@@ -102,11 +102,17 @@ public interface Dialoger
      */
     boolean onKeyDown(int keyCode, KeyEvent event);
 
+    /**
+     * 关闭监听
+     */
     interface OnDismissListener
     {
         void onDismiss(Dialoger dialoger);
     }
 
+    /**
+     * 动画创建接口
+     */
     interface AnimatorCreater
     {
         Animator createAnimator(boolean show, View view);
