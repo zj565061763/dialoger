@@ -210,7 +210,7 @@ public class FDialoger implements Dialoger
             {
                 getAnimatorHandler().setHideAnimator(createAnimator(false));
                 if (!getAnimatorHandler().startHideAnimator())
-                    removeSelf();
+                    removeDialogView();
             }
         }
 
@@ -231,7 +231,7 @@ public class FDialoger implements Dialoger
                 {
                     super.onAnimationEnd(animation);
                     mRemoveByAnimator = true;
-                    removeSelf();
+                    removeDialogView();
                 }
             });
         }
@@ -290,7 +290,7 @@ public class FDialoger implements Dialoger
         }
     };
 
-    private void removeSelf()
+    private void removeDialogView()
     {
         try
         {
