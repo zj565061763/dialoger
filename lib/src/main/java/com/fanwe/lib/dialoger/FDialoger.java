@@ -6,6 +6,7 @@ import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -16,7 +17,6 @@ import android.view.ViewParent;
 import com.fanwe.lib.dialoger.animator.ScaleXYCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
 
-
 public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
@@ -26,6 +26,8 @@ public class FDialoger implements Dialoger
     private View mContentView;
     private boolean mCancelable = true;
     private boolean mCanceledOnTouchOutside = true;
+
+    private int mGravity = Gravity.NO_GRAVITY;
 
     private OnDismissListener mOnDismissListener;
     private boolean mAttach;
@@ -133,10 +135,21 @@ public class FDialoger implements Dialoger
     }
 
     @Override
+    public void setGravity(int gravity)
+    {
+        mGravity = gravity;
+    }
+
+    @Override
+    public int getGravity()
+    {
+        return mGravity;
+    }
+
+    @Override
     public void show()
     {
-        if (mContentView != null)
-            attach(true);
+        attach(true);
     }
 
     @Override
@@ -148,8 +161,7 @@ public class FDialoger implements Dialoger
     @Override
     public void dismiss()
     {
-        if (isShowing())
-            attach(false);
+        attach(false);
     }
 
     @Override
@@ -233,11 +245,17 @@ public class FDialoger implements Dialoger
 
         if (attach)
         {
-            if (mDialogView.getParent() == null)
+            if (!isShowing() && mContentView != null)
+            {
+                if (mGravity == Gravity.NO_GRAVITY)
+                    setGravity(Gravity.CENTER);
+
+                onStart();
                 mDialogParent.addView(mDialogView);
+            }
         } else
         {
-            if (mDialogView.getParent() != null && !mActivity.isFinishing())
+            if (isShowing() && !mActivity.isFinishing())
             {
                 getAnimatorHandler().setHideAnimator(createAnimator(false));
                 if (!getAnimatorHandler().startHideAnimator())
@@ -328,9 +346,26 @@ public class FDialoger implements Dialoger
         {
             final ViewParent parent = mDialogView.getParent();
             if (parent instanceof ViewGroup)
+            {
+                onStop();
                 ((ViewGroup) parent).removeView(mDialogView);
+            }
         } catch (Exception e)
         {
         }
+    }
+
+    /**
+     * dialog要显示之前的回调
+     */
+    protected void onStart()
+    {
+    }
+
+    /**
+     * dialog要关闭之前的回调
+     */
+    protected void onStop()
+    {
     }
 }

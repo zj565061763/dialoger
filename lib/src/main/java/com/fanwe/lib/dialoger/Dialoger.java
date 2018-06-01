@@ -75,6 +75,20 @@ public interface Dialoger
     void setOnDismissListener(OnDismissListener listener);
 
     /**
+     * 设置重力属性{@link android.view.Gravity}
+     *
+     * @param gravity
+     */
+    void setGravity(int gravity);
+
+    /**
+     * 返回当前的重力属性
+     *
+     * @return
+     */
+    int getGravity();
+
+    /**
      * 显示窗口
      */
     void show();

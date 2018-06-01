@@ -79,10 +79,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId())
         {
             case R.id.btn_show:
-                // 居中显示
-                getDialogView().setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                // 显示dialog
+                /**
+                 * 设置显示在顶部，左右居中
+                 */
+                getDialogView().getDialoger().setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                /**
+                 * 显示dialog
+                 */
                 getDialogView().getDialoger().show();
+                /**
+                 * 延迟2000毫秒后关闭
+                 */
                 getDialogView().getDialoger().startDismissRunnable(2000);
                 break;
         }

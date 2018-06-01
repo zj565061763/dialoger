@@ -14,7 +14,15 @@ public class DialogView extends LinearLayout
     public DialogView(Activity activity)
     {
         super(activity);
-        mDialoger = new FDialoger(activity, this);
+        mDialoger = new FDialoger(activity, this)
+        {
+            @Override
+            protected void onStart()
+            {
+                super.onStart();
+                setGravity(getGravity());
+            }
+        };
     }
 
     public final Dialoger getDialoger()
