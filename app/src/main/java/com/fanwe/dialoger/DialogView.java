@@ -2,12 +2,12 @@ package com.fanwe.dialoger;
 
 import android.app.Activity;
 import android.view.MotionEvent;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.FDialoger;
 
-public class DialogView extends FrameLayout
+public class DialogView extends LinearLayout
 {
     private final Dialoger mDialoger;
 
