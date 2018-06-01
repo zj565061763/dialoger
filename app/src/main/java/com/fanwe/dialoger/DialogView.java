@@ -20,7 +20,7 @@ public class DialogView extends LinearLayout
             protected void onStart()
             {
                 super.onStart();
-                setGravity(getGravity());
+                DialogView.this.setGravity(mDialoger.getGravity());
             }
         };
     }

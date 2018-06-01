@@ -14,7 +14,15 @@ public class DialogView extends LinearLayout
     public DialogView(Activity activity)
     {
         super(activity);
-        mDialoger = new FDialoger(activity, this);
+        mDialoger = new FDialoger(activity, this)
+        {
+            @Override
+            protected void onStart()
+            {
+                super.onStart();
+                DialogView.this.setGravity(mDialoger.getGravity());
+            }
+        };
     }
 
     public final Dialoger getDialoger()
@@ -84,13 +92,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              */
             mDialogView.getDialoger().setCanceledOnTouchOutside(true);
             /**
-             * 设置窗口view的动画创建对象，此处为透明度变化创建对象
+             * 设置窗口view的动画创建对象，此处为透明度变化
              */
             mDialogView.getDialoger().setDialogAnimatorCreater(new AlphaCreater());
             /**
-             * 设置内容view的动画创建对象，此处为缩放创建对象
+             * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出
              */
-            mDialogView.getDialoger().setContentAnimatorCreater(new ScaleXYCreater());
+            mDialogView.getDialoger().setContentAnimatorCreater(new SlideTopTopCreater());
         }
         return mDialogView;
     }
@@ -110,10 +118,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId())
         {
             case R.id.btn_show:
-                // 居中显示
-                getDialogView().setGravity(Gravity.CENTER);
-                // 显示dialog
+                /**
+                 * 设置显示在顶部，左右居中
+                 */
+                getDialogView().getDialoger().setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                /**
+                 * 显示dialog
+                 */
                 getDialogView().getDialoger().show();
+                /**
+                 * 延迟2000毫秒后关闭
+                 */
+                getDialogView().getDialoger().startDismissRunnable(2000);
                 break;
         }
     }
@@ -192,14 +208,23 @@ public interface Dialoger
     void setOnDismissListener(OnDismissListener listener);
 
     /**
+     * 设置重力属性{@link android.view.Gravity}
+     *
+     * @param gravity
+     */
+    void setGravity(int gravity);
+
+    /**
+     * 返回当前的重力属性
+     *
+     * @return
+     */
+    int getGravity();
+
+    /**
      * 显示窗口
      */
     void show();
-
-    /**
-     * 关闭窗口
-     */
-    void dismiss();
 
     /**
      * 窗口是否正在显示
@@ -207,6 +232,23 @@ public interface Dialoger
      * @return
      */
     boolean isShowing();
+
+    /**
+     * 关闭窗口
+     */
+    void dismiss();
+
+    /**
+     * 延迟多久后关闭dialog
+     *
+     * @param delay （毫秒）
+     */
+    void startDismissRunnable(long delay);
+
+    /**
+     * 停止延迟关闭任务
+     */
+    void stopDismissRunnable();
 
     /**
      * 窗口view需要调用此方法
