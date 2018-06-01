@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
-import com.fanwe.lib.dialoger.animator.ScaleXYCreater;
+import com.fanwe.lib.dialoger.animator.SlideTopTopCreater;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              */
             mDialogView.getDialoger().setCanceledOnTouchOutside(true);
             /**
-             * 设置窗口view的动画创建对象，此处为透明度变化创建对象
+             * 设置窗口view的动画创建对象，此处为透明度变化
              */
             mDialogView.getDialoger().setDialogAnimatorCreater(new AlphaCreater());
             /**
-             * 设置内容view的动画创建对象，此处为缩放创建对象
+             * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出
              */
-            mDialogView.getDialoger().setContentAnimatorCreater(new ScaleXYCreater());
+            mDialogView.getDialoger().setContentAnimatorCreater(new SlideTopTopCreater());
         }
         return mDialogView;
     }
@@ -80,9 +80,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.btn_show:
                 // 居中显示
-                getDialogView().setGravity(Gravity.CENTER);
+                getDialogView().setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
                 // 显示dialog
                 getDialogView().getDialoger().show();
+                getDialogView().getDialoger().startDismissRunnable(2000);
                 break;
         }
     }

@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,9 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.animator.ScaleXYCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
+
 
 public class FDialoger implements Dialoger
 {
@@ -45,8 +47,6 @@ public class FDialoger implements Dialoger
         mDialogView = dialogView;
 
         dialogView.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
-
-        setDialogAnimatorCreater(new AlphaCreater());
         setContentAnimatorCreater(new ScaleXYCreater());
     }
 
@@ -140,6 +140,12 @@ public class FDialoger implements Dialoger
     }
 
     @Override
+    public boolean isShowing()
+    {
+        return mDialogView.getParent() == mDialogParent;
+    }
+
+    @Override
     public void dismiss()
     {
         if (isShowing())
@@ -147,10 +153,35 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public boolean isShowing()
+    public void startDismissRunnable(long delay)
     {
-        return mDialogView.getParent() == mDialogParent;
+        stopDismissRunnable();
+        getHandler().postDelayed(mDismissRunnable, delay);
     }
+
+    @Override
+    public void stopDismissRunnable()
+    {
+        getHandler().removeCallbacks(mDismissRunnable);
+    }
+
+    private Handler mHandler;
+
+    private Handler getHandler()
+    {
+        if (mHandler == null)
+            mHandler = new Handler(Looper.getMainLooper());
+        return mHandler;
+    }
+
+    private final Runnable mDismissRunnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            dismiss();
+        }
+    };
 
     @Override
     public void onLayout(boolean changed, int left, int top, int right, int bottom)
@@ -279,6 +310,7 @@ public class FDialoger implements Dialoger
             if (mAttach && !mActivity.isFinishing())
                 throw new RuntimeException("you must call dismiss() method to remove dialog view");
             mStartShowAnimator = false;
+            stopDismissRunnable();
 
             if (!mRemoveByAnimator)
                 getAnimatorHandler().cancelAnimators();

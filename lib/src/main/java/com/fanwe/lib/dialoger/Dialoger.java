@@ -80,16 +80,28 @@ public interface Dialoger
     void show();
 
     /**
-     * 关闭窗口
-     */
-    void dismiss();
-
-    /**
      * 窗口是否正在显示
      *
      * @return
      */
     boolean isShowing();
+
+    /**
+     * 关闭窗口
+     */
+    void dismiss();
+
+    /**
+     * 延迟多久后关闭dialog
+     *
+     * @param delay （毫秒）
+     */
+    void startDismissRunnable(long delay);
+
+    /**
+     * 停止延迟关闭任务
+     */
+    void stopDismissRunnable();
 
     /**
      * 窗口view需要调用此方法
