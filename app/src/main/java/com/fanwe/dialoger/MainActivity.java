@@ -20,7 +20,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public DialogView getDialogView()
     {
         if (mDialogView == null)
+        {
             mDialogView = new DialogView(this);
+            mDialogView.getDialoger().setContentView(R.layout.dialog_view);
+        }
         return mDialogView;
     }
 

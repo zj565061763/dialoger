@@ -15,7 +15,6 @@ public class DialogView extends LinearLayout
     {
         super(activity);
         mDialoger = new FDialoger(activity, this);
-        mDialoger.setContentView(R.layout.dialog_view);
     }
 
     public final Dialoger getDialoger()
