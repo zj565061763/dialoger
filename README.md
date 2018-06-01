@@ -151,13 +151,17 @@ public interface Dialoger
 
     /**
      * 设置按返回键是否可以关闭窗口，默认true
+     * <br>
+     * 此方法需要传递按键事件后才有效{@link #onKeyDown(int, KeyEvent)}
      *
      * @param cancel
      */
     void setCancelable(boolean cancel);
 
     /**
-     * 设置触摸到非内容区域是否关闭窗口，默认-true
+     * 设置触摸到非内容区域是否关闭窗口，默认true
+     * <br>
+     * 此方法需要窗口view传递触摸事件后才有效{@link #onTouchEvent(MotionEvent)}
      *
      * @param cancel
      */
