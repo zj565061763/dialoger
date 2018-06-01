@@ -26,6 +26,7 @@ public class DialogView extends LinearLayout
     protected void onLayout(boolean changed, int left, int top, int right, int bottom)
     {
         super.onLayout(changed, left, top, right, bottom);
+        // 传递事件
         getDialoger().onLayout(changed, left, top, right, bottom);
     }
 
@@ -33,6 +34,7 @@ public class DialogView extends LinearLayout
     public boolean onTouchEvent(MotionEvent event)
     {
         super.onTouchEvent(event);
+        // 传递事件
         return getDialoger().onTouchEvent(event);
     }
 }

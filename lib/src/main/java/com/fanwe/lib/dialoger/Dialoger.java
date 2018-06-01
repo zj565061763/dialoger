@@ -104,7 +104,7 @@ public interface Dialoger
 
     interface OnDismissListener
     {
-        void onDismiss(Dialoger dialogView);
+        void onDismiss(Dialoger dialoger);
     }
 
     interface AnimatorCreater
