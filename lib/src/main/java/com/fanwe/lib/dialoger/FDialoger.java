@@ -147,6 +147,44 @@ public class FDialoger implements Dialoger
     }
 
     @Override
+    public void paddingLeft(int padding)
+    {
+        final View view = mDialogView;
+        view.setPadding(padding, view.getPaddingTop(),
+                view.getPaddingRight(), view.getPaddingBottom());
+    }
+
+    @Override
+    public void paddingTop(int padding)
+    {
+        final View view = mDialogView;
+        view.setPadding(view.getPaddingLeft(), padding,
+                view.getPaddingRight(), view.getPaddingBottom());
+    }
+
+    @Override
+    public void paddingRight(int padding)
+    {
+        final View view = mDialogView;
+        view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
+                padding, view.getPaddingBottom());
+    }
+
+    @Override
+    public void paddingBottom(int padding)
+    {
+        final View view = mDialogView;
+        view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
+                view.getPaddingRight(), padding);
+    }
+
+    @Override
+    public void paddings(int paddings)
+    {
+        mDialogView.setPadding(paddings, paddings, paddings, paddings);
+    }
+
+    @Override
     public void show()
     {
         attach(true);
