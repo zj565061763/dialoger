@@ -7,7 +7,11 @@ import android.view.View;
 
 public interface Dialoger
 {
-
+    /**
+     * 设置是否调试模式
+     *
+     * @param debug
+     */
     void setDebug(boolean debug);
 
     Context getContext();
@@ -191,6 +195,15 @@ public interface Dialoger
      */
     interface AnimatorCreater
     {
+        /**
+         * 创建动画
+         * <br>
+         * 注意：隐藏动画不能设置为无限循环，否则窗口将不能被移除
+         *
+         * @param show
+         * @param view
+         * @return
+         */
         Animator createAnimator(boolean show, View view);
     }
 }

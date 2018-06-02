@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         mDialoger = new TestDialoger(this);
+        mDialoger.setDebug(true);
         /**
          * 设置窗口关闭监听
          */
