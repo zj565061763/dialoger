@@ -23,7 +23,7 @@ public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
     private final ViewGroup mDialogParent;
-    private final ViewGroup mDialogView;
+    private final InternalDialogView mDialogView;
 
     private View mContentView;
     private boolean mCancelable = true;
@@ -32,7 +32,7 @@ public class FDialoger implements Dialoger
     private int mGravity = Gravity.NO_GRAVITY;
 
     private OnDismissListener mOnDismissListener;
-    private boolean mAttach;
+    private boolean mIsAttached;
 
     private VisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mDialogAnimatorCreater;
@@ -41,21 +41,13 @@ public class FDialoger implements Dialoger
 
     public FDialoger(Activity activity)
     {
-        this(activity, null);
-    }
-
-    public FDialoger(Activity activity, ViewGroup dialogView)
-    {
         if (activity == null)
             throw new NullPointerException("activity is null");
-        if (dialogView == null)
-            dialogView = new InternalDialogView(activity);
 
         mActivity = activity;
         mDialogParent = activity.findViewById(android.R.id.content);
-        mDialogView = dialogView;
+        mDialogView = new InternalDialogView(activity);
 
-        dialogView.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
         setContentAnimatorCreater(new ScaleXYCreater());
     }
 
@@ -151,9 +143,7 @@ public class FDialoger implements Dialoger
     public void setGravity(int gravity)
     {
         mGravity = gravity;
-
-        if (mDialogView instanceof InternalDialogView)
-            ((InternalDialogView) mDialogView).setGravity(gravity);
+        mDialogView.setGravity(gravity);
     }
 
     @Override
@@ -250,28 +240,6 @@ public class FDialoger implements Dialoger
     };
 
     @Override
-    public void onLayout(boolean changed, int left, int top, int right, int bottom)
-    {
-        if (mStartShowAnimator)
-        {
-            getAnimatorHandler().setShowAnimator(createAnimator(true));
-            getAnimatorHandler().startShowAnimator();
-            mStartShowAnimator = false;
-        }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        if (!isViewUnder(mContentView, (int) event.getX(), (int) event.getY()))
-        {
-            if (mCanceledOnTouchOutside)
-                dismiss();
-        }
-        return true;
-    }
-
-    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         if (isShowing() && keyCode == KeyEvent.KEYCODE_BACK)
@@ -283,18 +251,9 @@ public class FDialoger implements Dialoger
         return false;
     }
 
-    private boolean isViewUnder(View view, int x, int y)
-    {
-        if (view == null)
-            return false;
-
-        return x >= view.getLeft() && x < view.getRight()
-                && y >= view.getTop() && y < view.getBottom();
-    }
-
     private void attach(boolean attach)
     {
-        if (mAttach == attach)
+        if (mIsAttached == attach)
             return;
 
         if (attach)
@@ -317,7 +276,7 @@ public class FDialoger implements Dialoger
             }
         }
 
-        mAttach = attach;
+        mIsAttached = attach;
     }
 
     private boolean mRemoveByAnimator;
@@ -366,34 +325,6 @@ public class FDialoger implements Dialoger
         return animator;
     }
 
-    private final View.OnAttachStateChangeListener mOnAttachStateChangeListener = new View.OnAttachStateChangeListener()
-    {
-        @Override
-        public void onViewAttachedToWindow(View v)
-        {
-            if (mDialogView.getParent() != mDialogParent)
-                throw new RuntimeException("dialog view can not be add to:" + mDialogView.getParent());
-            mStartShowAnimator = true;
-        }
-
-        @Override
-        public void onViewDetachedFromWindow(View v)
-        {
-            if (mAttach && !mActivity.isFinishing())
-                throw new RuntimeException("you must call dismiss() method to remove dialog view");
-            mStartShowAnimator = false;
-            stopDismissRunnable();
-
-            if (!mRemoveByAnimator)
-                getAnimatorHandler().cancelAnimators();
-
-            if (mOnDismissListener != null)
-                mOnDismissListener.onDismiss(FDialoger.this);
-
-            mRemoveByAnimator = false;
-        }
-    };
-
     private void removeDialogView()
     {
         try
@@ -434,14 +365,64 @@ public class FDialoger implements Dialoger
         protected void onLayout(boolean changed, int l, int t, int r, int b)
         {
             super.onLayout(changed, l, t, r, b);
-            FDialoger.this.onLayout(changed, l, t, r, b);
+            if (mStartShowAnimator)
+            {
+                getAnimatorHandler().setShowAnimator(createAnimator(true));
+                getAnimatorHandler().startShowAnimator();
+                mStartShowAnimator = false;
+            }
+        }
+
+        private boolean isViewUnder(View view, int x, int y)
+        {
+            if (view == null)
+                return false;
+
+            return x >= view.getLeft() && x < view.getRight()
+                    && y >= view.getTop() && y < view.getBottom();
         }
 
         @Override
         public boolean onTouchEvent(MotionEvent event)
         {
+            if (!isViewUnder(mContentView, (int) event.getX(), (int) event.getY()))
+            {
+                if (mCanceledOnTouchOutside)
+                {
+                    dismiss();
+                    return true;
+                }
+            }
+
             super.onTouchEvent(event);
-            return FDialoger.this.onTouchEvent(event);
+            return true;
+        }
+
+        @Override
+        protected void onAttachedToWindow()
+        {
+            super.onAttachedToWindow();
+            if (mDialogView.getParent() != mDialogParent)
+                throw new RuntimeException("dialog view can not be add to:" + mDialogView.getParent());
+            mStartShowAnimator = true;
+        }
+
+        @Override
+        protected void onDetachedFromWindow()
+        {
+            super.onDetachedFromWindow();
+            if (mIsAttached && !mActivity.isFinishing())
+                throw new RuntimeException("you must call dismiss() method to remove dialog view");
+            mStartShowAnimator = false;
+            stopDismissRunnable();
+
+            if (!mRemoveByAnimator)
+                getAnimatorHandler().cancelAnimators();
+
+            if (mOnDismissListener != null)
+                mOnDismissListener.onDismiss(FDialoger.this);
+
+            mRemoveByAnimator = false;
         }
     }
 }

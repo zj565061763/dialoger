@@ -157,16 +157,6 @@ public interface Dialoger
     void stopDismissRunnable();
 
     /**
-     * 窗口view需要调用此方法
-     */
-    void onLayout(boolean changed, int left, int top, int right, int bottom);
-
-    /**
-     * 窗口view需要调用此方法
-     */
-    boolean onTouchEvent(MotionEvent event);
-
-    /**
      * Activity需要调用此方法，如果此方法返回true的话，Activity那边的重写方法也要返回true
      */
     boolean onKeyDown(int keyCode, KeyEvent event);
