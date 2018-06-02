@@ -151,6 +151,9 @@ public class FDialoger implements Dialoger
     public void setGravity(int gravity)
     {
         mGravity = gravity;
+
+        if (mDialogView instanceof InternalDialogView)
+            ((InternalDialogView) mDialogView).setGravity(gravity);
     }
 
     @Override
