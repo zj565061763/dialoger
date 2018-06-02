@@ -2,6 +2,7 @@ package com.fanwe.lib.dialoger;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
@@ -399,8 +400,21 @@ public class FDialoger implements Dialoger
 
     private Animator createAnimator(boolean show)
     {
-        final Animator animator = (mAnimatorCreater != null && mContentView != null) ?
+        Animator animator = null;
+
+        final Animator animatorBackground = new AlphaCreater().createAnimator(show, mDialogerView.mBackgroundView);
+        final Animator animatorContent = (mAnimatorCreater != null && mContentView != null) ?
                 mAnimatorCreater.createAnimator(show, mContentView) : null;
+
+        if (animatorContent != null)
+        {
+            final AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.play(animatorBackground).with(animatorContent);
+            animator = animatorSet;
+        } else
+        {
+            animator = animatorBackground;
+        }
 
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "createAnimator " + (show ? "show" : "dismiss"));
