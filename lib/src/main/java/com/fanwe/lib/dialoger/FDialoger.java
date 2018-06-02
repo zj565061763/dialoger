@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.LinearLayout;
 
-import com.fanwe.lib.dialoger.animator.ScaleXYCreater;
+import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
 
 public class FDialoger implements Dialoger
@@ -61,7 +61,7 @@ public class FDialoger implements Dialoger
         mDialogerParent = activity.findViewById(android.R.id.content);
         mDialogerView = new InternalDialogerView(activity);
 
-        setContentAnimatorCreater(new ScaleXYCreater());
+        setDialogAnimatorCreater(new AlphaCreater());
     }
 
     @Override

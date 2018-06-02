@@ -54,11 +54,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         mDialoger.setCanceledOnTouchOutside(true);
         /**
-         * 设置窗口view的动画创建对象，此处为透明度变化
+         * 设置窗口view的动画创建对象，默认为透明度变化
          */
         mDialoger.setDialogAnimatorCreater(new AlphaCreater());
         /**
-         * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出
+         * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出，默认为null
          */
         mDialoger.setContentAnimatorCreater(new SlideTopTopCreater());
     }
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.btn_show:
                 /**
-                 * 设置显示在顶部，左右居中
+                 * 设置显示位置
                  */
                 mDialoger.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
                 /**
