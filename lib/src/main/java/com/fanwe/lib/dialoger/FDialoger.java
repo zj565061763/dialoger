@@ -36,6 +36,14 @@ public class FDialoger implements Dialoger
     private OnShowListener mOnShowListener;
 
     private boolean mIsAttached;
+    /**
+     * true - try show
+     * <br>
+     * false - try dismiss
+     * <br>
+     * null - none
+     */
+    private Boolean mTryShow;
 
     private VisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mDialogAnimatorCreater;
@@ -277,8 +285,12 @@ public class FDialoger implements Dialoger
 
         if (attach)
         {
+            if (mTryShow != null && mTryShow == false)
+                throw new RuntimeException("show() can not be called in onStop() method");
+
             if (mContentView == null)
                 return;
+
             if (isShowing())
             {
                 if (getAnimatorHandler().isHideAnimatorStarted())
@@ -288,15 +300,21 @@ public class FDialoger implements Dialoger
             }
 
             mIsAttached = true;
+
             if (mGravity == Gravity.NO_GRAVITY)
                 setGravity(Gravity.CENTER);
 
+            mTryShow = true;
             onStart();
             mDialogerParent.addView(mDialogerView);
         } else
         {
+            if (mTryShow != null && mTryShow == true)
+                throw new RuntimeException("dismiss() can not be called in onStart() method");
+
             if (mActivity.isFinishing())
                 return;
+
             if (!isShowing())
                 return;
 
@@ -412,6 +430,7 @@ public class FDialoger implements Dialoger
         final ViewParent parent = mDialogerView.getParent();
         if (parent instanceof ViewGroup)
         {
+            mTryShow = false;
             onStop();
             ((ViewGroup) parent).removeView(mDialogerView);
         }
@@ -503,6 +522,7 @@ public class FDialoger implements Dialoger
             if (mDialogerView.getParent() != mDialogerParent)
                 throw new RuntimeException("dialoger view can not be add to:" + mDialogerView.getParent());
 
+            mTryShow = null;
             mStartShowAnimator = true;
             if (mOnShowListener != null)
             {
@@ -528,6 +548,7 @@ public class FDialoger implements Dialoger
             if (mIsAttached && !mActivity.isFinishing())
                 throw new RuntimeException("you must call dismiss() method to remove dialoger view");
 
+            mTryShow = null;
             mStartShowAnimator = false;
             stopDismissRunnable();
 
