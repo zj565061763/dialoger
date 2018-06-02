@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mDialoger = new TestDialoger(this);
         /**
-         * 设置dialog关闭监听
+         * 设置窗口关闭监听
          */
         mDialoger.setOnDismissListener(new Dialoger.OnDismissListener()
         {
@@ -32,6 +32,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onDismiss(Dialoger dialoger)
             {
                 Log.i(TAG, "onDismiss:" + dialoger);
+            }
+        });
+        /**
+         * 设置窗口显示监听
+         */
+        mDialoger.setOnShowListener(new Dialoger.OnShowListener()
+        {
+            @Override
+            public void onShow(Dialoger dialog)
+            {
+
             }
         });
         /**
@@ -63,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 mDialoger.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
                 /**
-                 * 显示dialog
+                 * 显示dialoger
                  */
                 mDialoger.show();
                 /**

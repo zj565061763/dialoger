@@ -3,7 +3,6 @@ package com.fanwe.lib.dialoger;
 import android.animation.Animator;
 import android.content.Context;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 
 public interface Dialoger
@@ -12,28 +11,28 @@ public interface Dialoger
     Context getContext();
 
     /**
-     * 返回窗口view
+     * 返回窗口的view
      *
      * @return
      */
-    View getDialogView();
+    View getDialogerView();
 
     /**
-     * 返回内容view
+     * 返回窗口的内容view
      *
      * @return
      */
     View getContentView();
 
     /**
-     * 设置内容view布局id
+     * 设置窗口的内容view布局id
      *
      * @param layoutId
      */
     void setContentView(int layoutId);
 
     /**
-     * 设置内容view
+     * 设置窗口的内容view
      *
      * @param view
      */
@@ -49,23 +48,21 @@ public interface Dialoger
     void setCancelable(boolean cancel);
 
     /**
-     * 设置触摸到非内容区域是否关闭窗口，默认true
-     * <br>
-     * 此方法需要窗口view传递触摸事件后才有效{@link #onTouchEvent(MotionEvent)}
+     * 设置触摸到非内容view区域是否关闭窗口，默认true
      *
      * @param cancel
      */
     void setCanceledOnTouchOutside(boolean cancel);
 
     /**
-     * 设置窗口view的动画创建对象
+     * 设置窗口的view动画创建对象
      *
      * @param creater
      */
     void setDialogAnimatorCreater(AnimatorCreater creater);
 
     /**
-     * 设置内容view的动画创建对象
+     * 设置窗口的内容view动画创建对象
      *
      * @param creater
      */
@@ -79,18 +76,18 @@ public interface Dialoger
     void setOnDismissListener(OnDismissListener listener);
 
     /**
+     * 设置窗口显示监听
+     *
+     * @param listener
+     */
+    void setOnShowListener(OnShowListener listener);
+
+    /**
      * 设置重力属性{@link android.view.Gravity}
      *
      * @param gravity
      */
     void setGravity(int gravity);
-
-    /**
-     * 返回当前的重力属性
-     *
-     * @return
-     */
-    int getGravity();
 
     /**
      * 设置左边间距
@@ -166,7 +163,25 @@ public interface Dialoger
      */
     interface OnDismissListener
     {
+        /**
+         * 消失后回调
+         *
+         * @param dialoger
+         */
         void onDismiss(Dialoger dialoger);
+    }
+
+    /**
+     * 显示监听
+     */
+    interface OnShowListener
+    {
+        /**
+         * 显示后回调
+         *
+         * @param dialog
+         */
+        void onShow(Dialoger dialog);
     }
 
     /**

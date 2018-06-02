@@ -22,8 +22,8 @@ import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
 public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
-    private final ViewGroup mDialogParent;
-    private final InternalDialogView mDialogView;
+    private final ViewGroup mDialogerParent;
+    private final InternalDialogView mDialogerView;
 
     private View mContentView;
     private boolean mCancelable = true;
@@ -32,6 +32,8 @@ public class FDialoger implements Dialoger
     private int mGravity = Gravity.NO_GRAVITY;
 
     private OnDismissListener mOnDismissListener;
+    private OnShowListener mOnShowListener;
+
     private boolean mIsAttached;
 
     private VisibilityAnimatorHandler mAnimatorHandler;
@@ -45,8 +47,8 @@ public class FDialoger implements Dialoger
             throw new NullPointerException("activity is null");
 
         mActivity = activity;
-        mDialogParent = activity.findViewById(android.R.id.content);
-        mDialogView = new InternalDialogView(activity);
+        mDialogerParent = activity.findViewById(android.R.id.content);
+        mDialogerView = new InternalDialogView(activity);
 
         setContentAnimatorCreater(new ScaleXYCreater());
     }
@@ -58,9 +60,9 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public View getDialogView()
+    public View getDialogerView()
     {
-        return mDialogView;
+        return mDialogerView;
     }
 
     @Override
@@ -72,17 +74,17 @@ public class FDialoger implements Dialoger
     @Override
     public void setContentView(int layoutId)
     {
-        final View view = LayoutInflater.from(mActivity).inflate(layoutId, mDialogView, false);
-        setDialogView(view);
+        final View view = LayoutInflater.from(mActivity).inflate(layoutId, mDialogerView, false);
+        setDialogerView(view);
     }
 
     @Override
     public void setContentView(View view)
     {
-        setDialogView(view);
+        setDialogerView(view);
     }
 
-    private void setDialogView(View view)
+    private void setDialogerView(View view)
     {
         mContentView = view;
 
@@ -96,8 +98,8 @@ public class FDialoger implements Dialoger
             p.height = params.height;
         }
 
-        mDialogView.removeAllViews();
-        mDialogView.addView(view, p);
+        mDialogerView.removeAllViews();
+        mDialogerView.addView(view, p);
 
         onContentViewAdded(view);
     }
@@ -140,22 +142,22 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public void setGravity(int gravity)
+    public void setOnShowListener(OnShowListener listener)
     {
-        mGravity = gravity;
-        mDialogView.setGravity(gravity);
+        mOnShowListener = listener;
     }
 
     @Override
-    public int getGravity()
+    public void setGravity(int gravity)
     {
-        return mGravity;
+        mGravity = gravity;
+        mDialogerView.setGravity(gravity);
     }
 
     @Override
     public void paddingLeft(int padding)
     {
-        final View view = mDialogView;
+        final View view = mDialogerView;
         view.setPadding(padding, view.getPaddingTop(),
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -163,7 +165,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingTop(int padding)
     {
-        final View view = mDialogView;
+        final View view = mDialogerView;
         view.setPadding(view.getPaddingLeft(), padding,
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -171,7 +173,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingRight(int padding)
     {
-        final View view = mDialogView;
+        final View view = mDialogerView;
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 padding, view.getPaddingBottom());
     }
@@ -179,7 +181,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingBottom(int padding)
     {
-        final View view = mDialogView;
+        final View view = mDialogerView;
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 view.getPaddingRight(), padding);
     }
@@ -187,7 +189,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddings(int paddings)
     {
-        mDialogView.setPadding(paddings, paddings, paddings, paddings);
+        mDialogerView.setPadding(paddings, paddings, paddings, paddings);
     }
 
     @Override
@@ -199,7 +201,7 @@ public class FDialoger implements Dialoger
     @Override
     public boolean isShowing()
     {
-        return mDialogView.getParent() == mDialogParent;
+        return mDialogerView.getParent() == mDialogerParent;
     }
 
     @Override
@@ -212,22 +214,22 @@ public class FDialoger implements Dialoger
     public void startDismissRunnable(long delay)
     {
         stopDismissRunnable();
-        getHandler().postDelayed(mDismissRunnable, delay);
+        getDialogerHandler().postDelayed(mDismissRunnable, delay);
     }
 
     @Override
     public void stopDismissRunnable()
     {
-        getHandler().removeCallbacks(mDismissRunnable);
+        getDialogerHandler().removeCallbacks(mDismissRunnable);
     }
 
-    private Handler mHandler;
+    private Handler mDialogerHandler;
 
-    private Handler getHandler()
+    private Handler getDialogerHandler()
     {
-        if (mHandler == null)
-            mHandler = new Handler(Looper.getMainLooper());
-        return mHandler;
+        if (mDialogerHandler == null)
+            mDialogerHandler = new Handler(Looper.getMainLooper());
+        return mDialogerHandler;
     }
 
     private final Runnable mDismissRunnable = new Runnable()
@@ -264,7 +266,7 @@ public class FDialoger implements Dialoger
                     setGravity(Gravity.CENTER);
 
                 onStart();
-                mDialogParent.addView(mDialogView);
+                mDialogerParent.addView(mDialogerView);
             }
         } else
         {
@@ -305,7 +307,7 @@ public class FDialoger implements Dialoger
         Animator animator = null;
 
         final Animator dialogAnimator = mDialogAnimatorCreater != null ?
-                mDialogAnimatorCreater.createAnimator(show, mDialogView) : null;
+                mDialogAnimatorCreater.createAnimator(show, mDialogerView) : null;
 
         final Animator contentAnimator = (mContentAnimatorCreater != null && getContentView() != null) ?
                 mContentAnimatorCreater.createAnimator(show, getContentView()) : null;
@@ -329,11 +331,11 @@ public class FDialoger implements Dialoger
     {
         try
         {
-            final ViewParent parent = mDialogView.getParent();
+            final ViewParent parent = mDialogerView.getParent();
             if (parent instanceof ViewGroup)
             {
                 onStop();
-                ((ViewGroup) parent).removeView(mDialogView);
+                ((ViewGroup) parent).removeView(mDialogerView);
             }
         } catch (Exception e)
         {
@@ -402,9 +404,22 @@ public class FDialoger implements Dialoger
         protected void onAttachedToWindow()
         {
             super.onAttachedToWindow();
-            if (mDialogView.getParent() != mDialogParent)
-                throw new RuntimeException("dialog view can not be add to:" + mDialogView.getParent());
+            if (mDialogerView.getParent() != mDialogerParent)
+                throw new RuntimeException("dialoger view can not be add to:" + mDialogerView.getParent());
             mStartShowAnimator = true;
+
+            if (mOnShowListener != null)
+            {
+                getDialogerHandler().post(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        if (mOnShowListener != null)
+                            mOnShowListener.onShow(FDialoger.this);
+                    }
+                });
+            }
         }
 
         @Override
@@ -412,7 +427,7 @@ public class FDialoger implements Dialoger
         {
             super.onDetachedFromWindow();
             if (mIsAttached && !mActivity.isFinishing())
-                throw new RuntimeException("you must call dismiss() method to remove dialog view");
+                throw new RuntimeException("you must call dismiss() method to remove dialoger view");
             mStartShowAnimator = false;
             stopDismissRunnable();
 
@@ -422,7 +437,7 @@ public class FDialoger implements Dialoger
 
             if (mOnDismissListener != null)
             {
-                getHandler().post(new Runnable()
+                getDialogerHandler().post(new Runnable()
                 {
                     @Override
                     public void run()
