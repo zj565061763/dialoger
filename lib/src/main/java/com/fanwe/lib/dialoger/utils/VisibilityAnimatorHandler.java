@@ -51,13 +51,30 @@ public final class VisibilityAnimatorHandler
             if (mShowAnimator.isStarted())
                 return true;
 
-            if (mHideAnimator != null)
-                mHideAnimator.cancel();
-
+            cancelHideAnimator();
             mShowAnimator.start();
             return true;
         }
         return false;
+    }
+
+    /**
+     * 显示动画是否已经开始
+     *
+     * @return
+     */
+    public boolean isShowAnimatorStarted()
+    {
+        return mShowAnimator != null && mShowAnimator.isStarted();
+    }
+
+    /**
+     * 取消显示动画
+     */
+    public void cancelShowAnimator()
+    {
+        if (isShowAnimatorStarted())
+            mShowAnimator.cancel();
     }
 
     /**
@@ -101,22 +118,36 @@ public final class VisibilityAnimatorHandler
             if (mHideAnimator.isStarted())
                 return true;
 
-            if (mShowAnimator != null)
-                mShowAnimator.cancel();
-
+            cancelShowAnimator();
             mHideAnimator.start();
             return true;
         }
         return false;
     }
 
+    /**
+     * 隐藏动画是否已经开始执行
+     *
+     * @return
+     */
+    public boolean isHideAnimatorStarted()
+    {
+        return mHideAnimator != null && mHideAnimator.isStarted();
+    }
+
+    /**
+     * 取消隐藏动画
+     */
+    public void cancelHideAnimator()
+    {
+        if (isHideAnimatorStarted())
+            mHideAnimator.cancel();
+    }
+
     public void cancelAnimators()
     {
-        if (mShowAnimator != null && mShowAnimator.isStarted())
-            mShowAnimator.cancel();
-
-        if (mHideAnimator != null && mHideAnimator.isStarted())
-            mHideAnimator.cancel();
+        cancelShowAnimator();
+        cancelHideAnimator();
     }
 
     private static class AnimatorListenerWrapper implements Animator.AnimatorListener
