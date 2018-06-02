@@ -288,7 +288,12 @@ public class FDialoger implements Dialoger
             if (mContentView == null)
                 return;
             if (isShowing())
-                return;
+            {
+                if (getAnimatorHandler().isHideAnimatorStarted())
+                    getAnimatorHandler().cancelHideAnimator();
+                else
+                    return;
+            }
 
             mIsAttached = true;
             if (mGravity == Gravity.NO_GRAVITY)
