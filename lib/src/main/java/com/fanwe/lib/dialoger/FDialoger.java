@@ -420,15 +420,18 @@ public class FDialoger implements Dialoger
                 getAnimatorHandler().cancelAnimators();
             mRemoveByAnimator = false;
 
-            getHandler().post(new Runnable()
+            if (mOnDismissListener != null)
             {
-                @Override
-                public void run()
+                getHandler().post(new Runnable()
                 {
-                    if (mOnDismissListener != null)
-                        mOnDismissListener.onDismiss(FDialoger.this);
-                }
-            });
+                    @Override
+                    public void run()
+                    {
+                        if (mOnDismissListener != null)
+                            mOnDismissListener.onDismiss(FDialoger.this);
+                    }
+                });
+            }
         }
     }
 }
