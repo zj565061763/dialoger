@@ -392,7 +392,7 @@ public class FDialoger implements Dialoger
             return;
 
         if (mIsDebug)
-            Log.i(Dialoger.class.getSimpleName(), "remove dialoger view by animator:" + removeByAnimator);
+            Log.i(Dialoger.class.getSimpleName(), "removeDialogerView by animator:" + removeByAnimator);
 
         mRemoveByAnimator = removeByAnimator;
 
