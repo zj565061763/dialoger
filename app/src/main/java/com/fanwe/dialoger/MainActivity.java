@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         mDialoger.setAnimatorCreater(new SlideTopTopCreater());
         /**
-         * 设置窗口背景颜色
+         * 设置窗口背景颜色，默认#66000000
          */
         mDialoger.setBackgroundColor(Color.parseColor("#66000000"));
     }

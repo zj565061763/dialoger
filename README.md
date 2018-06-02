@@ -1,115 +1,92 @@
 # About
-封装了dialog的逻辑，可以让某个ViewGroup具有dialog的属性
+封装了dialog的逻辑，可以让某个View具有dialog的属性
 
 # Gradle
-`implementation 'com.fanwe.android:dialoger:1.0.0-beta1'`
+`implementation 'com.fanwe.android:dialoger:1.0.0-beta2'`
 
 # 简单demo
 1. 创建一个ViewGroup
 ```java
-public class DialogView extends LinearLayout
+public class TestDialoger extends FDialoger
 {
-    private final Dialoger mDialoger;
-
-    public DialogView(Activity activity)
+    public TestDialoger(Activity activity)
     {
         super(activity);
-        mDialoger = new FDialoger(activity, this)
+        /**
+         * 设置窗口内容
+         */
+        setContentView(R.layout.dialog_view);
+    }
+
+    @Override
+    protected void onContentViewAdded(View contentView)
+    {
+        super.onContentViewAdded(contentView);
+        contentView.findViewById(R.id.btn).setOnClickListener(new View.OnClickListener()
         {
             @Override
-            protected void onStart()
+            public void onClick(View v)
             {
-                super.onStart();
-                DialogView.this.setGravity(mDialoger.getGravity());
+                Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
             }
-        };
-    }
-
-    public final Dialoger getDialoger()
-    {
-        return mDialoger;
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom)
-    {
-        super.onLayout(changed, left, top, right, bottom);
-        // 传递事件
-        getDialoger().onLayout(changed, left, top, right, bottom);
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
-        super.onTouchEvent(event);
-        // 传递事件
-        return getDialoger().onTouchEvent(event);
+        });
     }
 }
 ```
 
-2. 让ViewGroup像dialog一样显示
+2. 让View像dialog一样显示
 ```java
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
     public static final String TAG = MainActivity.class.getSimpleName();
 
-    private DialogView mDialogView;
+    private TestDialoger mDialoger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    public DialogView getDialogView()
-    {
-        if (mDialogView == null)
+        mDialoger = new TestDialoger(this);
+        /**
+         * 设置窗口关闭监听
+         */
+        mDialoger.setOnDismissListener(new Dialoger.OnDismissListener()
         {
-            mDialogView = new DialogView(this);
-            /**
-             * 设置dialog要显示的内容
-             */
-            mDialogView.getDialoger().setContentView(R.layout.dialog_view);
-            /**
-             * 设置dialog关闭监听
-             */
-            mDialogView.getDialoger().setOnDismissListener(new Dialoger.OnDismissListener()
+            @Override
+            public void onDismiss(Dialoger dialoger)
             {
-                @Override
-                public void onDismiss(Dialoger dialoger)
-                {
-                    Log.i(TAG, "onDismiss:" + dialoger);
-                }
-            });
-            /**
-             * 设置按返回键是否可以关闭窗口，默认true
-             */
-            mDialogView.getDialoger().setCancelable(true);
-            /**
-             * 设置触摸到非内容区域是否关闭窗口，默认-true
-             */
-            mDialogView.getDialoger().setCanceledOnTouchOutside(true);
-            /**
-             * 设置窗口view的动画创建对象，此处为透明度变化
-             */
-            mDialogView.getDialoger().setDialogAnimatorCreater(new AlphaCreater());
-            /**
-             * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出
-             */
-            mDialogView.getDialoger().setContentAnimatorCreater(new SlideTopTopCreater());
-        }
-        return mDialogView;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        // 传递事件
-        if (getDialogView().getDialoger().onKeyDown(keyCode, event))
-            return true;
-        return super.onKeyDown(keyCode, event);
+                Log.i(TAG, "onDismiss:" + dialoger);
+            }
+        });
+        /**
+         * 设置窗口显示监听
+         */
+        mDialoger.setOnShowListener(new Dialoger.OnShowListener()
+        {
+            @Override
+            public void onShow(Dialoger dialoger)
+            {
+                Log.i(TAG, "onShow:" + dialoger);
+            }
+        });
+        /**
+         * 设置按返回键是否可以关闭窗口，默认true
+         */
+        mDialoger.setCancelable(true);
+        /**
+         * 设置触摸到非内容区域是否关闭窗口，默认-true
+         */
+        mDialoger.setCanceledOnTouchOutside(true);
+        /**
+         * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出，默认为透明度变化
+         */
+        mDialoger.setAnimatorCreater(new SlideTopTopCreater());
+        /**
+         * 设置窗口背景颜色，默认#66000000
+         */
+        mDialoger.setBackgroundColor(Color.parseColor("#66000000"));
     }
 
     @Override
@@ -119,17 +96,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case R.id.btn_show:
                 /**
-                 * 设置显示在顶部，左右居中
+                 * 设置显示位置
                  */
-                getDialogView().getDialoger().setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
+                mDialoger.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
                 /**
-                 * 显示dialog
+                 * 显示窗口
                  */
-                getDialogView().getDialoger().show();
-                /**
-                 * 延迟2000毫秒后关闭
-                 */
-                getDialogView().getDialoger().startDismissRunnable(2000);
+                mDialoger.show();
                 break;
         }
     }
@@ -141,32 +114,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 public interface Dialoger
 {
     /**
-     * 返回窗口view
+     * 设置是否调试模式
      *
-     * @return
+     * @param debug
      */
-    View getDialogView();
+    void setDebug(boolean debug);
+
+    Context getContext();
 
     /**
-     * 返回内容view
+     * 返回窗口的内容view
      *
      * @return
      */
     View getContentView();
 
     /**
-     * 设置内容view布局id
+     * 设置窗口的内容view布局id
      *
      * @param layoutId
      */
     void setContentView(int layoutId);
 
     /**
-     * 设置内容view
+     * 设置窗口的内容view
      *
      * @param view
      */
     void setContentView(View view);
+
+    /**
+     * 设置窗口背景颜色
+     *
+     * @param color
+     */
+    void setBackgroundColor(int color);
+
+    /**
+     * 根据id查找view
+     *
+     * @param id
+     * @param <T>
+     * @return
+     */
+    <T extends View> T findViewById(int id);
 
     /**
      * 设置按返回键是否可以关闭窗口，默认true
@@ -178,27 +169,18 @@ public interface Dialoger
     void setCancelable(boolean cancel);
 
     /**
-     * 设置触摸到非内容区域是否关闭窗口，默认true
-     * <br>
-     * 此方法需要窗口view传递触摸事件后才有效{@link #onTouchEvent(MotionEvent)}
+     * 设置触摸到非内容view区域是否关闭窗口，默认true
      *
      * @param cancel
      */
     void setCanceledOnTouchOutside(boolean cancel);
 
     /**
-     * 设置窗口view的动画创建对象
+     * 设置窗口内容view动画创建对象
      *
      * @param creater
      */
-    void setDialogAnimatorCreater(AnimatorCreater creater);
-
-    /**
-     * 设置内容view的动画创建对象
-     *
-     * @param creater
-     */
-    void setContentAnimatorCreater(AnimatorCreater creater);
+    void setAnimatorCreater(AnimatorCreater creater);
 
     /**
      * 设置窗口关闭监听
@@ -208,6 +190,13 @@ public interface Dialoger
     void setOnDismissListener(OnDismissListener listener);
 
     /**
+     * 设置窗口显示监听
+     *
+     * @param listener
+     */
+    void setOnShowListener(OnShowListener listener);
+
+    /**
      * 设置重力属性{@link android.view.Gravity}
      *
      * @param gravity
@@ -215,11 +204,39 @@ public interface Dialoger
     void setGravity(int gravity);
 
     /**
-     * 返回当前的重力属性
+     * 设置左边间距
      *
-     * @return
+     * @param padding
      */
-    int getGravity();
+    void paddingLeft(int padding);
+
+    /**
+     * 设置顶部间距
+     *
+     * @param padding
+     */
+    void paddingTop(int padding);
+
+    /**
+     * 设置右边间距
+     *
+     * @param padding
+     */
+    void paddingRight(int padding);
+
+    /**
+     * 设置底部间距
+     *
+     * @param padding
+     */
+    void paddingBottom(int padding);
+
+    /**
+     * 设置上下左右间距
+     *
+     * @param paddings
+     */
+    void paddings(int paddings);
 
     /**
      * 显示窗口
@@ -251,16 +268,6 @@ public interface Dialoger
     void stopDismissRunnable();
 
     /**
-     * 窗口view需要调用此方法
-     */
-    void onLayout(boolean changed, int left, int top, int right, int bottom);
-
-    /**
-     * 窗口view需要调用此方法
-     */
-    boolean onTouchEvent(MotionEvent event);
-
-    /**
      * Activity需要调用此方法，如果此方法返回true的话，Activity那边的重写方法也要返回true
      */
     boolean onKeyDown(int keyCode, KeyEvent event);
@@ -270,7 +277,25 @@ public interface Dialoger
      */
     interface OnDismissListener
     {
+        /**
+         * 消失后回调
+         *
+         * @param dialoger
+         */
         void onDismiss(Dialoger dialoger);
+    }
+
+    /**
+     * 显示监听
+     */
+    interface OnShowListener
+    {
+        /**
+         * 显示后回调
+         *
+         * @param dialoger
+         */
+        void onShow(Dialoger dialoger);
     }
 
     /**
@@ -278,6 +303,15 @@ public interface Dialoger
      */
     interface AnimatorCreater
     {
+        /**
+         * 创建动画
+         * <br>
+         * 注意：隐藏动画不能设置为无限循环，否则窗口将不能被移除
+         *
+         * @param show
+         * @param view
+         * @return
+         */
         Animator createAnimator(boolean show, View view);
     }
 }
