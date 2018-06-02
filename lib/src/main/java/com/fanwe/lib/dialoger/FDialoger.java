@@ -125,7 +125,6 @@ public class FDialoger implements Dialoger
         mContentView = view;
     }
 
-
     protected void onContentViewAdded(View contentView)
     {
     }
@@ -133,7 +132,10 @@ public class FDialoger implements Dialoger
     @Override
     public void setBackgroundColor(int color)
     {
-        mDialogerView.mBackgroundView.setBackgroundColor(color);
+        if (color == 0 || color == Color.TRANSPARENT)
+            mDialogerView.mBackgroundView.setBackgroundDrawable(null);
+        else
+            mDialogerView.mBackgroundView.setBackgroundColor(color);
     }
 
     @Override
@@ -402,18 +404,23 @@ public class FDialoger implements Dialoger
     {
         Animator animator = null;
 
-        final Animator animatorBackground = new AlphaCreater().createAnimator(show, mDialogerView.mBackgroundView);
+        final Animator animatorBackground = (mDialogerView.mBackgroundView.getBackground() != null) ?
+                new AlphaCreater().createAnimator(show, mDialogerView.mBackgroundView) : null;
+
         final Animator animatorContent = (mAnimatorCreater != null && mContentView != null) ?
                 mAnimatorCreater.createAnimator(show, mContentView) : null;
 
-        if (animatorContent != null)
+        if (animatorBackground != null && animatorContent != null)
         {
             final AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.play(animatorBackground).with(animatorContent);
             animator = animatorSet;
-        } else
+        } else if (animatorBackground != null)
         {
             animator = animatorBackground;
+        } else if (animatorContent != null)
+        {
+            animator = animatorContent;
         }
 
         if (mIsDebug)
