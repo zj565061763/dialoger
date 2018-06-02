@@ -84,7 +84,7 @@ public class FDialoger implements Dialoger
     public void setContentView(int layoutId)
     {
         final View view = LayoutInflater.from(mActivity).inflate(layoutId, mDialogerView, false);
-        setDialogerView(view);
+        setContentView(view);
     }
 
     @Override

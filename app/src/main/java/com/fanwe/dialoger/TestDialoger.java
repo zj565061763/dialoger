@@ -11,6 +11,7 @@ public class TestDialoger extends FDialoger
     public TestDialoger(Activity activity)
     {
         super(activity);
+        setDebug(true);
         setContentView(R.layout.dialog_view);
     }
 
