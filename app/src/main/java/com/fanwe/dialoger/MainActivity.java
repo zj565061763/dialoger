@@ -74,13 +74,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                  */
                 mDialoger.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
                 /**
-                 * 显示dialoger
+                 * 显示窗口
                  */
                 mDialoger.show();
-                /**
-                 * 延迟2000毫秒后关闭
-                 */
-                mDialoger.startDismissRunnable(2000);
                 break;
         }
     }
