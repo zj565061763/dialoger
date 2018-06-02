@@ -62,6 +62,10 @@ public class FDialoger implements Dialoger
         mDialogerView = new InternalDialogerView(activity);
 
         setDialogAnimatorCreater(new AlphaCreater());
+
+        final int defaultHorizontalPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
+        paddingLeft(defaultHorizontalPadding);
+        paddingRight(defaultHorizontalPadding);
     }
 
     @Override
