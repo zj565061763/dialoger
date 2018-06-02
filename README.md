@@ -110,6 +110,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        /**
+         * 传递按键事件给窗口
+         */
+        if (mDialoger.onKeyDown(keyCode, event))
+            return true;
+        return super.onKeyDown(keyCode, event);
+    }
 }
 ```
 
