@@ -24,7 +24,7 @@ public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
     private final ViewGroup mDialogerParent;
-    private final InternalDialogView mDialogerView;
+    private final InternalDialogerView mDialogerView;
 
     private View mContentView;
     private boolean mCancelable = true;
@@ -51,7 +51,7 @@ public class FDialoger implements Dialoger
 
         mActivity = activity;
         mDialogerParent = activity.findViewById(android.R.id.content);
-        mDialogerView = new InternalDialogView(activity);
+        mDialogerView = new InternalDialogerView(activity);
 
         setContentAnimatorCreater(new ScaleXYCreater());
     }
@@ -430,9 +430,9 @@ public class FDialoger implements Dialoger
             Log.i(Dialoger.class.getSimpleName(), "onStop");
     }
 
-    private class InternalDialogView extends LinearLayout
+    private class InternalDialogerView extends LinearLayout
     {
-        public InternalDialogView(Context context)
+        public InternalDialogerView(Context context)
         {
             super(context);
         }
