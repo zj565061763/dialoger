@@ -102,8 +102,6 @@ public class FDialoger implements Dialoger
 
     private void setDialogerView(View view)
     {
-        mContentView = view;
-
         final ViewGroup.LayoutParams p = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
@@ -114,13 +112,15 @@ public class FDialoger implements Dialoger
             p.height = params.height;
         }
 
-        mDialogerView.removeAllViews();
+        mDialogerView.removeView(mContentView);
         mDialogerView.addView(view, p);
 
         onContentViewAdded(view);
 
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "contentView:" + view);
+
+        mContentView = view;
     }
 
 
@@ -463,6 +463,14 @@ public class FDialoger implements Dialoger
             super.onViewAdded(child);
             if (getChildCount() > 2)
                 throw new RuntimeException("you can not add view to dialoger view");
+        }
+
+        @Override
+        public void onViewRemoved(View child)
+        {
+            super.onViewRemoved(child);
+            if (getChildCount() <= 0)
+                throw new RuntimeException("dialoger view has no child");
         }
 
         @Override
