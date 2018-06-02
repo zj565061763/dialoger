@@ -478,6 +478,7 @@ public class FDialoger implements Dialoger
 
             if (mDialogerView.getParent() != mDialogerParent)
                 throw new RuntimeException("dialoger view can not be add to:" + mDialogerView.getParent());
+
             mStartShowAnimator = true;
 
             if (mOnShowListener != null)
