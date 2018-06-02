@@ -311,7 +311,7 @@ public class FDialoger implements Dialoger
                 {
                     super.onAnimationStart(animation);
                     if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "show onAnimationStart");
+                        Log.i(Dialoger.class.getSimpleName(), "onAnimationStart show");
                 }
 
                 @Override
@@ -319,7 +319,7 @@ public class FDialoger implements Dialoger
                 {
                     super.onAnimationCancel(animation);
                     if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "show onAnimationCancel");
+                        Log.i(Dialoger.class.getSimpleName(), "onAnimationCancel show");
                 }
 
                 @Override
@@ -327,7 +327,7 @@ public class FDialoger implements Dialoger
                 {
                     super.onAnimationEnd(animation);
                     if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "show onAnimationEnd");
+                        Log.i(Dialoger.class.getSimpleName(), "onAnimationEnd show");
                 }
             });
             mAnimatorHandler.setHideAnimatorListener(new AnimatorListenerAdapter()
@@ -337,7 +337,7 @@ public class FDialoger implements Dialoger
                 {
                     super.onAnimationStart(animation);
                     if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "dismiss onAnimationStart");
+                        Log.i(Dialoger.class.getSimpleName(), "onAnimationStart dismiss");
                 }
 
                 @Override
@@ -345,7 +345,7 @@ public class FDialoger implements Dialoger
                 {
                     super.onAnimationCancel(animation);
                     if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "dismiss onAnimationCancel");
+                        Log.i(Dialoger.class.getSimpleName(), "onAnimationCancel dismiss");
                 }
 
                 @Override
@@ -353,7 +353,7 @@ public class FDialoger implements Dialoger
                 {
                     super.onAnimationEnd(animation);
                     if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "dismiss onAnimationEnd");
+                        Log.i(Dialoger.class.getSimpleName(), "onAnimationEnd dismiss");
                     removeDialogerView(true);
                 }
             });
@@ -392,7 +392,7 @@ public class FDialoger implements Dialoger
             return;
 
         if (mIsDebug)
-            Log.i(Dialoger.class.getSimpleName(), "removeDialogerView animator:" + removeByAnimator);
+            Log.i(Dialoger.class.getSimpleName(), "remove dialoger view by animator:" + removeByAnimator);
 
         mRemoveByAnimator = removeByAnimator;
 
