@@ -8,6 +8,8 @@ import android.view.View;
 public interface Dialoger
 {
 
+    void setDebug(boolean debug);
+
     Context getContext();
 
     /**

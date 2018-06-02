@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -41,6 +42,8 @@ public class FDialoger implements Dialoger
     private AnimatorCreater mContentAnimatorCreater;
     private boolean mStartShowAnimator;
 
+    private boolean mIsDebug;
+
     public FDialoger(Activity activity)
     {
         if (activity == null)
@@ -51,6 +54,12 @@ public class FDialoger implements Dialoger
         mDialogerView = new InternalDialogView(activity);
 
         setContentAnimatorCreater(new ScaleXYCreater());
+    }
+
+    @Override
+    public void setDebug(boolean debug)
+    {
+        mIsDebug = debug;
     }
 
     @Override
@@ -284,7 +293,7 @@ public class FDialoger implements Dialoger
             if (getAnimatorHandler().startHideAnimator())
                 return;
 
-            removeDialogView(false);
+            removeDialogerView(false);
         }
     }
 
@@ -295,13 +304,57 @@ public class FDialoger implements Dialoger
         if (mAnimatorHandler == null)
         {
             mAnimatorHandler = new VisibilityAnimatorHandler();
-            mAnimatorHandler.setHideAnimatorListener(new AnimatorListenerAdapter()
+            mAnimatorHandler.setShowAnimatorListener(new AnimatorListenerAdapter()
             {
+                @Override
+                public void onAnimationStart(Animator animation)
+                {
+                    super.onAnimationStart(animation);
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "show onAnimationStart");
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation)
+                {
+                    super.onAnimationCancel(animation);
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "show onAnimationCancel");
+                }
+
                 @Override
                 public void onAnimationEnd(Animator animation)
                 {
                     super.onAnimationEnd(animation);
-                    removeDialogView(true);
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "show onAnimationEnd");
+                }
+            });
+            mAnimatorHandler.setHideAnimatorListener(new AnimatorListenerAdapter()
+            {
+                @Override
+                public void onAnimationStart(Animator animation)
+                {
+                    super.onAnimationStart(animation);
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "dismiss onAnimationStart");
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation)
+                {
+                    super.onAnimationCancel(animation);
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "dismiss onAnimationCancel");
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation)
+                {
+                    super.onAnimationEnd(animation);
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "dismiss onAnimationEnd");
+                    removeDialogerView(true);
                 }
             });
         }
@@ -333,10 +386,13 @@ public class FDialoger implements Dialoger
         return animator;
     }
 
-    private void removeDialogView(boolean removeByAnimator)
+    private void removeDialogerView(boolean removeByAnimator)
     {
         if (mActivity.isFinishing())
             return;
+
+        if (mIsDebug)
+            Log.i(Dialoger.class.getSimpleName(), "removeDialogerView animator:" + removeByAnimator);
 
         mRemoveByAnimator = removeByAnimator;
 
@@ -353,6 +409,8 @@ public class FDialoger implements Dialoger
      */
     protected void onStart()
     {
+        if (mIsDebug)
+            Log.i(Dialoger.class.getSimpleName(), "onStart");
     }
 
     /**
@@ -360,6 +418,8 @@ public class FDialoger implements Dialoger
      */
     protected void onStop()
     {
+        if (mIsDebug)
+            Log.i(Dialoger.class.getSimpleName(), "onStop");
     }
 
     private class InternalDialogView extends LinearLayout
@@ -413,6 +473,9 @@ public class FDialoger implements Dialoger
         protected void onAttachedToWindow()
         {
             super.onAttachedToWindow();
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "onAttachedToWindow");
+
             if (mDialogerView.getParent() != mDialogerParent)
                 throw new RuntimeException("dialoger view can not be add to:" + mDialogerView.getParent());
             mStartShowAnimator = true;
@@ -435,6 +498,9 @@ public class FDialoger implements Dialoger
         protected void onDetachedFromWindow()
         {
             super.onDetachedFromWindow();
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
+
             if (mIsAttached && !mActivity.isFinishing())
                 throw new RuntimeException("you must call dismiss() method to remove dialoger view");
             mStartShowAnimator = false;
