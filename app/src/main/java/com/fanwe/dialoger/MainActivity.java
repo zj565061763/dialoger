@@ -1,5 +1,6 @@
 package com.fanwe.dialoger;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -7,7 +8,6 @@ import android.view.Gravity;
 import android.view.View;
 
 import com.fanwe.lib.dialoger.Dialoger;
-import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.animator.SlideTopTopCreater;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
@@ -54,13 +54,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         mDialoger.setCanceledOnTouchOutside(true);
         /**
-         * 设置窗口view的动画创建对象，默认为透明度变化
+         * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出，默认为透明度变化
          */
-        mDialoger.setDialogAnimatorCreater(new AlphaCreater());
+        mDialoger.setAnimatorCreater(new SlideTopTopCreater());
         /**
-         * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出，默认为null
+         * 设置窗口背景颜色
          */
-        mDialoger.setContentAnimatorCreater(new SlideTopTopCreater());
+        mDialoger.setBackgroundColor(Color.parseColor("#66000000"));
     }
 
     @Override

@@ -17,13 +17,6 @@ public interface Dialoger
     Context getContext();
 
     /**
-     * 返回窗口的view
-     *
-     * @return
-     */
-    View getDialogerView();
-
-    /**
      * 返回窗口的内容view
      *
      * @return
@@ -44,6 +37,20 @@ public interface Dialoger
      */
     void setContentView(View view);
 
+    /**
+     * 设置窗口背景颜色
+     *
+     * @param color
+     */
+    void setBackgroundColor(int color);
+
+    /**
+     * 根据id查找view
+     *
+     * @param id
+     * @param <T>
+     * @return
+     */
     <T extends View> T findViewById(int id);
 
     /**
@@ -63,18 +70,11 @@ public interface Dialoger
     void setCanceledOnTouchOutside(boolean cancel);
 
     /**
-     * 设置窗口的view动画创建对象
+     * 设置窗口内容view动画创建对象
      *
      * @param creater
      */
-    void setDialogAnimatorCreater(AnimatorCreater creater);
-
-    /**
-     * 设置窗口的内容view动画创建对象
-     *
-     * @param creater
-     */
-    void setContentAnimatorCreater(AnimatorCreater creater);
+    void setAnimatorCreater(AnimatorCreater creater);
 
     /**
      * 设置窗口关闭监听

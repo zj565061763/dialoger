@@ -2,9 +2,9 @@ package com.fanwe.lib.dialoger;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -15,7 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
@@ -46,8 +46,7 @@ public class FDialoger implements Dialoger
     private Boolean mTryShow;
 
     private VisibilityAnimatorHandler mAnimatorHandler;
-    private AnimatorCreater mDialogAnimatorCreater;
-    private AnimatorCreater mContentAnimatorCreater;
+    private AnimatorCreater mAnimatorCreater;
     private boolean mTryStartShowAnimator;
 
     private boolean mIsDebug;
@@ -61,11 +60,13 @@ public class FDialoger implements Dialoger
         mDialogerParent = activity.findViewById(android.R.id.content);
         mDialogerView = new InternalDialogerView(activity);
 
-        setDialogAnimatorCreater(new AlphaCreater());
+        setAnimatorCreater(new AlphaCreater());
 
         final int defaultHorizontalPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
         paddingLeft(defaultHorizontalPadding);
         paddingRight(defaultHorizontalPadding);
+
+        setBackgroundColor(Color.parseColor("#66000000"));
     }
 
     @Override
@@ -78,12 +79,6 @@ public class FDialoger implements Dialoger
     public Context getContext()
     {
         return mActivity;
-    }
-
-    @Override
-    public View getDialogerView()
-    {
-        return mDialogerView;
     }
 
     @Override
@@ -123,6 +118,20 @@ public class FDialoger implements Dialoger
         mDialogerView.addView(view, p);
 
         onContentViewAdded(view);
+
+        if (mIsDebug)
+            Log.i(Dialoger.class.getSimpleName(), "contentView:" + view);
+    }
+
+
+    protected void onContentViewAdded(View contentView)
+    {
+    }
+
+    @Override
+    public void setBackgroundColor(int color)
+    {
+        mDialogerView.mBackgroundView.setBackgroundColor(color);
     }
 
     @Override
@@ -131,10 +140,6 @@ public class FDialoger implements Dialoger
         if (mContentView == null)
             return null;
         return mContentView.findViewById(id);
-    }
-
-    protected void onContentViewAdded(View contentView)
-    {
     }
 
     @Override
@@ -153,15 +158,9 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public void setDialogAnimatorCreater(AnimatorCreater creater)
+    public void setAnimatorCreater(AnimatorCreater creater)
     {
-        mDialogAnimatorCreater = creater;
-    }
-
-    @Override
-    public void setContentAnimatorCreater(AnimatorCreater creater)
-    {
-        mContentAnimatorCreater = creater;
+        mAnimatorCreater = creater;
     }
 
     @Override
@@ -399,26 +398,8 @@ public class FDialoger implements Dialoger
 
     private Animator createAnimator(boolean show)
     {
-        Animator animator = null;
-
-        final Animator dialogAnimator = mDialogAnimatorCreater != null ?
-                mDialogAnimatorCreater.createAnimator(show, mDialogerView) : null;
-
-        final Animator contentAnimator = (mContentAnimatorCreater != null && getContentView() != null) ?
-                mContentAnimatorCreater.createAnimator(show, getContentView()) : null;
-
-        if (dialogAnimator != null && contentAnimator != null)
-        {
-            final AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.play(dialogAnimator).with(contentAnimator);
-            animator = animatorSet;
-        } else if (dialogAnimator != null)
-        {
-            animator = dialogAnimator;
-        } else if (contentAnimator != null)
-        {
-            animator = contentAnimator;
-        }
+        final Animator animator = (mAnimatorCreater != null && mContentView != null) ?
+                mAnimatorCreater.createAnimator(show, mContentView) : null;
 
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "createAnimator " + (show ? "show" : "dismiss"));
@@ -463,22 +444,25 @@ public class FDialoger implements Dialoger
             Log.i(Dialoger.class.getSimpleName(), "onStop");
     }
 
-    private class InternalDialogerView extends LinearLayout
+    private class InternalDialogerView extends RelativeLayout
     {
+        private final View mBackgroundView;
+
         public InternalDialogerView(Context context)
         {
             super(context);
+            mBackgroundView = new View(context);
+            mBackgroundView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            addView(mBackgroundView);
         }
 
         @Override
         public void onViewAdded(View child)
         {
             super.onViewAdded(child);
-            if (getChildCount() > 1)
-                throw new RuntimeException("dialoger view can only have one child");
-
-            if (mIsDebug)
-                Log.i(Dialoger.class.getSimpleName(), "contentView:" + child);
+            if (getChildCount() > 2)
+                throw new RuntimeException("you can not add view to dialoger view");
         }
 
         @Override
