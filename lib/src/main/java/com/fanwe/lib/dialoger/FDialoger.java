@@ -15,7 +15,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.RelativeLayout;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
@@ -90,7 +91,7 @@ public class FDialoger implements Dialoger
     @Override
     public void setContentView(int layoutId)
     {
-        final View view = LayoutInflater.from(mActivity).inflate(layoutId, mDialogerView, false);
+        final View view = LayoutInflater.from(mActivity).inflate(layoutId, mDialogerView.mContainerView, false);
         setContentView(view);
     }
 
@@ -112,8 +113,8 @@ public class FDialoger implements Dialoger
             p.height = params.height;
         }
 
-        mDialogerView.removeView(mContentView);
-        mDialogerView.addView(view, p);
+        mDialogerView.mContainerView.removeView(mContentView);
+        mDialogerView.mContainerView.addView(view, p);
 
         onContentViewAdded(view);
 
@@ -179,13 +180,13 @@ public class FDialoger implements Dialoger
     public void setGravity(int gravity)
     {
         mGravity = gravity;
-        mDialogerView.setGravity(gravity);
+        mDialogerView.mContainerView.setGravity(gravity);
     }
 
     @Override
     public void paddingLeft(int padding)
     {
-        final View view = mDialogerView;
+        final View view = mDialogerView.mContainerView;
         view.setPadding(padding, view.getPaddingTop(),
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -193,7 +194,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingTop(int padding)
     {
-        final View view = mDialogerView;
+        final View view = mDialogerView.mContainerView;
         view.setPadding(view.getPaddingLeft(), padding,
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -201,7 +202,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingRight(int padding)
     {
-        final View view = mDialogerView;
+        final View view = mDialogerView.mContainerView;
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 padding, view.getPaddingBottom());
     }
@@ -209,7 +210,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingBottom(int padding)
     {
-        final View view = mDialogerView;
+        final View view = mDialogerView.mContainerView;
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 view.getPaddingRight(), padding);
     }
@@ -217,7 +218,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddings(int paddings)
     {
-        mDialogerView.setPadding(paddings, paddings, paddings, paddings);
+        mDialogerView.mContainerView.setPadding(paddings, paddings, paddings, paddings);
     }
 
     @Override
@@ -444,9 +445,10 @@ public class FDialoger implements Dialoger
             Log.i(Dialoger.class.getSimpleName(), "onStop");
     }
 
-    private class InternalDialogerView extends RelativeLayout
+    private class InternalDialogerView extends FrameLayout
     {
         private final View mBackgroundView;
+        private final LinearLayout mContainerView;
 
         public InternalDialogerView(Context context)
         {
@@ -455,6 +457,11 @@ public class FDialoger implements Dialoger
             mBackgroundView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
             addView(mBackgroundView);
+
+            mContainerView = new LinearLayout(context);
+            mContainerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            addView(mContainerView);
         }
 
         @Override
