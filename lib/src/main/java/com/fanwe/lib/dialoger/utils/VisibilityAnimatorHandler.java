@@ -112,10 +112,10 @@ public final class VisibilityAnimatorHandler
 
     public void cancelAnimators()
     {
-        if (mShowAnimator != null)
+        if (mShowAnimator != null && mShowAnimator.isStarted())
             mShowAnimator.cancel();
 
-        if (mHideAnimator != null)
+        if (mHideAnimator != null && mHideAnimator.isStarted())
             mHideAnimator.cancel();
     }
 
