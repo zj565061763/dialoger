@@ -5,7 +5,7 @@
 `implementation 'com.fanwe.android:dialoger:1.0.0-beta2'`
 
 # 简单demo
-1. 创建一个ViewGroup
+1. 创建一个Dialoger
 ```java
 public class TestDialoger extends FDialoger
 {
