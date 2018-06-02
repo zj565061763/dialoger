@@ -113,6 +113,14 @@ public class FDialoger implements Dialoger
         onContentViewAdded(view);
     }
 
+    @Override
+    public <T extends View> T findViewById(int id)
+    {
+        if (mContentView == null)
+            return null;
+        return mContentView.findViewById(id);
+    }
+
     protected void onContentViewAdded(View contentView)
     {
     }
@@ -427,6 +435,14 @@ public class FDialoger implements Dialoger
         public InternalDialogView(Context context)
         {
             super(context);
+        }
+
+        @Override
+        public void onViewAdded(View child)
+        {
+            super.onViewAdded(child);
+            if (getChildCount() > 1)
+                throw new RuntimeException("dialoger view can only have one child");
         }
 
         @Override

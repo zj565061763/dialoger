@@ -44,6 +44,8 @@ public interface Dialoger
      */
     void setContentView(View view);
 
+    <T extends View> T findViewById(int id);
+
     /**
      * 设置按返回键是否可以关闭窗口，默认true
      * <br>
