@@ -28,6 +28,10 @@ public class TestDialoger extends FDialoger
             public void onClick(View v)
             {
                 Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+                /**
+                 * 关闭窗口
+                 */
+                dismiss();
             }
         });
     }
@@ -76,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         mDialoger.setCancelable(true);
         /**
-         * 设置触摸到非内容区域是否关闭窗口，默认-true
+         * 设置触摸到非内容区域是否关闭窗口，默认false
          */
         mDialoger.setCanceledOnTouchOutside(true);
         /**
@@ -169,7 +173,7 @@ public interface Dialoger
     void setCancelable(boolean cancel);
 
     /**
-     * 设置触摸到非内容view区域是否关闭窗口，默认true
+     * 设置触摸到非内容view区域是否关闭窗口，默认false
      *
      * @param cancel
      */
