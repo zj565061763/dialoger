@@ -395,9 +395,6 @@ public class FDialoger implements Dialoger
 
     private Animator createAnimator(boolean show)
     {
-        if (mIsDebug)
-            Log.i(Dialoger.class.getSimpleName(), "createAnimator show:" + show);
-
         Animator animator = null;
 
         final Animator dialogAnimator = mDialogAnimatorCreater != null ?
@@ -418,6 +415,10 @@ public class FDialoger implements Dialoger
         {
             animator = contentAnimator;
         }
+
+        if (mIsDebug)
+            Log.i(Dialoger.class.getSimpleName(), "createAnimator " + (show ? "show" : "dismiss"));
+
         return animator;
     }
 
