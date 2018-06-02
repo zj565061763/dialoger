@@ -179,9 +179,9 @@ public interface Dialoger
         /**
          * 显示后回调
          *
-         * @param dialog
+         * @param dialoger
          */
-        void onShow(Dialoger dialog);
+        void onShow(Dialoger dialoger);
     }
 
     /**

@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDialoger.setOnShowListener(new Dialoger.OnShowListener()
         {
             @Override
-            public void onShow(Dialoger dialog)
+            public void onShow(Dialoger dialoger)
             {
-
+                Log.i(TAG, "onShow:" + dialoger);
             }
         });
         /**
