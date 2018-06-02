@@ -132,7 +132,7 @@ public class FDialoger implements Dialoger
     @Override
     public void setBackgroundColor(int color)
     {
-        if (color == 0 || color == Color.TRANSPARENT)
+        if (color <= 0)
             mDialogerView.mBackgroundView.setBackgroundDrawable(null);
         else
             mDialogerView.mBackgroundView.setBackgroundColor(color);
