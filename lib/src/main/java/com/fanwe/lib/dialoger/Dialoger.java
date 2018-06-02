@@ -1,12 +1,16 @@
 package com.fanwe.lib.dialoger;
 
 import android.animation.Animator;
+import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
 public interface Dialoger
 {
+
+    Context getContext();
+
     /**
      * 返回窗口view
      *

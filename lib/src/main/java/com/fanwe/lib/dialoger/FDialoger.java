@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.widget.LinearLayout;
 
 import com.fanwe.lib.dialoger.animator.ScaleXYCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
@@ -37,12 +39,17 @@ public class FDialoger implements Dialoger
     private AnimatorCreater mContentAnimatorCreater;
     private boolean mStartShowAnimator;
 
+    public FDialoger(Activity activity)
+    {
+        this(activity, null);
+    }
+
     public FDialoger(Activity activity, ViewGroup dialogView)
     {
         if (activity == null)
             throw new NullPointerException("activity is null");
         if (dialogView == null)
-            throw new NullPointerException("dialogView is null");
+            dialogView = new InternalDialogView(activity);
 
         mActivity = activity;
         mDialogParent = activity.findViewById(android.R.id.content);
@@ -50,6 +57,12 @@ public class FDialoger implements Dialoger
 
         dialogView.addOnAttachStateChangeListener(mOnAttachStateChangeListener);
         setContentAnimatorCreater(new ScaleXYCreater());
+    }
+
+    @Override
+    public Context getContext()
+    {
+        return mActivity;
     }
 
     @Override
@@ -405,5 +418,27 @@ public class FDialoger implements Dialoger
      */
     protected void onStop()
     {
+    }
+
+    private class InternalDialogView extends LinearLayout
+    {
+        public InternalDialogView(Context context)
+        {
+            super(context);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int l, int t, int r, int b)
+        {
+            super.onLayout(changed, l, t, r, b);
+            FDialoger.this.onLayout(changed, l, t, r, b);
+        }
+
+        @Override
+        public boolean onTouchEvent(MotionEvent event)
+        {
+            super.onTouchEvent(event);
+            return FDialoger.this.onTouchEvent(event);
+        }
     }
 }
