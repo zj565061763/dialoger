@@ -443,6 +443,9 @@ public class FDialoger implements Dialoger
             super.onViewAdded(child);
             if (getChildCount() > 1)
                 throw new RuntimeException("dialoger view can only have one child");
+
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "contentView:" + child);
         }
 
         @Override
