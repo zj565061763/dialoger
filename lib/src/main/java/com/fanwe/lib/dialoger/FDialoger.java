@@ -59,7 +59,7 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public final View getContentView()
+    public View getContentView()
     {
         return mContentView;
     }
