@@ -144,12 +144,6 @@ public final class VisibilityAnimatorHandler
             mHideAnimator.cancel();
     }
 
-    public void cancelAnimators()
-    {
-        cancelShowAnimator();
-        cancelHideAnimator();
-    }
-
     private static class AnimatorListenerWrapper implements Animator.AnimatorListener
     {
         private Animator.AnimatorListener mOriginal;

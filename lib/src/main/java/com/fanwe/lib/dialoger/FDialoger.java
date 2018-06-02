@@ -328,7 +328,7 @@ public class FDialoger implements Dialoger
         }
     }
 
-    private boolean mRemoveByAnimator;
+    private boolean mRemoveByHideAnimator;
 
     private VisibilityAnimatorHandler getAnimatorHandler()
     {
@@ -394,6 +394,9 @@ public class FDialoger implements Dialoger
 
     private Animator createAnimator(boolean show)
     {
+        if (mIsDebug)
+            Log.i(Dialoger.class.getSimpleName(), "createAnimator show:" + show);
+
         Animator animator = null;
 
         final Animator dialogAnimator = mDialogAnimatorCreater != null ?
@@ -417,15 +420,15 @@ public class FDialoger implements Dialoger
         return animator;
     }
 
-    private void removeDialogerView(boolean removeByAnimator)
+    private void removeDialogerView(boolean removeByHideAnimator)
     {
         if (mActivity.isFinishing())
             return;
 
         if (mIsDebug)
-            Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by animator:" + removeByAnimator);
+            Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by hideAnimator:" + removeByHideAnimator);
 
-        mRemoveByAnimator = removeByAnimator;
+        mRemoveByHideAnimator = removeByHideAnimator;
 
         final ViewParent parent = mDialogerView.getParent();
         if (parent instanceof ViewGroup)
@@ -552,9 +555,11 @@ public class FDialoger implements Dialoger
             mStartShowAnimator = false;
             stopDismissRunnable();
 
-            if (!mRemoveByAnimator)
-                getAnimatorHandler().cancelAnimators();
-            mRemoveByAnimator = false;
+            getAnimatorHandler().cancelShowAnimator();
+            if (!mRemoveByHideAnimator)
+                getAnimatorHandler().cancelHideAnimator();
+
+            mRemoveByHideAnimator = false;
 
             if (mOnDismissListener != null)
             {
