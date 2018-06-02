@@ -260,26 +260,31 @@ public class FDialoger implements Dialoger
 
         if (attach)
         {
-            if (!isShowing() && mContentView != null)
-            {
-                mIsAttached = true;
+            if (mContentView == null)
+                return;
+            if (isShowing())
+                return;
 
-                if (mGravity == Gravity.NO_GRAVITY)
-                    setGravity(Gravity.CENTER);
+            mIsAttached = true;
+            if (mGravity == Gravity.NO_GRAVITY)
+                setGravity(Gravity.CENTER);
 
-                onStart();
-                mDialogerParent.addView(mDialogerView);
-            }
+            onStart();
+            mDialogerParent.addView(mDialogerView);
         } else
         {
-            if (isShowing() && !mActivity.isFinishing())
-            {
-                mIsAttached = false;
+            if (mActivity.isFinishing())
+                return;
+            if (!isShowing())
+                return;
 
-                getAnimatorHandler().setHideAnimator(createAnimator(false));
-                if (!getAnimatorHandler().startHideAnimator())
-                    removeDialogView();
-            }
+            mIsAttached = false;
+
+            getAnimatorHandler().setHideAnimator(createAnimator(false));
+            if (getAnimatorHandler().startHideAnimator())
+                return;
+
+            removeDialogView(false);
         }
     }
 
@@ -296,8 +301,7 @@ public class FDialoger implements Dialoger
                 public void onAnimationEnd(Animator animation)
                 {
                     super.onAnimationEnd(animation);
-                    mRemoveByAnimator = true;
-                    removeDialogView();
+                    removeDialogView(true);
                 }
             });
         }
@@ -329,18 +333,18 @@ public class FDialoger implements Dialoger
         return animator;
     }
 
-    private void removeDialogView()
+    private void removeDialogView(boolean removeByAnimator)
     {
-        try
+        if (mActivity.isFinishing())
+            return;
+
+        mRemoveByAnimator = removeByAnimator;
+
+        final ViewParent parent = mDialogerView.getParent();
+        if (parent instanceof ViewGroup)
         {
-            final ViewParent parent = mDialogerView.getParent();
-            if (parent instanceof ViewGroup)
-            {
-                onStop();
-                ((ViewGroup) parent).removeView(mDialogerView);
-            }
-        } catch (Exception e)
-        {
+            onStop();
+            ((ViewGroup) parent).removeView(mDialogerView);
         }
     }
 
