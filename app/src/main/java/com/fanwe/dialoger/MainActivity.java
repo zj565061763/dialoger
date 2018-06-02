@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          */
         mDialoger.setCancelable(true);
         /**
-         * 设置触摸到非内容区域是否关闭窗口，默认-true
+         * 设置触摸到非内容区域是否关闭窗口，默认false
          */
         mDialoger.setCanceledOnTouchOutside(true);
         /**

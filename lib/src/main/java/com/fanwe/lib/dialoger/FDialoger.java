@@ -30,7 +30,7 @@ public class FDialoger implements Dialoger
 
     private View mContentView;
     private boolean mCancelable = true;
-    private boolean mCanceledOnTouchOutside = true;
+    private boolean mCanceledOnTouchOutside = false;
 
     private int mGravity = Gravity.NO_GRAVITY;
 
@@ -62,12 +62,11 @@ public class FDialoger implements Dialoger
         mDialogerParent = activity.findViewById(android.R.id.content);
         mDialogerView = new InternalDialogerView(activity);
 
-        setAnimatorCreater(new AlphaCreater());
-
         final int defaultHorizontalPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
         paddingLeft(defaultHorizontalPadding);
         paddingRight(defaultHorizontalPadding);
 
+        setAnimatorCreater(new AlphaCreater());
         setBackgroundColor(Color.parseColor("#66000000"));
     }
 

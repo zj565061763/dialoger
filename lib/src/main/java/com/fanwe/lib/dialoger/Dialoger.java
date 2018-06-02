@@ -63,7 +63,7 @@ public interface Dialoger
     void setCancelable(boolean cancel);
 
     /**
-     * 设置触摸到非内容view区域是否关闭窗口，默认true
+     * 设置触摸到非内容view区域是否关闭窗口，默认false
      *
      * @param cancel
      */

@@ -27,6 +27,10 @@ public class TestDialoger extends FDialoger
             public void onClick(View v)
             {
                 Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
+                /**
+                 * 关闭窗口
+                 */
+                dismiss();
             }
         });
     }
