@@ -262,6 +262,8 @@ public class FDialoger implements Dialoger
         {
             if (!isShowing() && mContentView != null)
             {
+                mIsAttached = true;
+
                 if (mGravity == Gravity.NO_GRAVITY)
                     setGravity(Gravity.CENTER);
 
@@ -272,13 +274,13 @@ public class FDialoger implements Dialoger
         {
             if (isShowing() && !mActivity.isFinishing())
             {
+                mIsAttached = false;
+
                 getAnimatorHandler().setHideAnimator(createAnimator(false));
                 if (!getAnimatorHandler().startHideAnimator())
                     removeDialogView();
             }
         }
-
-        mIsAttached = attach;
     }
 
     private boolean mRemoveByAnimator;
@@ -387,12 +389,15 @@ public class FDialoger implements Dialoger
         @Override
         public boolean onTouchEvent(MotionEvent event)
         {
-            if (!isViewUnder(mContentView, (int) event.getX(), (int) event.getY()))
+            if (event.getAction() == MotionEvent.ACTION_DOWN)
             {
-                if (mCanceledOnTouchOutside)
+                if (!isViewUnder(mContentView, (int) event.getX(), (int) event.getY()))
                 {
-                    dismiss();
-                    return true;
+                    if (mCanceledOnTouchOutside)
+                    {
+                        dismiss();
+                        return true;
+                    }
                 }
             }
 
