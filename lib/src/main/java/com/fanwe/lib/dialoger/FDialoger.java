@@ -48,7 +48,7 @@ public class FDialoger implements Dialoger
     private VisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mDialogAnimatorCreater;
     private AnimatorCreater mContentAnimatorCreater;
-    private boolean mStartShowAnimator;
+    private boolean mTryStartShowAnimator;
 
     private boolean mIsDebug;
 
@@ -320,6 +320,7 @@ public class FDialoger implements Dialoger
 
             mIsAttached = false;
 
+            mTryStartShowAnimator = false;
             getAnimatorHandler().setHideAnimator(createAnimator(false));
             if (getAnimatorHandler().startHideAnimator())
                 return;
@@ -479,11 +480,11 @@ public class FDialoger implements Dialoger
         protected void onLayout(boolean changed, int l, int t, int r, int b)
         {
             super.onLayout(changed, l, t, r, b);
-            if (mStartShowAnimator)
+            if (mTryStartShowAnimator)
             {
                 getAnimatorHandler().setShowAnimator(createAnimator(true));
                 getAnimatorHandler().startShowAnimator();
-                mStartShowAnimator = false;
+                mTryStartShowAnimator = false;
             }
         }
 
@@ -526,7 +527,7 @@ public class FDialoger implements Dialoger
                 throw new RuntimeException("dialoger view can not be add to:" + mDialogerView.getParent());
 
             mTryShow = null;
-            mStartShowAnimator = true;
+            mTryStartShowAnimator = true;
             if (mOnShowListener != null)
             {
                 getDialogerHandler().post(new Runnable()
@@ -552,7 +553,7 @@ public class FDialoger implements Dialoger
                 throw new RuntimeException("you must call dismiss() method to remove dialoger view");
 
             mTryShow = null;
-            mStartShowAnimator = false;
+            mTryStartShowAnimator = false;
             stopDismissRunnable();
 
             getAnimatorHandler().cancelShowAnimator();
