@@ -44,11 +44,7 @@ public abstract class CombineCreater implements Dialoger.AnimatorCreater
     public final Animator createAnimator(boolean show, View view)
     {
         final Animator animator = getAnimator(show, view, getCreaters());
-        if (animator == null)
-            return null;
-
-        animator.setTarget(view);
-        return animator;
+        return animator == null ? null : animator;
     }
 
     protected abstract Dialoger.AnimatorCreater[] getCreaters();
