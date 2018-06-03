@@ -41,10 +41,8 @@ public class FDialoger implements Dialoger
 
     private boolean mIsAttached;
     /**
-     * true - try show
-     * <br>
-     * false - try dismiss
-     * <br>
+     * true - try show;
+     * false - try dismiss;
      * null - none
      */
     private Boolean mTryShow;
@@ -198,6 +196,9 @@ public class FDialoger implements Dialoger
     public void paddingLeft(int padding)
     {
         final View view = mContainerView;
+        if (view.getPaddingLeft() == padding)
+            return;
+
         view.setPadding(padding, view.getPaddingTop(),
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -206,6 +207,9 @@ public class FDialoger implements Dialoger
     public void paddingTop(int padding)
     {
         final View view = mContainerView;
+        if (view.getPaddingTop() == padding)
+            return;
+
         view.setPadding(view.getPaddingLeft(), padding,
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -214,6 +218,9 @@ public class FDialoger implements Dialoger
     public void paddingRight(int padding)
     {
         final View view = mContainerView;
+        if (view.getPaddingRight() == padding)
+            return;
+
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 padding, view.getPaddingBottom());
     }
@@ -222,6 +229,9 @@ public class FDialoger implements Dialoger
     public void paddingBottom(int padding)
     {
         final View view = mContainerView;
+        if (view.getPaddingBottom() == padding)
+            return;
+
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 view.getPaddingRight(), padding);
     }
@@ -229,7 +239,12 @@ public class FDialoger implements Dialoger
     @Override
     public void paddings(int paddings)
     {
-        mContainerView.setPadding(paddings, paddings, paddings, paddings);
+        final View view = mContainerView;
+        if (view.getPaddingLeft() != paddings || view.getPaddingTop() != paddings
+                || view.getPaddingRight() != paddings || view.getPaddingBottom() != paddings)
+        {
+            mContainerView.setPadding(paddings, paddings, paddings, paddings);
+        }
     }
 
     @Override
