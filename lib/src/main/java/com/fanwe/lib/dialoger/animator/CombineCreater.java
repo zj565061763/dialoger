@@ -24,14 +24,20 @@ public class CombineCreater implements Dialoger.AnimatorCreater
         mCreaters = creaters;
     }
 
+    protected final Dialoger.AnimatorCreater[] getCreaters()
+    {
+        return mCreaters;
+    }
+
     private Animator getAnimator(boolean show, View view)
     {
+        final Dialoger.AnimatorCreater[] creaters = getCreaters();
         final AnimatorSet animatorSet = new AnimatorSet();
 
         Animator mLast = null;
-        for (int i = 0; i < mCreaters.length; i++)
+        for (int i = 0; i < creaters.length; i++)
         {
-            final Animator animator = mCreaters[i].createAnimator(show, view);
+            final Animator animator = creaters[i].createAnimator(show, view);
             if (animator == null)
                 continue;
 
@@ -50,7 +56,7 @@ public class CombineCreater implements Dialoger.AnimatorCreater
     }
 
     @Override
-    public final Animator createAnimator(boolean show, View view)
+    public Animator createAnimator(boolean show, View view)
     {
         final Animator animator = getAnimator(show, view);
         return animator == null ? null : animator;
