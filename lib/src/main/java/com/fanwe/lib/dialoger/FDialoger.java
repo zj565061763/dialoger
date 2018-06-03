@@ -504,10 +504,10 @@ public class FDialoger implements Dialoger
             Log.i(Dialoger.class.getSimpleName(), "onStop");
     }
 
-    private class InternalDialogerView extends FrameLayout
+    private final class InternalDialogerView extends FrameLayout
     {
         private final View mBackgroundView;
-        private final InernalContainerView mContainerView;
+        private final LinearLayout mContainerView;
 
         public InternalDialogerView(Context context)
         {
@@ -640,7 +640,7 @@ public class FDialoger implements Dialoger
         }
     }
 
-    private class InernalContainerView extends LinearLayout
+    private final class InernalContainerView extends LinearLayout
     {
         public InernalContainerView(Context context)
         {
