@@ -109,6 +109,9 @@ public class FDialoger implements Dialoger
 
     private void setDialogerView(View view)
     {
+        if (mContentView == view)
+            return;
+
         final ViewGroup.LayoutParams p = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
