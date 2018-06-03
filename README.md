@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
          * 设置内容view的动画创建对象，通过CombineCreater可以组合多个creater对象
          */
-        mDialoger.setAnimatorCreater(new CombineCreater(new SlideRightRightCreater(), new AlphaCreater()));
+        mDialoger.setAnimatorCreater(new CombineCreater(new SlideTopTopCreater(), new AlphaCreater()));
         /**
          * 设置窗口背景颜色，默认#66000000
          */
