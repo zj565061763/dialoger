@@ -26,7 +26,9 @@ public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
     private final ViewGroup mDialogerParent;
-    private final InternalDialogerView mDialogerView;
+    private final View mDialogerView;
+    private final LinearLayout mContainerView;
+    private final View mBackgroundView;
 
     private View mContentView;
     private boolean mCancelable = true;
@@ -60,7 +62,11 @@ public class FDialoger implements Dialoger
 
         mActivity = activity;
         mDialogerParent = activity.findViewById(android.R.id.content);
-        mDialogerView = new InternalDialogerView(activity);
+
+        final InternalDialogerView dialogerView = new InternalDialogerView(activity);
+        mDialogerView = dialogerView;
+        mContainerView = dialogerView.mContainerView;
+        mBackgroundView = dialogerView.mBackgroundView;
 
         final int defaultHorizontalPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
         paddingLeft(defaultHorizontalPadding);
@@ -91,7 +97,7 @@ public class FDialoger implements Dialoger
     @Override
     public void setContentView(int layoutId)
     {
-        final View view = LayoutInflater.from(mActivity).inflate(layoutId, mDialogerView.mContainerView, false);
+        final View view = LayoutInflater.from(mActivity).inflate(layoutId, mContainerView, false);
         setContentView(view);
     }
 
@@ -113,15 +119,15 @@ public class FDialoger implements Dialoger
             p.height = params.height;
         }
 
-        mDialogerView.mContainerView.removeView(mContentView);
-        mDialogerView.mContainerView.addView(view, p);
+        final View old = mContainerView;
+        mContentView = view;
 
+        mContainerView.removeView(old);
+        mContainerView.addView(view, p);
         onContentViewAdded(view);
 
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "contentView:" + view);
-
-        mContentView = view;
     }
 
     protected void onContentViewAdded(View contentView)
@@ -132,9 +138,9 @@ public class FDialoger implements Dialoger
     public void setBackgroundColor(int color)
     {
         if (color <= 0)
-            mDialogerView.mBackgroundView.setBackgroundDrawable(null);
+            mBackgroundView.setBackgroundDrawable(null);
         else
-            mDialogerView.mBackgroundView.setBackgroundColor(color);
+            mBackgroundView.setBackgroundColor(color);
     }
 
     @Override
@@ -182,13 +188,13 @@ public class FDialoger implements Dialoger
     public void setGravity(int gravity)
     {
         mGravity = gravity;
-        mDialogerView.mContainerView.setGravity(gravity);
+        mContainerView.setGravity(gravity);
     }
 
     @Override
     public void paddingLeft(int padding)
     {
-        final View view = mDialogerView.mContainerView;
+        final View view = mContainerView;
         view.setPadding(padding, view.getPaddingTop(),
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -196,7 +202,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingTop(int padding)
     {
-        final View view = mDialogerView.mContainerView;
+        final View view = mContainerView;
         view.setPadding(view.getPaddingLeft(), padding,
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -204,7 +210,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingRight(int padding)
     {
-        final View view = mDialogerView.mContainerView;
+        final View view = mContainerView;
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 padding, view.getPaddingBottom());
     }
@@ -212,7 +218,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddingBottom(int padding)
     {
-        final View view = mDialogerView.mContainerView;
+        final View view = mContainerView;
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 view.getPaddingRight(), padding);
     }
@@ -220,7 +226,7 @@ public class FDialoger implements Dialoger
     @Override
     public void paddings(int paddings)
     {
-        mDialogerView.mContainerView.setPadding(paddings, paddings, paddings, paddings);
+        mContainerView.setPadding(paddings, paddings, paddings, paddings);
     }
 
     @Override
@@ -403,8 +409,8 @@ public class FDialoger implements Dialoger
     {
         Animator animator = null;
 
-        final Animator animatorBackground = (mDialogerView.mBackgroundView.getBackground() != null) ?
-                new AlphaCreater().createAnimator(show, mDialogerView.mBackgroundView) : null;
+        final Animator animatorBackground = (mBackgroundView.getBackground() != null) ?
+                new AlphaCreater().createAnimator(show, mBackgroundView) : null;
 
         final Animator animatorContent = (mAnimatorCreater != null && mContentView != null) ?
                 mAnimatorCreater.createAnimator(show, mContentView) : null;
@@ -468,27 +474,27 @@ public class FDialoger implements Dialoger
     private class InternalDialogerView extends FrameLayout
     {
         private final View mBackgroundView;
-        private final LinearLayout mContainerView;
+        private final InernalContainerView mContainerView;
 
         public InternalDialogerView(Context context)
         {
             super(context);
-            mBackgroundView = new View(context);
-            mBackgroundView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            addView(mBackgroundView);
 
-            mContainerView = new LinearLayout(context);
-            mContainerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT));
-            addView(mContainerView);
+            final ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT);
+
+            mBackgroundView = new View(context);
+            addView(mBackgroundView, params);
+
+            mContainerView = new InernalContainerView(context);
+            addView(mContainerView, params);
         }
 
         @Override
         public void onViewAdded(View child)
         {
             super.onViewAdded(child);
-            if (getChildCount() > 2)
+            if (child != mBackgroundView && child != mContainerView)
                 throw new RuntimeException("you can not add view to dialoger view");
         }
 
@@ -496,8 +502,8 @@ public class FDialoger implements Dialoger
         public void onViewRemoved(View child)
         {
             super.onViewRemoved(child);
-            if (getChildCount() <= 0)
-                throw new RuntimeException("dialoger view has no child");
+            if (child == mBackgroundView || child == mContainerView)
+                throw new RuntimeException("you can not remove dialoger child");
         }
 
         @Override
@@ -574,7 +580,7 @@ public class FDialoger implements Dialoger
                 Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
 
             if (mIsAttached && !mActivity.isFinishing())
-                throw new RuntimeException("you must call dismiss() method to remove dialoger view");
+                throw new RuntimeException("you must call dismiss() method to remove dialoger");
 
             mTryShow = null;
             mTryStartShowAnimator = false;
@@ -598,6 +604,22 @@ public class FDialoger implements Dialoger
                     }
                 });
             }
+        }
+    }
+
+    private class InernalContainerView extends LinearLayout
+    {
+        public InernalContainerView(Context context)
+        {
+            super(context);
+        }
+
+        @Override
+        public void onViewAdded(View child)
+        {
+            super.onViewAdded(child);
+            if (child != mContentView)
+                throw new RuntimeException("can not add view to contaner");
         }
     }
 }
