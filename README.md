@@ -2,7 +2,7 @@
 封装了dialog的逻辑，可以让某个View具有dialog的属性
 
 # Gradle
-`implementation 'com.fanwe.android:dialoger:1.0.0-beta2'`
+`implementation 'com.fanwe.android:dialoger:1.0.0-beta3'`
 
 # 简单demo
 1. 创建一个Dialoger
