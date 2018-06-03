@@ -18,7 +18,11 @@ public abstract class CombineCreater implements Dialoger.AnimatorCreater
         Animator mLast = null;
         for (int i = 0; i < creaters.length; i++)
         {
-            final Animator animator = creaters[i].createAnimator(show, view);
+            final Dialoger.AnimatorCreater item = creaters[i];
+            if (item == null)
+                continue;
+
+            final Animator animator = item.createAnimator(show, view);
             if (animator == null)
                 continue;
 
