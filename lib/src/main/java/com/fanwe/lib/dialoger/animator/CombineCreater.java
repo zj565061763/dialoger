@@ -6,23 +6,32 @@ import android.view.View;
 
 import com.fanwe.lib.dialoger.Dialoger;
 
-public abstract class CombineCreater implements Dialoger.AnimatorCreater
+public class CombineCreater implements Dialoger.AnimatorCreater
 {
-    private Animator getAnimator(boolean show, View view, Dialoger.AnimatorCreater[] creaters)
+    private final Dialoger.AnimatorCreater[] mCreaters;
+
+    public CombineCreater(Dialoger.AnimatorCreater... creaters)
     {
         if (creaters == null || creaters.length <= 0)
-            return null;
+            throw new IllegalArgumentException("creaters is null or empty");
 
+        for (Dialoger.AnimatorCreater item : creaters)
+        {
+            if (item == null)
+                throw new NullPointerException("creaters array contains null item");
+        }
+
+        mCreaters = creaters;
+    }
+
+    private Animator getAnimator(boolean show, View view)
+    {
         final AnimatorSet animatorSet = new AnimatorSet();
 
         Animator mLast = null;
-        for (int i = 0; i < creaters.length; i++)
+        for (int i = 0; i < mCreaters.length; i++)
         {
-            final Dialoger.AnimatorCreater item = creaters[i];
-            if (item == null)
-                continue;
-
-            final Animator animator = item.createAnimator(show, view);
+            final Animator animator = mCreaters[i].createAnimator(show, view);
             if (animator == null)
                 continue;
 
@@ -43,9 +52,7 @@ public abstract class CombineCreater implements Dialoger.AnimatorCreater
     @Override
     public final Animator createAnimator(boolean show, View view)
     {
-        final Animator animator = getAnimator(show, view, getCreaters());
+        final Animator animator = getAnimator(show, view);
         return animator == null ? null : animator;
     }
-
-    protected abstract Dialoger.AnimatorCreater[] getCreaters();
 }
