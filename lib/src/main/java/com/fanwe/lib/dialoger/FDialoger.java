@@ -654,5 +654,13 @@ public class FDialoger implements Dialoger
             if (child != mContentView)
                 throw new RuntimeException("can not add view to contaner");
         }
+
+        @Override
+        public void onViewRemoved(View child)
+        {
+            super.onViewRemoved(child);
+            if (child == mContentView)
+                throw new RuntimeException("you must call Dialoger.setContentView(null) instead");
+        }
     }
 }
