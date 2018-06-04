@@ -57,7 +57,8 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (mTracker.getSource() != null && mTracker.getTarget() != null)
                 {
-                    mUpdater.start();
+                    if (mUpdater.start())
+                        mUpdater.notifyUpdatable();
                 }
             }
 
@@ -65,6 +66,7 @@ class SimpleTargetDialoger implements TargetDialoger
             public void onStop(Dialoger dialoger)
             {
                 mUpdater.stop();
+                mTracker.setSource(null).setTarget(null);
             }
         });
     }
@@ -91,12 +93,8 @@ class SimpleTargetDialoger implements TargetDialoger
                     mPaddingTop = container.getPaddingTop();
                     mPaddingRight = container.getPaddingRight();
                     mPaddingBottom = container.getPaddingBottom();
-
-                    mTracker.update();
                 } else
                 {
-                    mTracker.setSource(null).setTarget(null);
-
                     mDialoger.paddingLeft(mPaddingLeft);
                     mDialoger.paddingTop(mPaddingTop);
                     mDialoger.paddingRight(mPaddingRight);
