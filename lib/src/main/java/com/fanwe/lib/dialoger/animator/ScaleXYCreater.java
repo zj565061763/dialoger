@@ -20,12 +20,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.view.View;
 
-import com.fanwe.lib.dialoger.Dialoger;
-
 /**
  * 缩放
  */
-public class ScaleXYCreater implements Dialoger.AnimatorCreater
+public class ScaleXYCreater extends BaseAnimatorCreater
 {
     private ObjectAnimator[] getObjectAnimator(float... values)
     {
@@ -45,12 +43,19 @@ public class ScaleXYCreater implements Dialoger.AnimatorCreater
     }
 
     @Override
-    public Animator createAnimator(boolean show, View view)
+    protected Animator onCreateAnimator(boolean show, View view)
     {
         final ObjectAnimator[] animators = show ? getObjectAnimator(0, 1.0f) : getObjectAnimator(1.0f, 0);
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(animators[0]).with(animators[1]);
         animatorSet.setTarget(view);
         return animatorSet;
+    }
+
+    @Override
+    protected void onAnimationEnd(boolean show, View view)
+    {
+        view.setScaleX(1.0f);
+        view.setScaleY(1.0f);
     }
 }

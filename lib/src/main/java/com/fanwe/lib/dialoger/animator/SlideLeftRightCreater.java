@@ -19,20 +19,24 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.view.View;
 
-import com.fanwe.lib.dialoger.Dialoger;
-
 /**
  * 向左滑入，向右滑出
  */
-public class SlideLeftRightCreater implements Dialoger.AnimatorCreater
+public class SlideLeftRightCreater extends BaseAnimatorCreater
 {
     @Override
-    public Animator createAnimator(boolean show, View view)
+    protected Animator onCreateAnimator(boolean show, View view)
     {
         final ObjectAnimator animator = new ObjectAnimator();
         animator.setPropertyName(View.TRANSLATION_X.getName());
         animator.setFloatValues(show ? new float[]{view.getWidth(), 0} : new float[]{0, view.getWidth()});
         animator.setTarget(view);
         return animator;
+    }
+
+    @Override
+    protected void onAnimationEnd(boolean show, View view)
+    {
+        view.setTranslationX(0);
     }
 }

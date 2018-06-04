@@ -19,12 +19,10 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.view.View;
 
-import com.fanwe.lib.dialoger.Dialoger;
-
 /**
  * 透明度
  */
-public class AlphaCreater implements Dialoger.AnimatorCreater
+public class AlphaCreater extends BaseAnimatorCreater
 {
     private ObjectAnimator getObjectAnimator(float... values)
     {
@@ -35,10 +33,16 @@ public class AlphaCreater implements Dialoger.AnimatorCreater
     }
 
     @Override
-    public Animator createAnimator(boolean show, View view)
+    protected Animator onCreateAnimator(boolean show, View view)
     {
         final Animator animator = show ? getObjectAnimator(0, 1.0f) : getObjectAnimator(1.0f, 0);
         animator.setTarget(view);
         return animator;
+    }
+
+    @Override
+    protected void onAnimationEnd(boolean show, View view)
+    {
+        view.setAlpha(1.0f);
     }
 }

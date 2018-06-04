@@ -19,20 +19,24 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.view.View;
 
-import com.fanwe.lib.dialoger.Dialoger;
-
 /**
  * 向下滑入，向上滑出
  */
-public class SlideBottomTopCreater implements Dialoger.AnimatorCreater
+public class SlideBottomTopCreater extends BaseAnimatorCreater
 {
     @Override
-    public Animator createAnimator(boolean show, View view)
+    protected Animator onCreateAnimator(boolean show, View view)
     {
         final ObjectAnimator animator = new ObjectAnimator();
         animator.setPropertyName(View.TRANSLATION_Y.getName());
         animator.setFloatValues(show ? new float[]{-view.getHeight(), 0} : new float[]{0, -view.getHeight()});
         animator.setTarget(view);
         return animator;
+    }
+
+    @Override
+    protected void onAnimationEnd(boolean show, View view)
+    {
+        view.setTranslationY(0);
     }
 }
