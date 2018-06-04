@@ -166,6 +166,7 @@ public class FDialoger implements Dialoger
     {
         if (mContentView == null)
             return null;
+
         return mContentView.findViewById(id);
     }
 
@@ -449,6 +450,7 @@ public class FDialoger implements Dialoger
                     super.onAnimationEnd(animation);
                     if (mIsDebug)
                         Log.i(Dialoger.class.getSimpleName(), "dismiss onAnimationEnd ");
+
                     removeDialogerView(true);
                 }
             });
