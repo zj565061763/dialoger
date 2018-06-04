@@ -11,8 +11,7 @@ import android.view.View;
 import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.animator.CombineCreater;
-import com.fanwe.lib.dialoger.animator.SlideRightRightCreater;
-import com.fanwe.lib.dialoger.animator.SlideTopTopCreater;
+import com.fanwe.lib.dialoger.animator.SlideBottomTopCreater;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
@@ -60,11 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
          * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出，默认为透明度变化
          */
-        mDialoger.setAnimatorCreater(new SlideTopTopCreater());
+        mDialoger.setAnimatorCreater(new SlideBottomTopCreater());
         /**
          * 设置内容view的动画创建对象，通过CombineCreater可以组合多个creater对象
          */
-        mDialoger.setAnimatorCreater(new CombineCreater(new SlideTopTopCreater(), new AlphaCreater()));
+        mDialoger.setAnimatorCreater(new CombineCreater(new SlideBottomTopCreater(), new AlphaCreater()));
         /**
          * 设置窗口背景颜色，默认#66000000
          */

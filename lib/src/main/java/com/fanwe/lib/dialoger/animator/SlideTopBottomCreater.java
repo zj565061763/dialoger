@@ -22,16 +22,16 @@ import android.view.View;
 import com.fanwe.lib.dialoger.Dialoger;
 
 /**
- * 右边滑入右边滑出
+ * 向上滑入，向下滑出
  */
-public class SlideRightRightCreater implements Dialoger.AnimatorCreater
+public class SlideTopBottomCreater implements Dialoger.AnimatorCreater
 {
     @Override
     public Animator createAnimator(boolean show, View view)
     {
         final ObjectAnimator animator = new ObjectAnimator();
-        animator.setPropertyName(View.TRANSLATION_X.getName());
-        animator.setFloatValues(show ? new float[]{view.getWidth(), 0} : new float[]{0, view.getWidth()});
+        animator.setPropertyName(View.TRANSLATION_Y.getName());
+        animator.setFloatValues(show ? new float[]{view.getHeight(), 0} : new float[]{0, view.getHeight()});
         animator.setTarget(view);
         return animator;
     }

@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.fanwe.android:viewtracker:1.0.0-rc6'
 }
 
 publish {

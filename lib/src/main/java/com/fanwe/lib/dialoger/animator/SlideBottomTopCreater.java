@@ -22,16 +22,16 @@ import android.view.View;
 import com.fanwe.lib.dialoger.Dialoger;
 
 /**
- * 底部滑入底部滑出
+ * 向下滑入，向上滑出
  */
-public class SlideBotBotCreater implements Dialoger.AnimatorCreater
+public class SlideBottomTopCreater implements Dialoger.AnimatorCreater
 {
     @Override
     public Animator createAnimator(boolean show, View view)
     {
         final ObjectAnimator animator = new ObjectAnimator();
         animator.setPropertyName(View.TRANSLATION_Y.getName());
-        animator.setFloatValues(show ? new float[]{view.getHeight(), 0} : new float[]{0, view.getHeight()});
+        animator.setFloatValues(show ? new float[]{-view.getHeight(), 0} : new float[]{0, -view.getHeight()});
         animator.setTarget(view);
         return animator;
     }

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@color/colorAccent"
-        android:text="button"
+        android:text="hello, i am button"
         android:textColor="@android:color/white" />
 
 </LinearLayout>
