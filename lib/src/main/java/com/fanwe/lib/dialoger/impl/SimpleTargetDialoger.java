@@ -57,8 +57,7 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (mTracker.getSource() != null && mTracker.getTarget() != null)
                 {
-                    if (mUpdater.start())
-                        mUpdater.notifyUpdatable();
+                    mUpdater.start();
                 }
             }
 
@@ -84,7 +83,7 @@ class SimpleTargetDialoger implements TargetDialoger
         mUpdater.setOnStateChangeCallback(new Updater.OnStateChangeCallback()
         {
             @Override
-            public void onStateChanged(boolean started)
+            public void onStateChanged(boolean started, Updater updater)
             {
                 if (started)
                 {
@@ -93,6 +92,8 @@ class SimpleTargetDialoger implements TargetDialoger
                     mPaddingTop = container.getPaddingTop();
                     mPaddingRight = container.getPaddingRight();
                     mPaddingBottom = container.getPaddingBottom();
+
+                    updater.notifyUpdatable();
                 } else
                 {
                     mDialoger.paddingLeft(mPaddingLeft);
