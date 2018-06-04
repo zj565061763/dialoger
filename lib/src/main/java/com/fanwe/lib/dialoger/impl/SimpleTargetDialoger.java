@@ -49,8 +49,11 @@ class SimpleTargetDialoger implements TargetDialoger
             @Override
             public void onStart(Dialoger dialoger)
             {
-                if (mViewTracker.update())
+                if (mViewTracker.getSource() != null && mViewTracker.getTarget() != null)
+                {
+                    mViewTracker.update();
                     getViewUpdater().start();
+                }
             }
 
             @Override
