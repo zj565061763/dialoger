@@ -32,9 +32,9 @@ class SimpleTargetDialoger implements TargetDialoger
 {
     private final Dialoger mDialoger;
 
+    private final ViewUpdater mUpdater = new OnPreDrawUpdater();
     private final ViewTracker mTracker = new FViewTracker();
     private Position mPosition;
-    private ViewUpdater mUpdater;
 
     private int mPaddingLeft;
     private int mPaddingTop;
@@ -47,6 +47,7 @@ class SimpleTargetDialoger implements TargetDialoger
             throw new NullPointerException("dialoger is null");
 
         mDialoger = dialoger;
+        initUpdater();
         initTracker();
 
         dialoger.addLifecycleCallback(new Dialoger.LifecycleCallback()
@@ -56,61 +57,56 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (mTracker.getSource() != null && mTracker.getTarget() != null)
                 {
-                    getUpdater().start();
+                    mUpdater.start();
                 }
             }
 
             @Override
             public void onStop(Dialoger dialoger)
             {
-                getUpdater().stop();
+                mUpdater.stop();
             }
         });
     }
 
-    private ViewUpdater getUpdater()
+    private void initUpdater()
     {
-        if (mUpdater == null)
+        mUpdater.setUpdatable(new Updater.Updatable()
         {
-            mUpdater = new OnPreDrawUpdater();
-            mUpdater.setUpdatable(new Updater.Updatable()
+            @Override
+            public void update()
             {
-                @Override
-                public void update()
+                mTracker.update();
+            }
+        });
+        mUpdater.setOnStateChangeCallback(new Updater.OnStateChangeCallback()
+        {
+            @Override
+            public void onStateChanged(boolean started)
+            {
+                if (started)
                 {
+                    final View container = (View) mDialoger.getContentView().getParent();
+                    mPaddingLeft = container.getPaddingLeft();
+                    mPaddingTop = container.getPaddingTop();
+                    mPaddingRight = container.getPaddingRight();
+                    mPaddingBottom = container.getPaddingBottom();
+
                     mTracker.update();
-                }
-            });
-            mUpdater.setOnStateChangeCallback(new Updater.OnStateChangeCallback()
-            {
-                @Override
-                public void onStateChanged(boolean started)
+                } else
                 {
-                    if (started)
-                    {
-                        final View container = (View) mDialoger.getContentView().getParent();
-                        mPaddingLeft = container.getPaddingLeft();
-                        mPaddingTop = container.getPaddingTop();
-                        mPaddingRight = container.getPaddingRight();
-                        mPaddingBottom = container.getPaddingBottom();
+                    mTracker.setSource(null).setTarget(null);
 
-                        mTracker.update();
-                    } else
-                    {
-                        mTracker.setSource(null).setTarget(null);
-
-                        mDialoger.paddingLeft(mPaddingLeft);
-                        mDialoger.paddingTop(mPaddingTop);
-                        mDialoger.paddingRight(mPaddingRight);
-                        mDialoger.paddingBottom(mPaddingBottom);
-                    }
+                    mDialoger.paddingLeft(mPaddingLeft);
+                    mDialoger.paddingTop(mPaddingTop);
+                    mDialoger.paddingRight(mPaddingRight);
+                    mDialoger.paddingBottom(mPaddingBottom);
                 }
-            });
+            }
+        });
 
-            final Activity activity = (Activity) mDialoger.getContext();
-            mUpdater.setView(activity.findViewById(android.R.id.content));
-        }
-        return mUpdater;
+        final Activity activity = (Activity) mDialoger.getContext();
+        mUpdater.setView(activity.findViewById(android.R.id.content));
     }
 
     private void initTracker()
