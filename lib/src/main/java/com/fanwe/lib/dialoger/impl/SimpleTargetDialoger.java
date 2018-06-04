@@ -42,7 +42,7 @@ class SimpleTargetDialoger implements TargetDialoger
             throw new NullPointerException("dialoger is null");
 
         mDialoger = dialoger;
-        initViewTracker();
+        initTracker();
 
         dialoger.addLifecycleCallback(new Dialoger.LifecycleCallback()
         {
@@ -85,7 +85,7 @@ class SimpleTargetDialoger implements TargetDialoger
         return mUpdater;
     }
 
-    private void initViewTracker()
+    private void initTracker()
     {
         mTracker.setCallback(new ViewTracker.Callback()
         {
