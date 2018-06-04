@@ -40,6 +40,9 @@ import com.fanwe.lib.dialoger.TargetDialoger;
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
@@ -56,14 +59,9 @@ public class FDialoger implements Dialoger
 
     private OnDismissListener mOnDismissListener;
     private OnShowListener mOnShowListener;
+    private List<LifecycleCallback> mLifecycleCallbacks;
 
     private boolean mIsAttached;
-    /**
-     * true - try show;
-     * false - try dismiss;
-     * null - none
-     */
-    private Boolean mTryShow;
 
     private VisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mAnimatorCreater;
@@ -205,6 +203,33 @@ public class FDialoger implements Dialoger
     }
 
     @Override
+    public void addLifecycleCallback(LifecycleCallback callback)
+    {
+        if (callback == null)
+            return;
+
+        if (mLifecycleCallbacks == null)
+            mLifecycleCallbacks = new CopyOnWriteArrayList<>();
+
+        if (mLifecycleCallbacks.contains(callback))
+            return;
+
+        mLifecycleCallbacks.add(callback);
+    }
+
+    @Override
+    public void removeLifecycleCallback(LifecycleCallback callback)
+    {
+        if (callback == null || mLifecycleCallbacks == null)
+            return;
+
+        mLifecycleCallbacks.remove(callback);
+
+        if (mLifecycleCallbacks.isEmpty())
+            mLifecycleCallbacks = null;
+    }
+
+    @Override
     public void setGravity(int gravity)
     {
         mGravity = gravity;
@@ -334,9 +359,6 @@ public class FDialoger implements Dialoger
 
         if (attach)
         {
-            if (mTryShow != null && mTryShow == false)
-                throw new RuntimeException("show() can not be called in onStop() method");
-
             if (mContentView == null)
                 return;
 
@@ -353,14 +375,9 @@ public class FDialoger implements Dialoger
             if (mGravity == Gravity.NO_GRAVITY)
                 setGravity(Gravity.CENTER);
 
-            mTryShow = true;
-            onStart();
             mDialogerParent.addView(mDialogerView);
         } else
         {
-            if (mTryShow != null && mTryShow == true)
-                throw new RuntimeException("dismiss() can not be called in onStart() method");
-
             if (mActivity.isFinishing())
                 return;
 
@@ -483,11 +500,7 @@ public class FDialoger implements Dialoger
 
         final ViewParent parent = mDialogerView.getParent();
         if (parent instanceof ViewGroup)
-        {
-            mTryShow = false;
-            onStop();
             ((ViewGroup) parent).removeView(mDialogerView);
-        }
     }
 
     /**
@@ -497,9 +510,6 @@ public class FDialoger implements Dialoger
     {
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "onStart");
-
-        if (mTargetDialoger != null)
-            mTargetDialoger.getViewTracker().start();
     }
 
     /**
@@ -509,9 +519,6 @@ public class FDialoger implements Dialoger
     {
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "onStop");
-
-        if (mTargetDialoger != null)
-            mTargetDialoger.getViewTracker().stop();
     }
 
     private SimpleTargetDialoger mTargetDialoger;
@@ -609,8 +616,17 @@ public class FDialoger implements Dialoger
             if (mDialogerView.getParent() != mDialogerParent)
                 throw new RuntimeException("dialoger view can not be add to:" + mDialogerView.getParent());
 
-            mTryShow = null;
             mTryStartShowAnimator = true;
+
+            // notify
+            onStart();
+            if (mLifecycleCallbacks != null)
+            {
+                for (LifecycleCallback item : mLifecycleCallbacks)
+                {
+                    item.onStart(FDialoger.this);
+                }
+            }
             if (mOnShowListener != null)
             {
                 getDialogerHandler().post(new Runnable()
@@ -635,16 +651,23 @@ public class FDialoger implements Dialoger
             if (mIsAttached && !mActivity.isFinishing())
                 throw new RuntimeException("you must call dismiss() method to remove dialoger");
 
-            mTryShow = null;
             mTryStartShowAnimator = false;
             stopDismissRunnable();
 
             getAnimatorHandler().cancelShowAnimator();
             if (!mRemoveByHideAnimator)
                 getAnimatorHandler().cancelHideAnimator();
-
             mRemoveByHideAnimator = false;
 
+            // notify
+            onStop();
+            if (mLifecycleCallbacks != null)
+            {
+                for (LifecycleCallback item : mLifecycleCallbacks)
+                {
+                    item.onStop(FDialoger.this);
+                }
+            }
             if (mOnDismissListener != null)
             {
                 getDialogerHandler().post(new Runnable()

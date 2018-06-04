@@ -16,29 +16,67 @@
 package com.fanwe.lib.dialoger.impl;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
 import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.TargetDialoger;
+import com.fanwe.lib.updater.Updater;
+import com.fanwe.lib.updater.ViewUpdater;
+import com.fanwe.lib.updater.impl.OnPreDrawUpdater;
 import com.fanwe.lib.viewtracker.FViewTracker;
 import com.fanwe.lib.viewtracker.ViewTracker;
-import com.fanwe.lib.viewtracker.update.ActivityUpdater;
 
 class SimpleTargetDialoger implements TargetDialoger
 {
     private final Dialoger mDialoger;
     private ViewTracker mViewTracker;
     private Position mPosition;
+    private ViewUpdater mViewUpdater;
 
     public SimpleTargetDialoger(Dialoger dialoger)
     {
         if (dialoger == null)
             throw new NullPointerException("dialoger is null");
+
         mDialoger = dialoger;
+        dialoger.addLifecycleCallback(new Dialoger.LifecycleCallback()
+        {
+            @Override
+            public void onStart(Dialoger dialoger)
+            {
+            }
+
+            @Override
+            public void onStop(Dialoger dialoger)
+            {
+                getViewUpdater().stop();
+            }
+        });
     }
 
-    ViewTracker getViewTracker()
+    private ViewUpdater getViewUpdater()
+    {
+        if (mViewUpdater == null)
+        {
+            mViewUpdater = new OnPreDrawUpdater();
+            mViewUpdater.setUpdatable(new Updater.Updatable()
+            {
+                @Override
+                public void update()
+                {
+                    getViewTracker().update();
+                }
+            });
+
+            final Activity activity = (Activity) mDialoger.getContext();
+            mViewUpdater.setView(activity.findViewById(android.R.id.content));
+        }
+        return mViewUpdater;
+    }
+
+    private ViewTracker getViewTracker()
     {
         if (mViewTracker == null)
         {
@@ -52,6 +90,8 @@ class SimpleTargetDialoger implements TargetDialoger
                     final int dy = y - source.getTop();
                     source.offsetLeftAndRight(dx);
                     source.offsetTopAndBottom(dy);
+
+                    Log.i(SimpleTargetDialoger.class.getSimpleName(), "onUpdate:" + source.getLeft() + "," + source.getTop() + " " + mPosition);
 
                     switch (mPosition)
                     {
@@ -137,7 +177,6 @@ class SimpleTargetDialoger implements TargetDialoger
                     mDialoger.paddingTop(padding);
                 }
             });
-            mViewTracker.setUpdater(new ActivityUpdater((Activity) mDialoger.getContext()));
         }
         return mViewTracker;
     }
@@ -167,5 +206,6 @@ class SimpleTargetDialoger implements TargetDialoger
         getViewTracker().setSource(mDialoger.getContentView());
 
         mDialoger.show();
+        getViewUpdater().start();
     }
 }

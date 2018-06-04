@@ -5,11 +5,43 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btn_show"
+        android:id="@+id/btn_top_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:onClick="onClick"
+        android:text="btn" />
+
+    <Button
+        android:id="@+id/btn_center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:onClick="onClick"
-        android:text="Hello World!" />
+        android:text="btn" />
+
+    <Button
+        android:id="@+id/btn_bottom_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:onClick="onClick"
+        android:text="btn" />
+
+    <Button
+        android:id="@+id/btn_left_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|center_vertical"
+        android:onClick="onClick"
+        android:text="btn" />
+
+    <Button
+        android:id="@+id/btn_right_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right|center_vertical"
+        android:onClick="onClick"
+        android:text="btn" />
 
 </FrameLayout>

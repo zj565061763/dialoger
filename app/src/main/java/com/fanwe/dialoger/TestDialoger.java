@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fanwe.lib.dialoger.FDialoger;
+import com.fanwe.lib.dialoger.impl.FDialoger;
 
 public class TestDialoger extends FDialoger
 {

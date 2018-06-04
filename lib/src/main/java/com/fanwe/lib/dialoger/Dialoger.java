@@ -106,6 +106,20 @@ public interface Dialoger
     void setOnShowListener(OnShowListener listener);
 
     /**
+     * 添加生命周期回调
+     *
+     * @param callback
+     */
+    void addLifecycleCallback(LifecycleCallback callback);
+
+    /**
+     * 移除生命周期回调
+     *
+     * @param callback
+     */
+    void removeLifecycleCallback(LifecycleCallback callback);
+
+    /**
      * 设置重力属性{@link android.view.Gravity}
      *
      * @param gravity
@@ -229,5 +243,12 @@ public interface Dialoger
          * @return
          */
         Animator createAnimator(boolean show, View view);
+    }
+
+    interface LifecycleCallback
+    {
+        void onStart(Dialoger dialoger);
+
+        void onStop(Dialoger dialoger);
     }
 }
