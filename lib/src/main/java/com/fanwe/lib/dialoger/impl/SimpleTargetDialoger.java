@@ -31,9 +31,12 @@ import com.fanwe.lib.viewtracker.ViewTracker;
 class SimpleTargetDialoger implements TargetDialoger
 {
     private final Dialoger mDialoger;
+
     private ViewTracker mViewTracker;
     private Position mPosition;
     private ViewUpdater mViewUpdater;
+
+    private boolean mIsShowByCurrent;
 
     public SimpleTargetDialoger(Dialoger dialoger)
     {
@@ -46,12 +49,16 @@ class SimpleTargetDialoger implements TargetDialoger
             @Override
             public void onStart(Dialoger dialoger)
             {
+                if (mIsShowByCurrent)
+                    getViewUpdater().start();
+                mIsShowByCurrent = false;
             }
 
             @Override
             public void onStop(Dialoger dialoger)
             {
                 getViewUpdater().stop();
+                mIsShowByCurrent = false;
             }
         });
     }
@@ -205,7 +212,7 @@ class SimpleTargetDialoger implements TargetDialoger
         getViewTracker().setTarget(target);
         getViewTracker().setSource(mDialoger.getContentView());
 
+        mIsShowByCurrent = true;
         mDialoger.show();
-        getViewUpdater().start();
     }
 }
