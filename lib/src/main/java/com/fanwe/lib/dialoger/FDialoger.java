@@ -21,6 +21,7 @@ import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -668,6 +669,14 @@ public class FDialoger implements Dialoger
         {
             super.onLayout(changed, l, t, r, b);
             FDialoger.this.checkLayoutParams(this);
+        }
+
+        @Override
+        public void setBackgroundDrawable(Drawable background)
+        {
+            super.setBackgroundDrawable(background);
+            if (background != null)
+                throw new RuntimeException("you can not setBackground to container");
         }
     }
 
