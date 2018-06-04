@@ -652,7 +652,7 @@ public class FDialoger implements Dialoger
         {
             super.onViewAdded(child);
             if (child != mContentView)
-                throw new RuntimeException("can not add view to contaner");
+                throw new RuntimeException("you can not add view to container");
         }
 
         @Override
@@ -661,6 +661,24 @@ public class FDialoger implements Dialoger
             super.onViewRemoved(child);
             if (child == mContentView)
                 throw new RuntimeException("you must call Dialoger.setContentView(null) instead");
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int l, int t, int r, int b)
+        {
+            super.onLayout(changed, l, t, r, b);
+            final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) getLayoutParams();
+            if (params.height != ViewGroup.LayoutParams.MATCH_PARENT
+                    || params.height != ViewGroup.LayoutParams.MATCH_PARENT)
+            {
+                throw new RuntimeException("you can not change container's width or height");
+            }
+
+            if (params.leftMargin != 0 || params.rightMargin != 0
+                    || params.topMargin != 0 || params.bottomMargin != 0)
+            {
+                throw new RuntimeException("you can not set margin to container");
+            }
         }
     }
 }
