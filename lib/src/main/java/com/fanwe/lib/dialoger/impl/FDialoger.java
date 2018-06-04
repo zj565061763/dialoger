@@ -611,7 +611,6 @@ public class FDialoger implements Dialoger
             super.onAttachedToWindow();
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onAttachedToWindow");
-
             if (mDialogerView.getParent() != mDialogerParent)
                 throw new RuntimeException("dialoger view can not be add to:" + mDialogerView.getParent());
 
@@ -646,7 +645,6 @@ public class FDialoger implements Dialoger
             super.onDetachedFromWindow();
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
-
             if (mIsAttached && !mActivity.isFinishing())
                 throw new RuntimeException("you must call dismiss() method to remove dialoger");
 
