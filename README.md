@@ -12,6 +12,7 @@ public class TestDialoger extends FDialoger
     public TestDialoger(Activity activity)
     {
         super(activity);
+        setDebug(true);
         /**
          * 设置窗口内容
          */
@@ -53,9 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         mDialoger = new TestDialoger(this);
-        /**
-         * 设置窗口关闭监听
-         */
+
+        // 设置窗口关闭监听
         mDialoger.setOnDismissListener(new Dialoger.OnDismissListener()
         {
             @Override
@@ -64,9 +64,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i(TAG, "onDismiss:" + dialoger);
             }
         });
-        /**
-         * 设置窗口显示监听
-         */
+
+        // 设置窗口显示监听
         mDialoger.setOnShowListener(new Dialoger.OnShowListener()
         {
             @Override
@@ -75,25 +74,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i(TAG, "onShow:" + dialoger);
             }
         });
-        /**
-         * 设置按返回键是否可以关闭窗口，默认true
-         */
+
+        // 设置按返回键是否可以关闭窗口，默认true
         mDialoger.setCancelable(true);
-        /**
-         * 设置触摸到非内容区域是否关闭窗口，默认false
-         */
+
+        // 设置触摸到非内容区域是否关闭窗口，默认false
         mDialoger.setCanceledOnTouchOutside(true);
-        /**
-         * 设置内容view的动画创建对象，此处为顶部滑入顶部滑出，默认为透明度变化
-         */
-        mDialoger.setAnimatorCreater(new SlideTopTopCreater());
-        /**
-         * 设置内容view的动画创建对象，通过CombineCreater可以组合多个creater对象
-         */
-        mDialoger.setAnimatorCreater(new CombineCreater(new SlideTopTopCreater(), new AlphaCreater()));
-        /**
-         * 设置窗口背景颜色，默认#66000000
-         */
+
+        // 设置窗口背景颜色，默认#66000000
         mDialoger.setBackgroundColor(Color.parseColor("#66000000"));
     }
 
@@ -102,15 +90,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         switch (v.getId())
         {
-            case R.id.btn_show:
-                /**
-                 * 设置显示位置
-                 */
-                mDialoger.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL);
-                /**
-                 * 显示窗口
-                 */
+            case R.id.btn_top_center:
+                // 设置动画创建对象，此处为：向下滑入，向上滑出
+                mDialoger.setAnimatorCreater(new SlideBottomTopCreater());
+
+                // 显示在目标view的底部
+                mDialoger.target().showPosition(v, TargetDialoger.Position.BottomOutsideCenter);
+                break;
+            case R.id.btn_center:
+                // 设置动画创建对象，通过CombineCreater可以组合多个creater对象
+                mDialoger.setAnimatorCreater(new CombineCreater(new AlphaCreater(), new ScaleXYCreater()));
+
+                // 设置重力属性
+                mDialoger.setGravity(Gravity.CENTER);
+
+                // 显示窗口
                 mDialoger.show();
+                break;
+            case R.id.btn_bottom_center:
+                // 设置动画创建对象，此处为：向上滑入，向下滑出
+                mDialoger.setAnimatorCreater(new SlideTopBottomCreater());
+
+                // 显示在目标view的顶部
+                mDialoger.target().showPosition(v, TargetDialoger.Position.TopOutsideCenter);
+                break;
+            case R.id.btn_left_center:
+                // 设置动画创建对象，此处为：向右滑入，向左滑出
+                mDialoger.setAnimatorCreater(new SlideRightLeftCreater());
+
+                // 显示在目标view的右边
+                mDialoger.target().showPosition(v, TargetDialoger.Position.RightOutsideCenter);
+                break;
+            case R.id.btn_right_center:
+                // 设置动画创建对象，此处为：向左滑入，向右滑出
+                mDialoger.setAnimatorCreater(new SlideLeftRightCreater());
+
+                // 显示在目标view的左边
+                mDialoger.target().showPosition(v, TargetDialoger.Position.LeftOutsideCenter);
                 break;
         }
     }
@@ -216,6 +232,20 @@ public interface Dialoger
     void setOnShowListener(OnShowListener listener);
 
     /**
+     * 添加生命周期回调
+     *
+     * @param callback
+     */
+    void addLifecycleCallback(LifecycleCallback callback);
+
+    /**
+     * 移除生命周期回调
+     *
+     * @param callback
+     */
+    void removeLifecycleCallback(LifecycleCallback callback);
+
+    /**
      * 设置重力属性{@link android.view.Gravity}
      *
      * @param gravity
@@ -292,6 +322,13 @@ public interface Dialoger
     boolean onKeyDown(int keyCode, KeyEvent event);
 
     /**
+     * 返回TargetDialoger对象
+     *
+     * @return
+     */
+    TargetDialoger target();
+
+    /**
      * 关闭监听
      */
     interface OnDismissListener
@@ -332,6 +369,23 @@ public interface Dialoger
          * @return
          */
         Animator createAnimator(boolean show, View view);
+    }
+
+    interface LifecycleCallback
+    {
+        /**
+         * 窗口显示之后回调
+         *
+         * @param dialoger
+         */
+        void onStart(Dialoger dialoger);
+
+        /**
+         * 窗口关闭之后回调
+         *
+         * @param dialoger
+         */
+        void onStop(Dialoger dialoger);
     }
 }
 ```
