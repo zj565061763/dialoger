@@ -32,9 +32,9 @@ class SimpleTargetDialoger implements TargetDialoger
 {
     private final Dialoger mDialoger;
 
-    private final ViewTracker mViewTracker = new FViewTracker();
+    private final ViewTracker mTracker = new FViewTracker();
     private Position mPosition;
-    private ViewUpdater mViewUpdater;
+    private ViewUpdater mUpdater;
 
     public SimpleTargetDialoger(Dialoger dialoger)
     {
@@ -49,45 +49,45 @@ class SimpleTargetDialoger implements TargetDialoger
             @Override
             public void onStart(Dialoger dialoger)
             {
-                if (mViewTracker.getSource() != null && mViewTracker.getTarget() != null)
+                if (mTracker.getSource() != null && mTracker.getTarget() != null)
                 {
-                    mViewTracker.update();
-                    getViewUpdater().start();
+                    mTracker.update();
+                    getUpdater().start();
                 }
             }
 
             @Override
             public void onStop(Dialoger dialoger)
             {
-                getViewUpdater().stop();
-                mViewTracker.setSource(null).setTarget(null);
+                getUpdater().stop();
+                mTracker.setSource(null).setTarget(null);
             }
         });
     }
 
-    private ViewUpdater getViewUpdater()
+    private ViewUpdater getUpdater()
     {
-        if (mViewUpdater == null)
+        if (mUpdater == null)
         {
-            mViewUpdater = new OnPreDrawUpdater();
-            mViewUpdater.setUpdatable(new Updater.Updatable()
+            mUpdater = new OnPreDrawUpdater();
+            mUpdater.setUpdatable(new Updater.Updatable()
             {
                 @Override
                 public void update()
                 {
-                    mViewTracker.update();
+                    mTracker.update();
                 }
             });
 
             final Activity activity = (Activity) mDialoger.getContext();
-            mViewUpdater.setView(activity.findViewById(android.R.id.content));
+            mUpdater.setView(activity.findViewById(android.R.id.content));
         }
-        return mViewUpdater;
+        return mUpdater;
     }
 
     private void initViewTracker()
     {
-        mViewTracker.setCallback(new ViewTracker.Callback()
+        mTracker.setCallback(new ViewTracker.Callback()
         {
             @Override
             public void onUpdate(int x, int y, View source, View sourceParent, View target)
@@ -102,54 +102,54 @@ class SimpleTargetDialoger implements TargetDialoger
                 switch (mPosition)
                 {
                     case LeftOutsideTop:
-                        mViewTracker.setPosition(ViewTracker.Position.LeftOutsideTop);
+                        mTracker.setPosition(ViewTracker.Position.LeftOutsideTop);
                         showLeftOfTarget(x, y, source, sourceParent, target);
                         break;
                     case LeftOutsideCenter:
-                        mViewTracker.setPosition(ViewTracker.Position.LeftOutsideCenter);
+                        mTracker.setPosition(ViewTracker.Position.LeftOutsideCenter);
                         showLeftOfTarget(x, y, source, sourceParent, target);
                         break;
                     case LeftOutsideBottom:
-                        mViewTracker.setPosition(ViewTracker.Position.LeftOutsideBottom);
+                        mTracker.setPosition(ViewTracker.Position.LeftOutsideBottom);
                         showLeftOfTarget(x, y, source, sourceParent, target);
                         break;
 
                     case TopOutsideLeft:
-                        mViewTracker.setPosition(ViewTracker.Position.TopOutsideLeft);
+                        mTracker.setPosition(ViewTracker.Position.TopOutsideLeft);
                         showTopOfTarget(x, y, source, sourceParent, target);
                         break;
                     case TopOutsideCenter:
-                        mViewTracker.setPosition(ViewTracker.Position.TopOutsideCenter);
+                        mTracker.setPosition(ViewTracker.Position.TopOutsideCenter);
                         showTopOfTarget(x, y, source, sourceParent, target);
                         break;
                     case TopOutsideRight:
-                        mViewTracker.setPosition(ViewTracker.Position.TopOutsideRight);
+                        mTracker.setPosition(ViewTracker.Position.TopOutsideRight);
                         showTopOfTarget(x, y, source, sourceParent, target);
                         break;
 
                     case RightOutsideTop:
-                        mViewTracker.setPosition(ViewTracker.Position.RightOutsideTop);
+                        mTracker.setPosition(ViewTracker.Position.RightOutsideTop);
                         showRightOfTarget(x, y, source, sourceParent, target);
                         break;
                     case RightOutsideCenter:
-                        mViewTracker.setPosition(ViewTracker.Position.RightOutsideCenter);
+                        mTracker.setPosition(ViewTracker.Position.RightOutsideCenter);
                         showRightOfTarget(x, y, source, sourceParent, target);
                         break;
                     case RightOutsideBottom:
-                        mViewTracker.setPosition(ViewTracker.Position.RightOutsideBottom);
+                        mTracker.setPosition(ViewTracker.Position.RightOutsideBottom);
                         showRightOfTarget(x, y, source, sourceParent, target);
                         break;
 
                     case BottomOutsideLeft:
-                        mViewTracker.setPosition(ViewTracker.Position.BottomOutsideLeft);
+                        mTracker.setPosition(ViewTracker.Position.BottomOutsideLeft);
                         showBottomOfTarget(x, y, source, sourceParent, target);
                         break;
                     case BottomOutsideCenter:
-                        mViewTracker.setPosition(ViewTracker.Position.BottomOutsideCenter);
+                        mTracker.setPosition(ViewTracker.Position.BottomOutsideCenter);
                         showBottomOfTarget(x, y, source, sourceParent, target);
                         break;
                     case BottomOutsideRight:
-                        mViewTracker.setPosition(ViewTracker.Position.BottomOutsideRight);
+                        mTracker.setPosition(ViewTracker.Position.BottomOutsideRight);
                         showBottomOfTarget(x, y, source, sourceParent, target);
                         break;
                 }
@@ -188,14 +188,14 @@ class SimpleTargetDialoger implements TargetDialoger
     @Override
     public TargetDialoger setMarginX(int marginX)
     {
-        mViewTracker.setMarginX(marginX);
+        mTracker.setMarginX(marginX);
         return this;
     }
 
     @Override
     public TargetDialoger setMarginY(int marginY)
     {
-        mViewTracker.setMarginY(marginY);
+        mTracker.setMarginY(marginY);
         return this;
     }
 
@@ -207,8 +207,8 @@ class SimpleTargetDialoger implements TargetDialoger
 
         mPosition = position;
 
-        mViewTracker.setSource(mDialoger.getContentView());
-        mViewTracker.setTarget(target);
+        mTracker.setSource(mDialoger.getContentView());
+        mTracker.setTarget(target);
 
         mDialoger.show();
     }
