@@ -143,15 +143,28 @@ class SimpleTargetDialoger implements TargetDialoger
     }
 
     @Override
-    public void showPosition(View target, int x, int y, Position position)
+    public TargetDialoger setMarginX(int marginX)
+    {
+        getViewTracker().setMarginX(marginX);
+        return this;
+    }
+
+    @Override
+    public TargetDialoger setMarginY(int marginY)
+    {
+        getViewTracker().setMarginY(marginY);
+        return this;
+    }
+
+    @Override
+    public void showPosition(View target, Position position)
     {
         if (position == null)
             throw new NullPointerException("position is null");
         mPosition = position;
 
         getViewTracker().setTarget(target);
-        getViewTracker().setMarginX(x);
-        getViewTracker().setMarginY(y);
+        getViewTracker().setSource(mDialoger.getContentView());
 
         mDialoger.show();
     }

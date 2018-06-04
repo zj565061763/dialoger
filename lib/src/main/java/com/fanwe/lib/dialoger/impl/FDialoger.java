@@ -521,8 +521,6 @@ public class FDialoger implements Dialoger
     {
         if (mTargetDialoger == null)
             mTargetDialoger = new SimpleTargetDialoger(this);
-
-        mTargetDialoger.getViewTracker().setSource(mContentView);
         return mTargetDialoger;
     }
 

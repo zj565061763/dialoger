@@ -20,14 +20,28 @@ import android.view.View;
 public interface TargetDialoger
 {
     /**
+     * x方向偏移量，大于0-向右；小于0-向左
+     *
+     * @param marginX
+     * @return
+     */
+    TargetDialoger setMarginX(int marginX);
+
+    /**
+     * y方向偏移量，大于0-向下；小于0-向上
+     *
+     * @param marginY
+     * @return
+     */
+    TargetDialoger setMarginY(int marginY);
+
+    /**
      * 显示在目标view的某个位置
      *
      * @param target   目标view
-     * @param x        x方向偏移量，大于0-向右；小于0-向左
-     * @param y        y方向偏移量，大于0-向下；小于0-向上
      * @param position 显示的位置{@link Position}
      */
-    void showPosition(View target, int x, int y, Position position);
+    void showPosition(View target, Position position);
 
     enum Position
     {
