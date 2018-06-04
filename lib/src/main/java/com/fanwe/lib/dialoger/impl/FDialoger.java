@@ -363,15 +363,24 @@ public class FDialoger implements Dialoger
             if (isShowing())
             {
                 if (getAnimatorHandler().isHideAnimatorStarted())
+                {
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "cancel HideAnimator before show");
+
                     getAnimatorHandler().cancelHideAnimator();
-                else
+                } else
+                {
                     return;
+                }
             }
 
             mIsAttached = true;
 
             if (mGravity == Gravity.NO_GRAVITY)
                 setGravity(Gravity.CENTER);
+
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "try show");
 
             mDialogerParent.addView(mDialogerView);
         } else
@@ -499,7 +508,9 @@ public class FDialoger implements Dialoger
 
         final ViewParent parent = mDialogerView.getParent();
         if (parent instanceof ViewGroup)
+        {
             ((ViewGroup) parent).removeView(mDialogerView);
+        }
     }
 
     /**
