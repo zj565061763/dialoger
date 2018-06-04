@@ -516,7 +516,7 @@ public class FDialoger implements Dialoger
             final ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT);
 
-            mBackgroundView = new View(context);
+            mBackgroundView = new InternalBackgroundView(context);
             addView(mBackgroundView, params);
 
             mContainerView = new InernalContainerView(context);
@@ -667,18 +667,38 @@ public class FDialoger implements Dialoger
         protected void onLayout(boolean changed, int l, int t, int r, int b)
         {
             super.onLayout(changed, l, t, r, b);
-            final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) getLayoutParams();
-            if (params.height != ViewGroup.LayoutParams.MATCH_PARENT
-                    || params.height != ViewGroup.LayoutParams.MATCH_PARENT)
-            {
-                throw new RuntimeException("you can not change container's width or height");
-            }
+            FDialoger.this.checkLayoutParams(this);
+        }
+    }
 
-            if (params.leftMargin != 0 || params.rightMargin != 0
-                    || params.topMargin != 0 || params.bottomMargin != 0)
-            {
-                throw new RuntimeException("you can not set margin to container");
-            }
+    private final class InternalBackgroundView extends View
+    {
+        public InternalBackgroundView(Context context)
+        {
+            super(context);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+        {
+            super.onLayout(changed, left, top, right, bottom);
+            FDialoger.this.checkLayoutParams(this);
+        }
+    }
+
+    private void checkLayoutParams(View view)
+    {
+        final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
+        if (params.width != ViewGroup.LayoutParams.MATCH_PARENT
+                || params.height != ViewGroup.LayoutParams.MATCH_PARENT)
+        {
+            throw new RuntimeException("you can not change view's width or height");
+        }
+
+        if (params.leftMargin != 0 || params.rightMargin != 0
+                || params.topMargin != 0 || params.bottomMargin != 0)
+        {
+            throw new RuntimeException("you can not set margin to view");
         }
     }
 }
