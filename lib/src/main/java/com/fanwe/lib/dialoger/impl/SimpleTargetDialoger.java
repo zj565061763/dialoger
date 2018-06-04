@@ -36,6 +36,11 @@ class SimpleTargetDialoger implements TargetDialoger
     private Position mPosition;
     private ViewUpdater mUpdater;
 
+    private int mPaddingLeft;
+    private int mPaddingTop;
+    private int mPaddingRight;
+    private int mPaddingBottom;
+
     public SimpleTargetDialoger(Dialoger dialoger)
     {
         if (dialoger == null)
@@ -51,7 +56,6 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (mTracker.getSource() != null && mTracker.getTarget() != null)
                 {
-                    mTracker.update();
                     getUpdater().start();
                 }
             }
@@ -60,7 +64,6 @@ class SimpleTargetDialoger implements TargetDialoger
             public void onStop(Dialoger dialoger)
             {
                 getUpdater().stop();
-                mTracker.setSource(null).setTarget(null);
             }
         });
     }
@@ -76,6 +79,31 @@ class SimpleTargetDialoger implements TargetDialoger
                 public void update()
                 {
                     mTracker.update();
+                }
+            });
+            mUpdater.setOnStateChangeCallback(new Updater.OnStateChangeCallback()
+            {
+                @Override
+                public void onStateChanged(boolean started)
+                {
+                    if (started)
+                    {
+                        final View container = (View) mDialoger.getContentView().getParent();
+                        mPaddingLeft = container.getPaddingLeft();
+                        mPaddingTop = container.getPaddingTop();
+                        mPaddingRight = container.getPaddingRight();
+                        mPaddingBottom = container.getPaddingBottom();
+
+                        mTracker.update();
+                    } else
+                    {
+                        mTracker.setSource(null).setTarget(null);
+
+                        mDialoger.paddingLeft(mPaddingLeft);
+                        mDialoger.paddingTop(mPaddingTop);
+                        mDialoger.paddingRight(mPaddingRight);
+                        mDialoger.paddingBottom(mPaddingBottom);
+                    }
                 }
             });
 
