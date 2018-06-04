@@ -21,7 +21,6 @@ import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -514,7 +513,7 @@ public class FDialoger implements Dialoger
     }
 
     /**
-     * dialog要显示之前的回调
+     * dialog显示之后回调
      */
     protected void onStart()
     {
@@ -523,7 +522,7 @@ public class FDialoger implements Dialoger
     }
 
     /**
-     * dialog要关闭之前的回调
+     * dialog关闭之后回调
      */
     protected void onStop()
     {
@@ -580,6 +579,9 @@ public class FDialoger implements Dialoger
         protected void onLayout(boolean changed, int l, int t, int r, int b)
         {
             super.onLayout(changed, l, t, r, b);
+            if (changed)
+                FDialoger.this.checkLayoutParams(this);
+
             if (mTryStartShowAnimator)
             {
                 getAnimatorHandler().setShowAnimator(createAnimator(true));
@@ -718,15 +720,8 @@ public class FDialoger implements Dialoger
         protected void onLayout(boolean changed, int l, int t, int r, int b)
         {
             super.onLayout(changed, l, t, r, b);
-            FDialoger.this.checkLayoutParams(this);
-        }
-
-        @Override
-        public void setBackgroundDrawable(Drawable background)
-        {
-            super.setBackgroundDrawable(background);
-            if (background != null)
-                throw new RuntimeException("you can not setBackground to container");
+            if (changed)
+                FDialoger.this.checkLayoutParams(this);
         }
     }
 
@@ -741,7 +736,8 @@ public class FDialoger implements Dialoger
         protected void onLayout(boolean changed, int left, int top, int right, int bottom)
         {
             super.onLayout(changed, left, top, right, bottom);
-            FDialoger.this.checkLayoutParams(this);
+            if (changed)
+                FDialoger.this.checkLayoutParams(this);
         }
     }
 
