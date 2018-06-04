@@ -182,6 +182,13 @@ public interface Dialoger
     boolean onKeyDown(int keyCode, KeyEvent event);
 
     /**
+     * 返回TargetDialoger对象
+     *
+     * @return
+     */
+    TargetDialoger target();
+
+    /**
      * 关闭监听
      */
     interface OnDismissListener

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.fanwe.lib.dialoger;
+package com.fanwe.lib.dialoger.impl;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -35,13 +35,12 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.fanwe.lib.dialoger.Dialoger;
+import com.fanwe.lib.dialoger.TargetDialoger;
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
-import com.fanwe.lib.viewtracker.FViewTracker;
-import com.fanwe.lib.viewtracker.ViewTracker;
-import com.fanwe.lib.viewtracker.update.ActivityUpdater;
 
-public class FDialoger implements Dialoger, TargetDialoger
+public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
     private final ViewGroup mDialogerParent;
@@ -153,7 +152,6 @@ public class FDialoger implements Dialoger, TargetDialoger
 
     protected void onContentViewAdded(View contentView)
     {
-        getViewTracker().setSource(contentView);
     }
 
     @Override
@@ -500,7 +498,8 @@ public class FDialoger implements Dialoger, TargetDialoger
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "onStart");
 
-        getViewTracker().start();
+        if (mTargetDialoger != null)
+            mTargetDialoger.getViewTracker().start();
     }
 
     /**
@@ -511,130 +510,20 @@ public class FDialoger implements Dialoger, TargetDialoger
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "onStop");
 
-        getViewTracker().stop();
+        if (mTargetDialoger != null)
+            mTargetDialoger.getViewTracker().stop();
     }
 
-    private ViewTracker mViewTracker;
-    private Position mPosition;
-
-    private ViewTracker getViewTracker()
-    {
-        if (mViewTracker == null)
-        {
-            mViewTracker = new FViewTracker();
-            mViewTracker.setCallback(new ViewTracker.Callback()
-            {
-                @Override
-                public void onUpdate(int x, int y, View source, View sourceParent, View target)
-                {
-                    final int dx = x - source.getLeft();
-                    final int dy = y - source.getTop();
-                    source.offsetLeftAndRight(dx);
-                    source.offsetTopAndBottom(dy);
-
-                    int padding = 0;
-
-                    switch (mPosition)
-                    {
-                        case LeftOutsideTop:
-                            getViewTracker().setPosition(ViewTracker.Position.LeftOutsideTop);
-                            showLeftOfTarget(x, y, source, sourceParent, target);
-                            break;
-                        case LeftOutsideCenter:
-                            getViewTracker().setPosition(ViewTracker.Position.LeftOutsideCenter);
-                            showLeftOfTarget(x, y, source, sourceParent, target);
-                            break;
-                        case LeftOutsideBottom:
-                            getViewTracker().setPosition(ViewTracker.Position.LeftOutsideBottom);
-                            showLeftOfTarget(x, y, source, sourceParent, target);
-                            break;
-
-                        case TopOutsideLeft:
-                            getViewTracker().setPosition(ViewTracker.Position.TopOutsideLeft);
-                            showTopOfTarget(x, y, source, sourceParent, target);
-                            break;
-                        case TopOutsideCenter:
-                            getViewTracker().setPosition(ViewTracker.Position.TopOutsideCenter);
-                            showTopOfTarget(x, y, source, sourceParent, target);
-                            break;
-                        case TopOutsideRight:
-                            getViewTracker().setPosition(ViewTracker.Position.TopOutsideRight);
-                            showTopOfTarget(x, y, source, sourceParent, target);
-                            break;
-
-                        case RightOutsideTop:
-                            getViewTracker().setPosition(ViewTracker.Position.RightOutsideTop);
-                            showRightOfTarget(x, y, source, sourceParent, target);
-                            break;
-                        case RightOutsideCenter:
-                            getViewTracker().setPosition(ViewTracker.Position.RightOutsideCenter);
-                            showRightOfTarget(x, y, source, sourceParent, target);
-                            break;
-                        case RightOutsideBottom:
-                            getViewTracker().setPosition(ViewTracker.Position.RightOutsideBottom);
-                            showRightOfTarget(x, y, source, sourceParent, target);
-                            break;
-
-                        case BottomOutsideLeft:
-                            getViewTracker().setPosition(ViewTracker.Position.BottomOutsideLeft);
-                            showBottomOfTarget(x, y, source, sourceParent, target);
-                            break;
-                        case BottomOutsideCenter:
-                            getViewTracker().setPosition(ViewTracker.Position.BottomOutsideCenter);
-                            showBottomOfTarget(x, y, source, sourceParent, target);
-                            break;
-                        case BottomOutsideRight:
-                            getViewTracker().setPosition(ViewTracker.Position.BottomOutsideRight);
-                            showBottomOfTarget(x, y, source, sourceParent, target);
-                            break;
-                    }
-                }
-
-                private void showLeftOfTarget(int x, int y, View source, View sourceParent, View target)
-                {
-                    setGravity(Gravity.RIGHT);
-                    int padding = sourceParent.getWidth() - x - source.getWidth();
-                    paddingRight(padding);
-                }
-
-                private void showTopOfTarget(int x, int y, View source, View sourceParent, View target)
-                {
-                    setGravity(Gravity.BOTTOM);
-                    int padding = sourceParent.getHeight() - y - source.getHeight();
-                    paddingBottom(padding);
-                }
-
-                private void showRightOfTarget(int x, int y, View source, View sourceParent, View target)
-                {
-                    setGravity(Gravity.LEFT);
-                    int padding = x;
-                    paddingLeft(padding);
-                }
-
-                private void showBottomOfTarget(int x, int y, View source, View sourceParent, View target)
-                {
-                    setGravity(Gravity.TOP);
-                    int padding = y;
-                    paddingTop(padding);
-                }
-            });
-            mViewTracker.setUpdater(new ActivityUpdater(mActivity));
-        }
-        return mViewTracker;
-    }
+    private SimpleTargetDialoger mTargetDialoger;
 
     @Override
-    public void showPosition(View target, int x, int y, Position position)
+    public TargetDialoger target()
     {
-        if (position == null)
-            throw new NullPointerException("position is null");
-        mPosition = position;
+        if (mTargetDialoger == null)
+            mTargetDialoger = new SimpleTargetDialoger(this);
 
-        getViewTracker().setTarget(target);
-        getViewTracker().setMarginX(x);
-        getViewTracker().setMarginY(y);
-
-        show();
+        mTargetDialoger.getViewTracker().setSource(mContentView);
+        return mTargetDialoger;
     }
 
     private final class InternalDialogerView extends FrameLayout
