@@ -85,13 +85,6 @@ public interface Dialoger
     void setCanceledOnTouchOutside(boolean cancel);
 
     /**
-     * 设置窗口内容view动画创建对象
-     *
-     * @param creater
-     */
-    void setAnimatorCreater(AnimatorCreater creater);
-
-    /**
      * 设置窗口关闭监听
      *
      * @param listener
@@ -118,6 +111,20 @@ public interface Dialoger
      * @param callback
      */
     void removeLifecycleCallback(LifecycleCallback callback);
+
+    /**
+     * 设置窗口内容view动画创建对象
+     *
+     * @param creater
+     */
+    void setAnimatorCreater(AnimatorCreater creater);
+
+    /**
+     * 返回窗口内容view动画创建对象
+     *
+     * @return
+     */
+    AnimatorCreater getAnimatorCreater();
 
     /**
      * 设置重力属性{@link android.view.Gravity}

@@ -37,6 +37,10 @@ import android.widget.LinearLayout;
 import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.TargetDialoger;
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
+import com.fanwe.lib.dialoger.animator.SlideBottomTopCreater;
+import com.fanwe.lib.dialoger.animator.SlideLeftRightCreater;
+import com.fanwe.lib.dialoger.animator.SlideRightLeftCreater;
+import com.fanwe.lib.dialoger.animator.SlideTopBottomCreater;
 import com.fanwe.lib.dialoger.utils.VisibilityAnimatorHandler;
 
 import java.util.List;
@@ -85,7 +89,6 @@ public class FDialoger implements Dialoger
         setPadding(defaultPadding, defaultPadding, defaultPadding, defaultPadding);
 
         setGravity(Gravity.NO_GRAVITY);
-        setAnimatorCreater(new AlphaCreater());
         setBackgroundColor(Color.parseColor("#66000000"));
     }
 
@@ -185,12 +188,6 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public void setAnimatorCreater(AnimatorCreater creater)
-    {
-        mAnimatorCreater = creater;
-    }
-
-    @Override
     public void setOnDismissListener(OnDismissListener listener)
     {
         mOnDismissListener = listener;
@@ -227,6 +224,18 @@ public class FDialoger implements Dialoger
 
         if (mLifecycleCallbacks.isEmpty())
             mLifecycleCallbacks = null;
+    }
+
+    @Override
+    public void setAnimatorCreater(AnimatorCreater creater)
+    {
+        mAnimatorCreater = creater;
+    }
+
+    @Override
+    public AnimatorCreater getAnimatorCreater()
+    {
+        return mAnimatorCreater;
     }
 
     @Override
@@ -355,8 +364,7 @@ public class FDialoger implements Dialoger
 
             mIsAttached = true;
 
-            if (mGravity == Gravity.NO_GRAVITY)
-                setGravity(Gravity.CENTER);
+            setDefaultConfigBeforeShow();
 
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try show");
@@ -387,6 +395,38 @@ public class FDialoger implements Dialoger
                 return;
 
             removeDialogerView(false);
+        }
+    }
+
+    private void setDefaultConfigBeforeShow()
+    {
+        if (mGravity == Gravity.NO_GRAVITY)
+            setGravity(Gravity.CENTER);
+
+        if (mAnimatorCreater == null)
+        {
+            switch (mGravity)
+            {
+                case Gravity.CENTER:
+                    setAnimatorCreater(new AlphaCreater());
+                    break;
+                case Gravity.LEFT:
+                case Gravity.LEFT | Gravity.CENTER:
+                    setAnimatorCreater(new SlideRightLeftCreater());
+                    break;
+                case Gravity.TOP:
+                case Gravity.TOP | Gravity.CENTER:
+                    setAnimatorCreater(new SlideBottomTopCreater());
+                    break;
+                case Gravity.RIGHT:
+                case Gravity.RIGHT | Gravity.CENTER:
+                    setAnimatorCreater(new SlideLeftRightCreater());
+                    break;
+                case Gravity.BOTTOM:
+                case Gravity.BOTTOM | Gravity.CENTER:
+                    setAnimatorCreater(new SlideTopBottomCreater());
+                    break;
+            }
         }
     }
 
@@ -467,6 +507,8 @@ public class FDialoger implements Dialoger
 
         if (animatorBackground != null && animatorContent != null)
         {
+            animatorBackground.setDuration(animatorContent.getDuration());
+
             final AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.play(animatorBackground).with(animatorContent);
             animator = animatorSet;

@@ -46,13 +46,44 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
                     BaseAnimatorCreater.this.onAnimationEnd(show, view);
                 }
             });
+            onCreated(show, view, animator);
         }
         return animator;
     }
 
+    /**
+     * 动画被创建后回调
+     *
+     * @param show
+     * @param view
+     * @param animator
+     */
+    protected void onCreated(boolean show, View view, Animator animator)
+    {
+    }
+
+    /**
+     * 创建动画
+     *
+     * @param show
+     * @param view
+     * @return
+     */
     protected abstract Animator onCreateAnimator(boolean show, View view);
 
+    /**
+     * 动画开始
+     *
+     * @param show
+     * @param view
+     */
     protected abstract void onAnimationStart(boolean show, View view);
 
+    /**
+     * 动画结束
+     *
+     * @param show
+     * @param view
+     */
     protected abstract void onAnimationEnd(boolean show, View view);
 }
