@@ -498,11 +498,26 @@ public class FDialoger implements Dialoger
     {
         Animator animator = null;
 
-        final Animator animatorBackground = (mBackgroundView.getBackground() != null) ?
-                new AlphaCreater().createAnimator(show, mBackgroundView) : null;
+        final Animator animatorBackground = (mBackgroundView.getBackground() == null) ? null : new AlphaCreater()
+        {
+            @Override
+            protected void onAnimationStart(boolean show, View view)
+            {
+                super.onAnimationStart(show, view);
+                view.setVisibility(View.VISIBLE);
+            }
 
-        final Animator animatorContent = (mAnimatorCreater != null && mContentView != null) ?
-                mAnimatorCreater.createAnimator(show, mContentView) : null;
+            @Override
+            protected void onAnimationEnd(boolean show, View view)
+            {
+                super.onAnimationEnd(show, view);
+                if (!show)
+                    view.setVisibility(View.INVISIBLE);
+            }
+        }.createAnimator(show, mBackgroundView);
+
+        final Animator animatorContent = (mAnimatorCreater == null || mContentView == null) ?
+                null : mAnimatorCreater.createAnimator(show, mContentView);
 
         if (animatorBackground != null && animatorContent != null)
         {
