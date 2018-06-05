@@ -19,6 +19,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Handler;
@@ -30,11 +31,12 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.fanwe.lib.dialoger.Dialoger;
+import com.fanwe.lib.dialoger.R;
 import com.fanwe.lib.dialoger.TargetDialoger;
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.animator.SlideBottomTopCreater;
@@ -86,7 +88,7 @@ public class FDialoger implements Dialoger
         mBackgroundView = dialogerView.mBackgroundView;
 
         final int defaultPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
-        setPadding(defaultPadding, defaultPadding, defaultPadding, defaultPadding);
+//        setPadding(defaultPadding, defaultPadding, defaultPadding, defaultPadding);
 
         setGravity(Gravity.NO_GRAVITY);
         setBackgroundColor(Color.parseColor("#66000000"));
@@ -283,19 +285,27 @@ public class FDialoger implements Dialoger
     @Override
     public void show()
     {
-        attach(true);
+        getDialog().show();
     }
 
     @Override
     public boolean isShowing()
     {
-        return mDialogerView.getParent() == mDialogerParent;
+        return getDialog().isShowing();
     }
 
     @Override
     public void dismiss()
     {
-        attach(false);
+        if (isShowing())
+        {
+            mTryStartShowAnimator = false;
+            getAnimatorHandler().setHideAnimator(createAnimator(false));
+            if (getAnimatorHandler().startHideAnimator())
+                return;
+
+            removeDialogerView(false);
+        }
     }
 
     @Override
@@ -553,20 +563,7 @@ public class FDialoger implements Dialoger
             Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by hideAnimator:" + removeByHideAnimator);
 
         mRemoveByHideAnimator = removeByHideAnimator;
-
-        final ViewParent parent = mDialogerView.getParent();
-        if (parent instanceof ViewGroup)
-        {
-            onStop();
-            if (mLifecycleCallbacks != null)
-            {
-                for (LifecycleCallback item : mLifecycleCallbacks)
-                {
-                    item.onStop(FDialoger.this);
-                }
-            }
-            ((ViewGroup) parent).removeView(mDialogerView);
-        }
+        getDialog().dismiss();
     }
 
     /**
@@ -644,9 +641,6 @@ public class FDialoger implements Dialoger
         protected void onLayout(boolean changed, int l, int t, int r, int b)
         {
             super.onLayout(changed, l, t, r, b);
-            if (changed)
-                FDialoger.this.checkLayoutParams(this);
-
             if (mTryStartShowAnimator)
             {
                 getAnimatorHandler().setShowAnimator(createAnimator(true));
@@ -692,8 +686,6 @@ public class FDialoger implements Dialoger
             super.onAttachedToWindow();
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onAttachedToWindow");
-            if (mDialogerView.getParent() != mDialogerParent)
-                throw new RuntimeException("dialoger view can not be add to:" + mDialogerView.getParent());
 
             mTryStartShowAnimator = true;
 
@@ -835,5 +827,53 @@ public class FDialoger implements Dialoger
         {
             throw new RuntimeException("you can not set margin to view");
         }
+    }
+
+    private Dialog mDialog;
+
+    private Dialog getDialog()
+    {
+        if (mDialog == null)
+        {
+            mDialog = new Dialog(mActivity, R.style.libDialog_dialog)
+            {
+                @Override
+                protected void onStart()
+                {
+                    super.onStart();
+
+                }
+
+                @Override
+                protected void onStop()
+                {
+                    super.onStop();
+
+                    FDialoger.this.onStop();
+                    if (mLifecycleCallbacks != null)
+                    {
+                        for (LifecycleCallback item : mLifecycleCallbacks)
+                        {
+                            item.onStop(FDialoger.this);
+                        }
+                    }
+                }
+            };
+
+            final WindowManager.LayoutParams params = mDialog.getWindow().getAttributes();
+            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+            params.horizontalMargin = 0;
+            params.verticalMargin = 0;
+            mDialog.getWindow().setAttributes(params);
+
+            mDialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setCancelable(false);
+
+            mDialog.setContentView(mDialogerView, new ViewGroup.LayoutParams(mDialogerParent.getWidth(),
+                    mDialogerParent.getHeight()));
+        }
+        return mDialog;
     }
 }

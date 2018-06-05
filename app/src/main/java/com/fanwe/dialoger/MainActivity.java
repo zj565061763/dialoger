@@ -1,11 +1,14 @@
 package com.fanwe.dialoger;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import com.fanwe.lib.dialoger.Dialoger;
@@ -21,6 +24,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button button = new Button(this);
+        button.setBackgroundColor(Color.BLACK);
+
+        Dialog dialog = new Dialog(this, R.style.libDialog_dialog);
+        final WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        params.horizontalMargin = 0;
+        params.verticalMargin = 0;
+        dialog.getWindow().setAttributes(params);
+
+        dialog.setContentView(button,new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        dialog.show();
     }
 
     private void showSimpleDemo()
