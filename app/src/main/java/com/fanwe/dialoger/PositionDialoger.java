@@ -21,6 +21,7 @@ public class PositionDialoger extends FDialoger implements View.OnClickListener
     {
         super(activity);
         setPadding(0, 0, 0, 0);
+        setBackgroundColor(0);
         mTargetView = targetView;
         setContentView(R.layout.dialoger_position);
         btn_left_top = findViewById(R.id.btn_left_top);
