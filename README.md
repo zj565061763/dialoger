@@ -97,117 +97,44 @@ private void showSimpleDemo()
 }
 ```
 
-2. 让View像dialog一样显示
+# 关于窗口动画
+可以给窗口设置一个窗口动画创建对象来实现自己想要的动画效果，接口如下：
 ```java
-public class MainActivity extends AppCompatActivity implements View.OnClickListener
+/**
+ * 动画创建接口
+ */
+interface AnimatorCreater
 {
-    public static final String TAG = MainActivity.class.getSimpleName();
-
-    private TestDialoger mDialoger;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        mDialoger = new TestDialoger(this);
-
-        // 设置窗口关闭监听
-        mDialoger.setOnDismissListener(new Dialoger.OnDismissListener()
-        {
-            @Override
-            public void onDismiss(Dialoger dialoger)
-            {
-                Log.i(TAG, "onDismiss:" + dialoger);
-            }
-        });
-
-        // 设置窗口显示监听
-        mDialoger.setOnShowListener(new Dialoger.OnShowListener()
-        {
-            @Override
-            public void onShow(Dialoger dialoger)
-            {
-                Log.i(TAG, "onShow:" + dialoger);
-            }
-        });
-
-        // 设置按返回键是否可以关闭窗口，默认true
-        mDialoger.setCancelable(true);
-
-        // 设置触摸到非内容区域是否关闭窗口，默认false
-        mDialoger.setCanceledOnTouchOutside(true);
-
-        // 设置窗口背景颜色，默认#66000000
-        mDialoger.setBackgroundColor(Color.parseColor("#66000000"));
-    }
-
-    @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
-            case R.id.btn_top_center:
-                // 设置动画创建对象，此处为：向下滑入，向上滑出
-                mDialoger.setAnimatorCreater(new SlideBottomTopCreater());
-
-                // 显示在目标view的底部
-                mDialoger.target().showPosition(v, TargetDialoger.Position.BottomOutsideCenter);
-                break;
-            case R.id.btn_center:
-                // 设置动画创建对象，通过CombineCreater可以组合多个creater对象
-                mDialoger.setAnimatorCreater(new CombineCreater(new AlphaCreater(), new ScaleXYCreater()));
-
-                // 设置重力属性
-                mDialoger.setGravity(Gravity.CENTER);
-
-                // 显示窗口
-                mDialoger.show();
-                break;
-            case R.id.btn_bottom_center:
-                // 设置动画创建对象，此处为：向上滑入，向下滑出
-                mDialoger.setAnimatorCreater(new SlideTopBottomCreater());
-
-                // 显示在目标view的顶部
-                mDialoger.target().showPosition(v, TargetDialoger.Position.TopOutsideCenter);
-                break;
-            case R.id.btn_left_center:
-                // 设置动画创建对象，此处为：向右滑入，向左滑出
-                mDialoger.setAnimatorCreater(new SlideRightLeftCreater());
-
-                // 显示在目标view的右边
-                mDialoger.target().showPosition(v, TargetDialoger.Position.RightOutsideCenter);
-                break;
-            case R.id.btn_right_center:
-                // 设置动画创建对象，此处为：向左滑入，向右滑出
-                mDialoger.setAnimatorCreater(new SlideLeftRightCreater());
-
-                // 显示在目标view的左边
-                mDialoger.target().showPosition(v, TargetDialoger.Position.LeftOutsideCenter);
-                break;
-        }
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        /**
-         * 传递按键事件给窗口
-         */
-        if (mDialoger.onKeyDown(keyCode, event))
-            return true;
-        return super.onKeyDown(keyCode, event);
-    }
+    /**
+     * 创建动画
+     * <br>
+     * 注意：隐藏动画不能设置为无限循环，否则窗口将不能被移除
+     *
+     * @param show true-窗口显示，false-窗口隐藏
+     * @param view 窗口内容view
+     * @return
+     */
+    Animator createAnimator(boolean show, View view);
 }
 ```
+
+库中已经提供的实现类有：
+* AlphaCreater 透明度
+* ScaleXYCreater 宽高同时缩放
+* SlideBottomTopCreater 向下滑入，向上滑出，滑动的距离为内容view的高度
+* SlideLeftRightCreater 向左滑入，向右滑出，滑动的距离为内容view的宽度
+* SlideRightLeftCreater 向右滑入，向左滑出，滑动的距离为内容view的宽度
+* SlideTopBottomCreater 向上滑入，向下滑出，滑动的距离为内容view的高度
+* PivotCreater 为包装类，可以在动画开始的时候改变view的锚点
+* CombineCreater 为组合类，可以同时组合多个不同的creater
+
 
 # Dialoger接口
 ```java
 public interface Dialoger
 {
     /**
-     * 设置是否调试模式
+     * 设置调试模式，内部会输出日志，日志tag：Dialoger
      *
      * @param debug
      */
@@ -262,18 +189,11 @@ public interface Dialoger
     void setCancelable(boolean cancel);
 
     /**
-     * 设置触摸到非内容view区域是否关闭窗口，默认false
+     * 设置触摸到非内容view区域是否关闭窗口，默认true
      *
      * @param cancel
      */
     void setCanceledOnTouchOutside(boolean cancel);
-
-    /**
-     * 设置窗口内容view动画创建对象
-     *
-     * @param creater
-     */
-    void setAnimatorCreater(AnimatorCreater creater);
 
     /**
      * 设置窗口关闭监听
@@ -304,6 +224,20 @@ public interface Dialoger
     void removeLifecycleCallback(LifecycleCallback callback);
 
     /**
+     * 设置窗口内容view动画创建对象
+     *
+     * @param creater
+     */
+    void setAnimatorCreater(AnimatorCreater creater);
+
+    /**
+     * 返回窗口内容view动画创建对象
+     *
+     * @return
+     */
+    AnimatorCreater getAnimatorCreater();
+
+    /**
      * 设置重力属性{@link android.view.Gravity}
      *
      * @param gravity
@@ -311,39 +245,49 @@ public interface Dialoger
     void setGravity(int gravity);
 
     /**
-     * 设置左边间距
+     * 返回当前的重力属性
      *
-     * @param padding
+     * @return
      */
-    void paddingLeft(int padding);
-
-    /**
-     * 设置顶部间距
-     *
-     * @param padding
-     */
-    void paddingTop(int padding);
-
-    /**
-     * 设置右边间距
-     *
-     * @param padding
-     */
-    void paddingRight(int padding);
-
-    /**
-     * 设置底部间距
-     *
-     * @param padding
-     */
-    void paddingBottom(int padding);
+    int getGravity();
 
     /**
      * 设置上下左右间距
      *
-     * @param paddings
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
      */
-    void paddings(int paddings);
+    void setPadding(int left, int top, int right, int bottom);
+
+    /**
+     * 左边边距
+     *
+     * @return
+     */
+    int getPaddingLeft();
+
+    /**
+     * 顶部边距
+     *
+     * @return
+     */
+    int getPaddingTop();
+
+    /**
+     * 右边边距
+     *
+     * @return
+     */
+    int getPaddingRight();
+
+    /**
+     * 底部边距
+     *
+     * @return
+     */
+    int getPaddingBottom();
 
     /**
      * 显示窗口
@@ -422,8 +366,8 @@ public interface Dialoger
          * <br>
          * 注意：隐藏动画不能设置为无限循环，否则窗口将不能被移除
          *
-         * @param show
-         * @param view
+         * @param show true-窗口显示，false-窗口隐藏
+         * @param view 窗口内容view
          * @return
          */
         Animator createAnimator(boolean show, View view);
