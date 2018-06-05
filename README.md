@@ -1,5 +1,5 @@
 # About
-封装了dialog的逻辑，内部采用view实现，实现原理：<br>
+封装了dialog的逻辑，内部用view实现，可以让窗口显示在某个view的上下左右，实现原理：<br>
 ![](http://thumbsnap.com/i/I5BJBy0e.png?0605)
 
 # Gradle
