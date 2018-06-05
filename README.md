@@ -414,6 +414,14 @@ public interface Dialoger
     void stopDismissRunnable();
 
     /**
+     * 触摸事件回调
+     *
+     * @param event
+     * @return
+     */
+    boolean onTouchEvent(MotionEvent event);
+
+    /**
      * Activity需要调用此方法，如果此方法返回true的话，Activity那边的重写方法也要返回true
      */
     boolean onKeyDown(int keyCode, KeyEvent event);
