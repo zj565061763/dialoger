@@ -232,7 +232,6 @@ public class FDialoger implements Dialoger
     @Override
     public void setGravity(int gravity)
     {
-        mGravity = gravity;
         mContainerView.setGravity(gravity);
     }
 
@@ -698,6 +697,16 @@ public class FDialoger implements Dialoger
         public InernalContainerView(Context context)
         {
             super(context);
+        }
+
+        @Override
+        public void setGravity(int gravity)
+        {
+            if (mGravity == gravity)
+                return;
+
+            mGravity = gravity;
+            super.setGravity(gravity);
         }
 
         @Override
