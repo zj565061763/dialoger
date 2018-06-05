@@ -57,8 +57,51 @@ class SimpleTargetDialoger implements TargetDialoger
             @Override
             public void onStart(Dialoger dialoger)
             {
-                if (mTracker.getSource() != null && mTracker.getTarget() != null)
+                if (mTracker.getSource() != null && mTracker.getTarget() != null && mPosition != null)
                 {
+                    switch (mPosition)
+                    {
+                        case LeftOutsideTop:
+                            mTracker.setPosition(ViewTracker.Position.LeftOutsideTop);
+                            break;
+                        case LeftOutsideCenter:
+                            mTracker.setPosition(ViewTracker.Position.LeftOutsideCenter);
+                            break;
+                        case LeftOutsideBottom:
+                            mTracker.setPosition(ViewTracker.Position.LeftOutsideBottom);
+                            break;
+
+                        case TopOutsideLeft:
+                            mTracker.setPosition(ViewTracker.Position.TopOutsideLeft);
+                            break;
+                        case TopOutsideCenter:
+                            mTracker.setPosition(ViewTracker.Position.TopOutsideCenter);
+                            break;
+                        case TopOutsideRight:
+                            mTracker.setPosition(ViewTracker.Position.TopOutsideRight);
+                            break;
+
+                        case RightOutsideTop:
+                            mTracker.setPosition(ViewTracker.Position.RightOutsideTop);
+                            break;
+                        case RightOutsideCenter:
+                            mTracker.setPosition(ViewTracker.Position.RightOutsideCenter);
+                            break;
+                        case RightOutsideBottom:
+                            mTracker.setPosition(ViewTracker.Position.RightOutsideBottom);
+                            break;
+
+                        case BottomOutsideLeft:
+                            mTracker.setPosition(ViewTracker.Position.BottomOutsideLeft);
+                            break;
+                        case BottomOutsideCenter:
+                            mTracker.setPosition(ViewTracker.Position.BottomOutsideCenter);
+                            break;
+                        case BottomOutsideRight:
+                            mTracker.setPosition(ViewTracker.Position.BottomOutsideRight);
+                            break;
+                    }
+
                     mUpdater.start();
                 }
             }
@@ -68,6 +111,7 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 mUpdater.stop();
                 mTracker.setSource(null).setTarget(null);
+                mPosition = null;
             }
         });
     }
@@ -209,48 +253,6 @@ class SimpleTargetDialoger implements TargetDialoger
             throw new NullPointerException("position is null");
 
         mPosition = position;
-        switch (position)
-        {
-            case LeftOutsideTop:
-                mTracker.setPosition(ViewTracker.Position.LeftOutsideTop);
-                break;
-            case LeftOutsideCenter:
-                mTracker.setPosition(ViewTracker.Position.LeftOutsideCenter);
-                break;
-            case LeftOutsideBottom:
-                mTracker.setPosition(ViewTracker.Position.LeftOutsideBottom);
-                break;
-
-            case TopOutsideLeft:
-                mTracker.setPosition(ViewTracker.Position.TopOutsideLeft);
-                break;
-            case TopOutsideCenter:
-                mTracker.setPosition(ViewTracker.Position.TopOutsideCenter);
-                break;
-            case TopOutsideRight:
-                mTracker.setPosition(ViewTracker.Position.TopOutsideRight);
-                break;
-
-            case RightOutsideTop:
-                mTracker.setPosition(ViewTracker.Position.RightOutsideTop);
-                break;
-            case RightOutsideCenter:
-                mTracker.setPosition(ViewTracker.Position.RightOutsideCenter);
-                break;
-            case RightOutsideBottom:
-                mTracker.setPosition(ViewTracker.Position.RightOutsideBottom);
-                break;
-
-            case BottomOutsideLeft:
-                mTracker.setPosition(ViewTracker.Position.BottomOutsideLeft);
-                break;
-            case BottomOutsideCenter:
-                mTracker.setPosition(ViewTracker.Position.BottomOutsideCenter);
-                break;
-            case BottomOutsideRight:
-                mTracker.setPosition(ViewTracker.Position.BottomOutsideRight);
-                break;
-        }
 
         mTracker.setSource(mDialoger.getContentView());
         mTracker.setTarget(target);
