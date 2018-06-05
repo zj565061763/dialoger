@@ -97,8 +97,8 @@ private void showSimpleDemo()
 }
 ```
 
-# 关于窗口动画
-可以给窗口设置一个窗口动画创建对象来实现自己想要的动画效果，接口如下：
+# 窗口动画
+可以给窗口设置动画创建对象来实现自己想要的动画效果，接口如下：
 ```java
 /**
  * 动画创建接口
@@ -127,6 +127,100 @@ interface AnimatorCreater
 * SlideTopBottomCreater 向上滑入，向下滑出，滑动的距离为内容view的高度
 * PivotCreater 为包装类，可以在动画开始的时候改变view的锚点
 * CombineCreater 为组合类，可以同时组合多个不同的creater
+
+# 显示在某个View旁边
+
+```java
+/**
+ * target()方法返回一个TargetDialoger对象，可以指定窗口要显示在某个view的什么位置
+ */
+dialoger.target()
+        .showPosition(mTargetView, TargetDialoger.Position.LeftOutsideTop);
+```
+TargetDialoger接口：
+```java
+public interface TargetDialoger
+{
+    /**
+     * x方向偏移量，大于0-向右；小于0-向左
+     *
+     * @param marginX
+     * @return
+     */
+    TargetDialoger setMarginX(int marginX);
+
+    /**
+     * y方向偏移量，大于0-向下；小于0-向上
+     *
+     * @param marginY
+     * @return
+     */
+    TargetDialoger setMarginY(int marginY);
+
+    /**
+     * 显示在目标view的某个位置
+     *
+     * @param target   目标view
+     * @param position 显示的位置{@link Position}
+     */
+    void showPosition(View target, Position position);
+
+    enum Position
+    {
+        /**
+         * 在target的左边外侧靠顶部对齐
+         */
+        LeftOutsideTop,
+        /**
+         * 在target的左边外侧上下居中
+         */
+        LeftOutsideCenter,
+        /**
+         * 在target的左边外侧靠底部对齐
+         */
+        LeftOutsideBottom,
+
+        /**
+         * 在target的顶部外侧靠左对齐
+         */
+        TopOutsideLeft,
+        /**
+         * 在target的顶部外侧左右居中
+         */
+        TopOutsideCenter,
+        /**
+         * 在target的顶部外侧靠右对齐
+         */
+        TopOutsideRight,
+
+        /**
+         * 在target的右边外侧靠顶部对齐
+         */
+        RightOutsideTop,
+        /**
+         * 在target的右边外侧上下居中
+         */
+        RightOutsideCenter,
+        /**
+         * 在target的右边外侧靠底部对齐
+         */
+        RightOutsideBottom,
+
+        /**
+         * 在target的底部外侧靠左对齐
+         */
+        BottomOutsideLeft,
+        /**
+         * 在target的底部外侧左右居中
+         */
+        BottomOutsideCenter,
+        /**
+         * 在target的底部外侧靠右对齐
+         */
+        BottomOutsideRight,
+    }
+}
+```
 
 
 # Dialoger接口
