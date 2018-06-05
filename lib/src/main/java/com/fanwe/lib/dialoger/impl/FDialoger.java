@@ -81,9 +81,8 @@ public class FDialoger implements Dialoger
         mContainerView = dialogerView.mContainerView;
         mBackgroundView = dialogerView.mBackgroundView;
 
-        final int defaultHorizontalPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
-        paddingLeft(defaultHorizontalPadding);
-        paddingRight(defaultHorizontalPadding);
+        final int defaultPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
+        setPadding(defaultPadding, defaultPadding, defaultPadding, defaultPadding);
 
         setGravity(Gravity.NO_GRAVITY);
         setAnimatorCreater(new AlphaCreater());
@@ -243,42 +242,33 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public void paddingLeft(int padding)
+    public void setPadding(int left, int top, int right, int bottom)
     {
-        final View view = mContainerView;
-        view.setPadding(padding, view.getPaddingTop(),
-                view.getPaddingRight(), view.getPaddingBottom());
+        mContainerView.setPadding(left, top, right, bottom);
     }
 
     @Override
-    public void paddingTop(int padding)
+    public int getPaddingLeft()
     {
-        final View view = mContainerView;
-        view.setPadding(view.getPaddingLeft(), padding,
-                view.getPaddingRight(), view.getPaddingBottom());
+        return mContainerView.getPaddingLeft();
     }
 
     @Override
-    public void paddingRight(int padding)
+    public int getPaddingTop()
     {
-        final View view = mContainerView;
-        view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
-                padding, view.getPaddingBottom());
+        return mContainerView.getPaddingTop();
     }
 
     @Override
-    public void paddingBottom(int padding)
+    public int getPaddingRight()
     {
-        final View view = mContainerView;
-        view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
-                view.getPaddingRight(), padding);
+        return mContainerView.getPaddingRight();
     }
 
     @Override
-    public void paddings(int paddings)
+    public int getPaddingBottom()
     {
-        final View view = mContainerView;
-        view.setPadding(paddings, paddings, paddings, paddings);
+        return mContainerView.getPaddingBottom();
     }
 
     @Override

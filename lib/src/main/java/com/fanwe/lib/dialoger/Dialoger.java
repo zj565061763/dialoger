@@ -134,39 +134,42 @@ public interface Dialoger
     int getGravity();
 
     /**
-     * 设置左边间距
-     *
-     * @param padding
-     */
-    void paddingLeft(int padding);
-
-    /**
-     * 设置顶部间距
-     *
-     * @param padding
-     */
-    void paddingTop(int padding);
-
-    /**
-     * 设置右边间距
-     *
-     * @param padding
-     */
-    void paddingRight(int padding);
-
-    /**
-     * 设置底部间距
-     *
-     * @param padding
-     */
-    void paddingBottom(int padding);
-
-    /**
      * 设置上下左右间距
      *
-     * @param paddings
+     * @param left
+     * @param top
+     * @param right
+     * @param bottom
      */
-    void paddings(int paddings);
+    void setPadding(int left, int top, int right, int bottom);
+
+    /**
+     * 左边边距
+     *
+     * @return
+     */
+    int getPaddingLeft();
+
+    /**
+     * 顶部边距
+     *
+     * @return
+     */
+    int getPaddingTop();
+
+    /**
+     * 右边边距
+     *
+     * @return
+     */
+    int getPaddingRight();
+
+    /**
+     * 底部边距
+     *
+     * @return
+     */
+    int getPaddingBottom();
 
     /**
      * 显示窗口

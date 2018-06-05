@@ -16,6 +16,10 @@ public class TestDialoger extends FDialoger
          * 设置窗口内容
          */
         setContentView(R.layout.dialog_view);
+        /**
+         * 设置窗口边距
+         */
+        setPadding(0, 0, 0, 0);
     }
 
     @Override

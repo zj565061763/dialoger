@@ -89,20 +89,14 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (started)
                 {
-                    final View container = (View) mDialoger.getContentView().getParent();
-                    mPaddingLeft = container.getPaddingLeft();
-                    mPaddingTop = container.getPaddingTop();
-                    mPaddingRight = container.getPaddingRight();
-                    mPaddingBottom = container.getPaddingBottom();
-
+                    mPaddingLeft = mDialoger.getPaddingLeft();
+                    mPaddingTop = mDialoger.getPaddingTop();
+                    mPaddingRight = mDialoger.getPaddingRight();
+                    mPaddingBottom = mDialoger.getPaddingBottom();
                     mGravity = mDialoger.getGravity();
                 } else
                 {
-                    mDialoger.paddingLeft(mPaddingLeft);
-                    mDialoger.paddingTop(mPaddingTop);
-                    mDialoger.paddingRight(mPaddingRight);
-                    mDialoger.paddingBottom(mPaddingBottom);
-
+                    mDialoger.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
                     mDialoger.setGravity(mGravity);
                 }
             }
@@ -163,29 +157,33 @@ class SimpleTargetDialoger implements TargetDialoger
             private void showLeftOfTarget(int x, int y, View source, View sourceParent, View target)
             {
                 mDialoger.setGravity(Gravity.RIGHT);
-                int padding = sourceParent.getWidth() - x - source.getWidth();
-                mDialoger.paddingRight(padding);
+                final int padding = sourceParent.getWidth() - x - source.getWidth();
+                mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
+                        padding, mDialoger.getPaddingBottom());
             }
 
             private void showTopOfTarget(int x, int y, View source, View sourceParent, View target)
             {
                 mDialoger.setGravity(Gravity.BOTTOM);
-                int padding = sourceParent.getHeight() - y - source.getHeight();
-                mDialoger.paddingBottom(padding);
+                final int padding = sourceParent.getHeight() - y - source.getHeight();
+                mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
+                        mDialoger.getPaddingRight(), padding);
             }
 
             private void showRightOfTarget(int x, int y, View source, View sourceParent, View target)
             {
                 mDialoger.setGravity(Gravity.LEFT);
-                int padding = x;
-                mDialoger.paddingLeft(padding);
+                final int padding = x;
+                mDialoger.setPadding(padding, mDialoger.getPaddingTop(),
+                        mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
             }
 
             private void showBottomOfTarget(int x, int y, View source, View sourceParent, View target)
             {
                 mDialoger.setGravity(Gravity.TOP);
-                int padding = y;
-                mDialoger.paddingTop(padding);
+                final int padding = y;
+                mDialoger.setPadding(mDialoger.getPaddingLeft(), padding,
+                        mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
             }
         });
     }
