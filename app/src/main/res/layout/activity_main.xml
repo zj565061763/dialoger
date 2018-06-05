@@ -5,6 +5,15 @@
     android:layout_height="match_parent">
 
     <Button
+        android:id="@+id/btn_simple_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:layout_gravity="center_horizontal"
+        android:text="simple_demo"
+        android:textAllCaps="false" />
+
+    <Button
         android:id="@+id/btn_target"
         android:layout_width="100dp"
         android:layout_height="100dp"

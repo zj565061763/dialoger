@@ -21,7 +21,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        showSimpleDemo();
     }
 
     private void showSimpleDemo()
@@ -118,6 +117,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         switch (v.getId())
         {
+            case R.id.btn_simple_demo:
+                showSimpleDemo();
+                break;
             case R.id.btn_target:
                 new PositionDialoger(this, v).show();
                 break;
