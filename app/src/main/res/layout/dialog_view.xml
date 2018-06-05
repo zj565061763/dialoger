@@ -10,8 +10,8 @@
         android:id="@+id/btn"
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:textAllCaps="false"
         android:background="@color/colorAccent"
-        android:text="dialoger"
         android:textColor="@android:color/white" />
 
 </LinearLayout>
