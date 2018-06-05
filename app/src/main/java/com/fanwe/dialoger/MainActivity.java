@@ -96,14 +96,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mDialoger.setAnimatorCreater(new SlideRightLeftCreater());
 
                 // 显示在目标view的右边
-                mDialoger.target().showPosition(v, TargetDialoger.Position.RightOutsideCenter);
+                mDialoger.target().showPosition(v, TargetDialoger.Position.RightOutsideTop);
                 break;
             case R.id.btn_right_center:
                 // 设置动画创建对象，此处为：向左滑入，向右滑出
                 mDialoger.setAnimatorCreater(new SlideLeftRightCreater());
 
                 // 显示在目标view的左边
-                mDialoger.target().showPosition(v, TargetDialoger.Position.LeftOutsideCenter);
+                mDialoger.target().showPosition(v, TargetDialoger.Position.LeftOutsideTop);
                 break;
         }
     }
