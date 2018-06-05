@@ -23,7 +23,7 @@ import android.view.View;
 public interface Dialoger
 {
     /**
-     * 设置是否调试模式
+     * 设置调试模式，内部会输出日志，日志tag：Dialoger
      *
      * @param debug
      */

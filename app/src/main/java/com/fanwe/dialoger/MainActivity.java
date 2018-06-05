@@ -28,6 +28,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final FDialoger dialoger = new FDialoger(this);
 
         /**
+         * 设置调试模式，内部会输出日志，日志tag：Dialoger
+         */
+        dialoger.setDebug(true);
+        /**
          * 设置窗口要显示的内容
          */
         dialoger.setContentView(new Button(this));

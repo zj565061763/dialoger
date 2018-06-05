@@ -5,37 +5,73 @@
 `implementation 'com.fanwe.android:dialoger:1.0.0-rc1'`
 
 # 简单demo
-1. 创建一个Dialoger
 ```java
-public class TestDialoger extends FDialoger
+private void showSimpleDemo()
 {
-    public TestDialoger(Activity activity)
-    {
-        super(activity);
-        setDebug(true);
-        /**
-         * 设置窗口内容
-         */
-        setContentView(R.layout.dialog_view);
-    }
+    final FDialoger dialoger = new FDialoger(this);
 
-    @Override
-    protected void onContentViewAdded(View contentView)
+    /**
+     * 设置调试模式，内部会输出日志，日志tag：Dialoger
+     */
+    dialoger.setDebug(true);
+    /**
+     * 设置窗口要显示的内容
+     */
+    dialoger.setContentView(new Button(this));
+
+    /**
+     * 设置窗口关闭监听
+     */
+    dialoger.setOnDismissListener(new Dialoger.OnDismissListener()
     {
-        super.onContentViewAdded(contentView);
-        contentView.findViewById(R.id.btn).setOnClickListener(new View.OnClickListener()
+        @Override
+        public void onDismiss(Dialoger dialoger)
         {
-            @Override
-            public void onClick(View v)
-            {
-                Toast.makeText(getContext(), "clicked", Toast.LENGTH_SHORT).show();
-                /**
-                 * 关闭窗口
-                 */
-                dismiss();
-            }
-        });
-    }
+            Log.i(TAG, "onDismiss:" + dialoger);
+        }
+    });
+
+    /**
+     * 设置窗口显示监听
+     */
+    dialoger.setOnShowListener(new Dialoger.OnShowListener()
+    {
+        @Override
+        public void onShow(Dialoger dialoger)
+        {
+            Log.i(TAG, "onShow:" + dialoger);
+        }
+    });
+
+    /**
+     * 设置按返回键是否可以关闭窗口，默认true
+     */
+    dialoger.setCancelable(true);
+
+    /**
+     * 设置触摸到非内容区域是否关闭窗口，默认false
+     */
+    dialoger.setCanceledOnTouchOutside(true);
+
+    /**
+     * 设置窗口背景颜色，默认#66000000
+     */
+    dialoger.setBackgroundColor(Color.parseColor("#66000000"));
+
+    /**
+     * 设置上下左右间距
+     */
+    dialoger.setPadding(0, 0, 0, 0);
+
+    /**
+     * 设置重力属性
+     */
+    dialoger.setGravity(Gravity.CENTER);
+
+    /**
+     * 显示窗口
+     */
+    dialoger.show();
 }
 ```
 
