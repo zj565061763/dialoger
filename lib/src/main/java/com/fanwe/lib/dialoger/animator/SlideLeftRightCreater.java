@@ -15,23 +15,23 @@
  */
 package com.fanwe.lib.dialoger.animator;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.view.View;
 
 /**
  * 向左滑入，向右滑出
  */
-public class SlideLeftRightCreater extends BaseAnimatorCreater
+public class SlideLeftRightCreater extends SlideHorizontalCreater
 {
     @Override
-    protected Animator onCreateAnimator(boolean show, View view)
+    protected float[] getFloatValues(boolean show, View view)
     {
-        final ObjectAnimator animator = new ObjectAnimator();
-        animator.setPropertyName(View.TRANSLATION_X.getName());
-        animator.setFloatValues(show ? new float[]{view.getWidth(), 0} : new float[]{0, view.getWidth()});
-        animator.setTarget(view);
-        return animator;
+        if (show)
+        {
+            return new float[]{view.getWidth(), 0};
+        } else
+        {
+            return new float[]{0, view.getWidth()};
+        }
     }
 
     @Override

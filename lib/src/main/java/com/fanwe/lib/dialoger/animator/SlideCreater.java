@@ -15,18 +15,34 @@
  */
 package com.fanwe.lib.dialoger.animator;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.view.View;
 
 /**
- * 竖直方向滑动
+ * 滑动
  */
-public abstract class SlideVerticalCreater extends SlideCreater
+abstract class SlideCreater extends BaseAnimatorCreater
 {
     @Override
-    protected final String getPropertyName()
+    protected final Animator onCreateAnimator(boolean show, View view)
     {
-        return View.TRANSLATION_Y.getName();
+        final ObjectAnimator animator = new ObjectAnimator();
+        final String propertyName = getPropertyName();
+
+        if (View.TRANSLATION_Y.getName().equals(propertyName) || View.TRANSLATION_X.getName().equals(propertyName))
+        {
+            animator.setPropertyName(propertyName);
+            animator.setFloatValues(getFloatValues(show, view));
+            animator.setTarget(view);
+            return animator;
+        } else
+        {
+            throw new RuntimeException("Illegal property name:" + propertyName);
+        }
     }
+
+    protected abstract String getPropertyName();
 
     protected abstract float[] getFloatValues(boolean show, View view);
 }

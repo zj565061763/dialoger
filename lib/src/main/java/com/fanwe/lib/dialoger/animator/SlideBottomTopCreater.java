@@ -23,7 +23,7 @@ import android.view.View;
 public class SlideBottomTopCreater extends SlideVerticalCreater
 {
     @Override
-    protected float[] getPosition(boolean show, View view)
+    protected float[] getFloatValues(boolean show, View view)
     {
         if (show)
         {

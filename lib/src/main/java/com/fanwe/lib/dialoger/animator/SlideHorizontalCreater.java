@@ -18,31 +18,15 @@ package com.fanwe.lib.dialoger.animator;
 import android.view.View;
 
 /**
- * 向右滑入，向左滑出
+ * 水平方向滑动
  */
-public class SlideRightLeftCreater extends SlideHorizontalCreater
+public abstract class SlideHorizontalCreater extends SlideCreater
 {
     @Override
-    protected float[] getFloatValues(boolean show, View view)
+    protected final String getPropertyName()
     {
-        if (show)
-        {
-            return new float[]{-view.getWidth(), 0};
-        } else
-        {
-            return new float[]{0, -view.getWidth()};
-        }
+        return View.TRANSLATION_X.getName();
     }
 
-    @Override
-    protected void onAnimationStart(boolean show, View view)
-    {
-
-    }
-
-    @Override
-    protected void onAnimationEnd(boolean show, View view)
-    {
-        view.setTranslationX(0);
-    }
+    protected abstract float[] getFloatValues(boolean show, View view);
 }
