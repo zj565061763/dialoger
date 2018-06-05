@@ -239,9 +239,6 @@ public class FDialoger implements Dialoger
     public void paddingLeft(int padding)
     {
         final View view = mContainerView;
-        if (view.getPaddingLeft() == padding)
-            return;
-
         view.setPadding(padding, view.getPaddingTop(),
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -250,9 +247,6 @@ public class FDialoger implements Dialoger
     public void paddingTop(int padding)
     {
         final View view = mContainerView;
-        if (view.getPaddingTop() == padding)
-            return;
-
         view.setPadding(view.getPaddingLeft(), padding,
                 view.getPaddingRight(), view.getPaddingBottom());
     }
@@ -261,9 +255,6 @@ public class FDialoger implements Dialoger
     public void paddingRight(int padding)
     {
         final View view = mContainerView;
-        if (view.getPaddingRight() == padding)
-            return;
-
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 padding, view.getPaddingBottom());
     }
@@ -272,9 +263,6 @@ public class FDialoger implements Dialoger
     public void paddingBottom(int padding)
     {
         final View view = mContainerView;
-        if (view.getPaddingBottom() == padding)
-            return;
-
         view.setPadding(view.getPaddingLeft(), view.getPaddingTop(),
                 view.getPaddingRight(), padding);
     }
@@ -283,11 +271,7 @@ public class FDialoger implements Dialoger
     public void paddings(int paddings)
     {
         final View view = mContainerView;
-        if (view.getPaddingLeft() != paddings || view.getPaddingTop() != paddings
-                || view.getPaddingRight() != paddings || view.getPaddingBottom() != paddings)
-        {
-            mContainerView.setPadding(paddings, paddings, paddings, paddings);
-        }
+        view.setPadding(paddings, paddings, paddings, paddings);
     }
 
     @Override
@@ -703,11 +687,21 @@ public class FDialoger implements Dialoger
         @Override
         public void setGravity(int gravity)
         {
-            if (mGravity == gravity)
-                return;
+            if (mGravity != gravity)
+            {
+                mGravity = gravity;
+                super.setGravity(gravity);
+            }
+        }
 
-            mGravity = gravity;
-            super.setGravity(gravity);
+        @Override
+        public void setPadding(int left, int top, int right, int bottom)
+        {
+            if (left != getPaddingLeft() || top != getPaddingTop()
+                    || right != getPaddingRight() || bottom != getPaddingBottom())
+            {
+                super.setPadding(left, top, right, bottom);
+            }
         }
 
         @Override
