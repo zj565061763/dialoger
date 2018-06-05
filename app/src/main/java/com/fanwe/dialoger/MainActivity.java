@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fanwe.lib.dialoger.Dialoger;
+import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.impl.FDialoger;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
@@ -81,9 +82,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialoger.setPadding(0, 0, 0, 0);
 
         /**
-         * 设置重力属性
+         * 设置重力属性，默认居中显示
          */
         dialoger.setGravity(Gravity.CENTER);
+
+        /**
+         * 设置窗口内容view动画创建对象，此处设置为透明度变化，可以实现AnimatorCreater接口来实现自定义动画
+         *
+         * 默认规则:
+         * Gravity.CENTER:                      AlphaCreater 透明度
+         *
+         * Gravity.LEFT:                        SlideRightLeftCreater 向右滑入，向左滑出
+         * Gravity.LEFT | Gravity.CENTER:       SlideRightLeftCreater
+         *
+         * Gravity.TOP:                         SlideBottomTopCreater 向下滑入，向上滑出
+         * Gravity.TOP | Gravity.CENTER:        SlideBottomTopCreater
+         *
+         * Gravity.RIGHT:                       SlideLeftRightCreater 向左滑入，向右滑出
+         * case Gravity.RIGHT | Gravity.CENTER: SlideLeftRightCreater
+         *
+         * Gravity.BOTTOM:                      SlideTopBottomCreater 向上滑入，向下滑出
+         * Gravity.BOTTOM | Gravity.CENTER:     SlideTopBottomCreater
+         *
+         */
+        dialoger.setAnimatorCreater(new AlphaCreater());
 
         /**
          * 显示窗口
