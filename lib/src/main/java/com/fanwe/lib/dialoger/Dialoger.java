@@ -18,6 +18,7 @@ package com.fanwe.lib.dialoger;
 import android.animation.Animator;
 import android.content.Context;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 public interface Dialoger
@@ -206,6 +207,14 @@ public interface Dialoger
      * 停止延迟关闭任务
      */
     void stopDismissRunnable();
+
+    /**
+     * 触摸事件回调
+     *
+     * @param event
+     * @return
+     */
+    boolean onTouchEvent(MotionEvent event);
 
     /**
      * Activity需要调用此方法，如果此方法返回true的话，Activity那边的重写方法也要返回true

@@ -330,6 +330,12 @@ public class FDialoger implements Dialoger
     };
 
     @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        return false;
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         if (isShowing() && keyCode == KeyEvent.KEYCODE_BACK)
@@ -672,6 +678,9 @@ public class FDialoger implements Dialoger
                     }
                 }
             }
+
+            if (FDialoger.this.onTouchEvent(event))
+                return true;
 
             super.onTouchEvent(event);
             return true;
