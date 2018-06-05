@@ -121,10 +121,10 @@ interface AnimatorCreater
 库中已经提供的实现类有：
 * AlphaCreater 透明度
 * ScaleXYCreater 宽高同时缩放
-* SlideBottomTopCreater 向下滑入，向上滑出，滑动的距离为内容view的高度
-* SlideLeftRightCreater 向左滑入，向右滑出，滑动的距离为内容view的宽度
-* SlideRightLeftCreater 向右滑入，向左滑出，滑动的距离为内容view的宽度
-* SlideTopBottomCreater 向上滑入，向下滑出，滑动的距离为内容view的高度
+* SlideBottomTopCreater 向下滑入，向上滑出，默认距离为内容view的高度
+* SlideTopBottomCreater 向上滑入，向下滑出，默认距离为内容view的高度
+* SlideLeftRightCreater 向左滑入，向右滑出，默认距离为内容view的宽度
+* SlideRightLeftCreater 向右滑入，向左滑出，默认距离为内容view的宽度
 * PivotCreater 为包装类，可以在动画开始的时候改变view的锚点
 * CombineCreater 为组合类，可以同时组合多个不同的creater
 
