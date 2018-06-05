@@ -67,13 +67,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     {
         switch (v.getId())
         {
-            case R.id.btn_top_center:
-                // 设置动画创建对象，此处为：向下滑入，向上滑出
-                mDialoger.setAnimatorCreater(new SlideBottomTopCreater());
-
-                // 显示在目标view的底部
-                mDialoger.target().showPosition(v, TargetDialoger.Position.BottomOutsideCenter);
-                break;
             case R.id.btn_center:
                 // 设置动画创建对象，通过CombineCreater可以组合多个creater对象
                 mDialoger.setAnimatorCreater(new CombineCreater(new AlphaCreater(), new ScaleXYCreater()));
@@ -83,6 +76,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 // 显示窗口
                 mDialoger.show();
+                break;
+            case R.id.btn_top_center:
+                // 设置动画创建对象，此处为：向下滑入，向上滑出
+                mDialoger.setAnimatorCreater(new SlideBottomTopCreater());
+
+                // 显示在目标view的底部
+                mDialoger.target().showPosition(v, TargetDialoger.Position.BottomOutsideCenter);
                 break;
             case R.id.btn_bottom_center:
                 // 设置动画创建对象，此处为：向上滑入，向下滑出
