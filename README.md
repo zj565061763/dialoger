@@ -1,5 +1,6 @@
 # About
-封装了dialog的逻辑，可以让某个View具有dialog的属性
+封装了dialog的逻辑，内部采用view实现，实现原理：<br>
+![](http://thumbsnap.com/i/I5BJBy0e.png?0605)
 
 # Gradle
 `implementation 'com.fanwe.android:dialoger:1.0.0-rc1'`
