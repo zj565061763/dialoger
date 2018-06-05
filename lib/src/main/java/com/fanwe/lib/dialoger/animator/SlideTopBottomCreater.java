@@ -15,23 +15,23 @@
  */
 package com.fanwe.lib.dialoger.animator;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.view.View;
 
 /**
  * 向上滑入，向下滑出
  */
-public class SlideTopBottomCreater extends BaseAnimatorCreater
+public class SlideTopBottomCreater extends SlideVerticalCreater
 {
     @Override
-    protected Animator onCreateAnimator(boolean show, View view)
+    protected float[] getPosition(boolean show, View view)
     {
-        final ObjectAnimator animator = new ObjectAnimator();
-        animator.setPropertyName(View.TRANSLATION_Y.getName());
-        animator.setFloatValues(show ? new float[]{view.getHeight(), 0} : new float[]{0, view.getHeight()});
-        animator.setTarget(view);
-        return animator;
+        if (show)
+        {
+            return new float[]{view.getHeight(), 0};
+        } else
+        {
+            return new float[]{0, view.getHeight()};
+        }
     }
 
     @Override
