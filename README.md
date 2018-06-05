@@ -374,14 +374,14 @@ public interface Dialoger
     interface LifecycleCallback
     {
         /**
-         * 窗口显示之后回调
+         * 窗口显示之前回调
          *
          * @param dialoger
          */
         void onStart(Dialoger dialoger);
 
         /**
-         * 窗口关闭之后回调
+         * 窗口关闭之前回调
          *
          * @param dialoger
          */

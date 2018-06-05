@@ -92,8 +92,6 @@ class SimpleTargetDialoger implements TargetDialoger
                     mPaddingTop = container.getPaddingTop();
                     mPaddingRight = container.getPaddingRight();
                     mPaddingBottom = container.getPaddingBottom();
-
-                    updater.notifyUpdatable();
                 } else
                 {
                     mDialoger.paddingLeft(mPaddingLeft);

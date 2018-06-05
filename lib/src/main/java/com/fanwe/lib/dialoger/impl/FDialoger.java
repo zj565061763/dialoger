@@ -380,6 +380,15 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try show");
 
+            onStart();
+            if (mLifecycleCallbacks != null)
+            {
+                for (LifecycleCallback item : mLifecycleCallbacks)
+                {
+                    item.onStart(FDialoger.this);
+                }
+            }
+
             mDialogerParent.addView(mDialogerView);
         } else
         {
@@ -507,12 +516,20 @@ public class FDialoger implements Dialoger
         final ViewParent parent = mDialogerView.getParent();
         if (parent instanceof ViewGroup)
         {
+            onStop();
+            if (mLifecycleCallbacks != null)
+            {
+                for (LifecycleCallback item : mLifecycleCallbacks)
+                {
+                    item.onStop(FDialoger.this);
+                }
+            }
             ((ViewGroup) parent).removeView(mDialogerView);
         }
     }
 
     /**
-     * dialog显示之后回调
+     * dialog显示之前回调
      */
     protected void onStart()
     {
@@ -521,7 +538,7 @@ public class FDialoger implements Dialoger
     }
 
     /**
-     * dialog关闭之后回调
+     * dialog关闭之前回调
      */
     protected void onStop()
     {
@@ -629,14 +646,6 @@ public class FDialoger implements Dialoger
             mTryStartShowAnimator = true;
 
             // notify
-            onStart();
-            if (mLifecycleCallbacks != null)
-            {
-                for (LifecycleCallback item : mLifecycleCallbacks)
-                {
-                    item.onStart(FDialoger.this);
-                }
-            }
             if (mOnShowListener != null)
             {
                 getDialogerHandler().post(new Runnable()
@@ -669,14 +678,6 @@ public class FDialoger implements Dialoger
             mRemoveByHideAnimator = false;
 
             // notify
-            onStop();
-            if (mLifecycleCallbacks != null)
-            {
-                for (LifecycleCallback item : mLifecycleCallbacks)
-                {
-                    item.onStop(FDialoger.this);
-                }
-            }
             if (mOnDismissListener != null)
             {
                 getDialogerHandler().post(new Runnable()
