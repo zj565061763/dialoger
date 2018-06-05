@@ -53,6 +53,12 @@ public class ScaleXYCreater extends BaseAnimatorCreater
     }
 
     @Override
+    protected void onAnimationStart(boolean show, View view)
+    {
+
+    }
+
+    @Override
     protected void onAnimationEnd(boolean show, View view)
     {
         view.setScaleX(1.0f);

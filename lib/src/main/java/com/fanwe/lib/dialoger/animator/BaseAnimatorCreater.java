@@ -32,6 +32,13 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
             animator.addListener(new AnimatorListenerAdapter()
             {
                 @Override
+                public void onAnimationStart(Animator animation)
+                {
+                    super.onAnimationStart(animation);
+                    BaseAnimatorCreater.this.onAnimationStart(show, view);
+                }
+
+                @Override
                 public void onAnimationEnd(Animator animation)
                 {
                     super.onAnimationEnd(animation);
@@ -44,6 +51,8 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
     }
 
     protected abstract Animator onCreateAnimator(boolean show, View view);
+
+    protected abstract void onAnimationStart(boolean show, View view);
 
     protected abstract void onAnimationEnd(boolean show, View view);
 }

@@ -41,6 +41,12 @@ public class AlphaCreater extends BaseAnimatorCreater
     }
 
     @Override
+    protected void onAnimationStart(boolean show, View view)
+    {
+
+    }
+
+    @Override
     protected void onAnimationEnd(boolean show, View view)
     {
         view.setAlpha(1.0f);

@@ -35,6 +35,12 @@ public class SlideLeftRightCreater extends BaseAnimatorCreater
     }
 
     @Override
+    protected void onAnimationStart(boolean show, View view)
+    {
+
+    }
+
+    @Override
     protected void onAnimationEnd(boolean show, View view)
     {
         view.setTranslationX(0);
