@@ -18,6 +18,6 @@ public class PivotOnStartBottomCenterCreater extends PivotOnStartCreater
     protected void getPivot(boolean show, View view, float[] pivotXY)
     {
         pivotXY[0] = view.getWidth() / 2;
-        pivotXY[1] = 0.0f;
+        pivotXY[1] = view.getHeight();
     }
 }
