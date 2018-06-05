@@ -56,7 +56,7 @@ public class FDialoger implements Dialoger
 
     private View mContentView;
     private boolean mCancelable = true;
-    private boolean mCanceledOnTouchOutside = false;
+    private boolean mCanceledOnTouchOutside = true;
 
     private int mGravity = Gravity.NO_GRAVITY;
 
@@ -364,8 +364,6 @@ public class FDialoger implements Dialoger
 
             mIsAttached = true;
 
-            setDefaultConfigBeforeShow();
-
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try show");
 
@@ -378,6 +376,7 @@ public class FDialoger implements Dialoger
                 }
             }
 
+            setDefaultConfigBeforeShow();
             mDialogerParent.addView(mDialogerView);
         } else
         {
@@ -507,8 +506,6 @@ public class FDialoger implements Dialoger
 
         if (animatorBackground != null && animatorContent != null)
         {
-            animatorBackground.setDuration(animatorContent.getDuration());
-
             final AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.play(animatorBackground).with(animatorContent);
             animator = animatorSet;

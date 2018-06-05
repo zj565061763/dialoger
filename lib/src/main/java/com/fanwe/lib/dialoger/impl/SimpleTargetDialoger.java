@@ -22,6 +22,9 @@ import android.view.View;
 
 import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.TargetDialoger;
+import com.fanwe.lib.dialoger.animator.PivotCreater;
+import com.fanwe.lib.dialoger.animator.ScaleXYCreater;
+import com.fanwe.lib.dialoger.utils.PivotHolder;
 import com.fanwe.lib.updater.Updater;
 import com.fanwe.lib.updater.ViewUpdater;
 import com.fanwe.lib.updater.impl.OnGlobalLayoutChangeUpdater;
@@ -40,8 +43,9 @@ class SimpleTargetDialoger implements TargetDialoger
     private int mPaddingTop;
     private int mPaddingRight;
     private int mPaddingBottom;
-
     private int mGravity;
+
+    private boolean mModifyAnimatorCreater;
 
     public SimpleTargetDialoger(Dialoger dialoger)
     {
@@ -63,42 +67,54 @@ class SimpleTargetDialoger implements TargetDialoger
                     {
                         case LeftOutsideTop:
                             mTracker.setPosition(ViewTracker.Position.LeftOutsideTop);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopRight));
                             break;
                         case LeftOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.LeftOutsideCenter);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.RightCenter));
                             break;
                         case LeftOutsideBottom:
                             mTracker.setPosition(ViewTracker.Position.LeftOutsideBottom);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomRight));
                             break;
 
                         case TopOutsideLeft:
                             mTracker.setPosition(ViewTracker.Position.TopOutsideLeft);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomLeft));
                             break;
                         case TopOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.TopOutsideCenter);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomCenter));
                             break;
                         case TopOutsideRight:
                             mTracker.setPosition(ViewTracker.Position.TopOutsideRight);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomRight));
                             break;
 
                         case RightOutsideTop:
                             mTracker.setPosition(ViewTracker.Position.RightOutsideTop);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopLeft));
                             break;
                         case RightOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.RightOutsideCenter);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.LeftCenter));
                             break;
                         case RightOutsideBottom:
                             mTracker.setPosition(ViewTracker.Position.RightOutsideBottom);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomLeft));
                             break;
 
                         case BottomOutsideLeft:
                             mTracker.setPosition(ViewTracker.Position.BottomOutsideLeft);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopLeft));
                             break;
                         case BottomOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.BottomOutsideCenter);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopCenter));
                             break;
                         case BottomOutsideRight:
                             mTracker.setPosition(ViewTracker.Position.BottomOutsideRight);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopRight));
                             break;
                     }
 
@@ -112,8 +128,18 @@ class SimpleTargetDialoger implements TargetDialoger
                 mUpdater.stop();
                 mTracker.setSource(null).setTarget(null);
                 mPosition = null;
+                mModifyAnimatorCreater = false;
             }
         });
+    }
+
+    private void setDefaultAnimator(Dialoger.AnimatorCreater creater)
+    {
+        if (mDialoger.getAnimatorCreater() == null)
+        {
+            mDialoger.setAnimatorCreater(creater);
+            mModifyAnimatorCreater = true;
+        }
     }
 
     private void initUpdater()
@@ -142,6 +168,9 @@ class SimpleTargetDialoger implements TargetDialoger
                 {
                     mDialoger.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
                     mDialoger.setGravity(mGravity);
+
+                    if (mModifyAnimatorCreater)
+                        mDialoger.setAnimatorCreater(null);
                 }
             }
         });
