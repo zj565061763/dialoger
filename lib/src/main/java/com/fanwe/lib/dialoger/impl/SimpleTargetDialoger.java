@@ -16,6 +16,7 @@
 package com.fanwe.lib.dialoger.impl;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 
@@ -112,12 +113,20 @@ class SimpleTargetDialoger implements TargetDialoger
         mTracker.setCallback(new ViewTracker.Callback()
         {
             @Override
+            public boolean canUpdate(View source, View sourceParent, View target)
+            {
+                return source.getWidth() > 0 && source.getHeight() > 0;
+            }
+
+            @Override
             public void onUpdate(int x, int y, View source, View sourceParent, View target)
             {
                 final int dx = x - source.getLeft();
                 final int dy = y - source.getTop();
                 source.offsetLeftAndRight(dx);
                 source.offsetTopAndBottom(dy);
+
+                Log.i(SimpleTargetDialoger.class.getSimpleName(), x + "," + y);
 
                 switch (mPosition)
                 {
