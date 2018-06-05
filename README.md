@@ -128,7 +128,7 @@ interface AnimatorCreater
 * PivotCreater 为包装类，可以在动画开始的时候改变view的锚点
 * CombineCreater 为组合类，可以同时组合多个不同的creater
 
-# 显示在某个View旁边
+# 显示在某个View周围
 
 ```java
 /**
