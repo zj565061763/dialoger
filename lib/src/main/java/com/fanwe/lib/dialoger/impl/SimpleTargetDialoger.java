@@ -41,6 +41,8 @@ class SimpleTargetDialoger implements TargetDialoger
     private int mPaddingRight;
     private int mPaddingBottom;
 
+    private int mGravity;
+
     public SimpleTargetDialoger(Dialoger dialoger)
     {
         if (dialoger == null)
@@ -92,12 +94,16 @@ class SimpleTargetDialoger implements TargetDialoger
                     mPaddingTop = container.getPaddingTop();
                     mPaddingRight = container.getPaddingRight();
                     mPaddingBottom = container.getPaddingBottom();
+
+                    mGravity = mDialoger.getGravity();
                 } else
                 {
                     mDialoger.paddingLeft(mPaddingLeft);
                     mDialoger.paddingTop(mPaddingTop);
                     mDialoger.paddingRight(mPaddingRight);
                     mDialoger.paddingBottom(mPaddingBottom);
+
+                    mDialoger.setGravity(mGravity);
                 }
             }
         });

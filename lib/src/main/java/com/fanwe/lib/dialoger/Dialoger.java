@@ -127,6 +127,13 @@ public interface Dialoger
     void setGravity(int gravity);
 
     /**
+     * 返回当前的重力属性
+     *
+     * @return
+     */
+    int getGravity();
+
+    /**
      * 设置左边间距
      *
      * @param padding

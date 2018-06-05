@@ -85,6 +85,7 @@ public class FDialoger implements Dialoger
         paddingLeft(defaultHorizontalPadding);
         paddingRight(defaultHorizontalPadding);
 
+        setGravity(Gravity.NO_GRAVITY);
         setAnimatorCreater(new AlphaCreater());
         setBackgroundColor(Color.parseColor("#66000000"));
     }
@@ -233,6 +234,12 @@ public class FDialoger implements Dialoger
     public void setGravity(int gravity)
     {
         mContainerView.setGravity(gravity);
+    }
+
+    @Override
+    public int getGravity()
+    {
+        return mGravity;
     }
 
     @Override
