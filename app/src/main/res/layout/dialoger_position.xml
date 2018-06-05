@@ -14,19 +14,22 @@
             android:id="@+id/btn_left_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="左边-靠顶部" />
+            android:text="left_top"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_left_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="左边-上下居中" />
+            android:text="left_center"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_left_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="左边-靠底部" />
+            android:text="left_bottom"
+            android:textAllCaps="false" />
 
     </LinearLayout>
 
@@ -40,19 +43,22 @@
             android:id="@+id/btn_right_top"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="右边-靠顶部" />
+            android:text="right_top"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_right_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="右边-上下居中" />
+            android:text="right_center"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_right_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="右边-靠底部" />
+            android:text="right_bottom"
+            android:textAllCaps="false" />
 
     </LinearLayout>
 
@@ -66,19 +72,22 @@
             android:id="@+id/btn_top_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="顶部-靠左边" />
+            android:text="top_left"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_top_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="顶部-左右居中" />
+            android:text="top_center"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_top_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="顶部-靠右边" />
+            android:text="top_right"
+            android:textAllCaps="false" />
 
     </LinearLayout>
 
@@ -92,19 +101,22 @@
             android:id="@+id/btn_bottom_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="底部-靠左边" />
+            android:text="bottom_left"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_bottom_center"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="底部-左右居中" />
+            android:text="bottom_center"
+            android:textAllCaps="false" />
 
         <Button
             android:id="@+id/btn_bottom_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="底部-靠右边" />
+            android:text="bottom_right"
+            android:textAllCaps="false" />
 
     </LinearLayout>
 
