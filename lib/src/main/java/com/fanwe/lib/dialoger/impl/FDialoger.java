@@ -627,6 +627,14 @@ public class FDialoger implements Dialoger
         }
 
         @Override
+        public void setVisibility(int visibility)
+        {
+            if (visibility == GONE || visibility == INVISIBLE)
+                throw new IllegalArgumentException("you can not hide dialoger");
+            super.setVisibility(visibility);
+        }
+
+        @Override
         protected void onLayout(boolean changed, int l, int t, int r, int b)
         {
             super.onLayout(changed, l, t, r, b);
@@ -753,6 +761,14 @@ public class FDialoger implements Dialoger
             {
                 super.setPadding(left, top, right, bottom);
             }
+        }
+
+        @Override
+        public void setVisibility(int visibility)
+        {
+            if (visibility == GONE || visibility == INVISIBLE)
+                throw new IllegalArgumentException("you can not hide container");
+            super.setVisibility(visibility);
         }
 
         @Override
