@@ -21,6 +21,7 @@ import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.Looper;
@@ -66,7 +67,7 @@ public class FDialoger implements Dialoger
     private OnShowListener mOnShowListener;
     private List<LifecycleCallback> mLifecycleCallbacks;
 
-    private boolean mIsAttached;
+    private boolean mIsAttach;
 
     private VisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mAnimatorCreater;
@@ -285,6 +286,24 @@ public class FDialoger implements Dialoger
     @Override
     public void show()
     {
+        if (isShowing())
+        {
+            if (getAnimatorHandler().isHideAnimatorStarted())
+            {
+                if (mIsDebug)
+                    Log.i(Dialoger.class.getSimpleName(), "cancel HideAnimator before show");
+
+                getAnimatorHandler().cancelHideAnimator();
+            } else
+            {
+                return;
+            }
+        }
+
+        if (mIsDebug)
+            Log.i(Dialoger.class.getSimpleName(), "try show");
+
+        mIsAttach = true;
         getDialog().show();
     }
 
@@ -355,62 +374,6 @@ public class FDialoger implements Dialoger
             return true;
         }
         return false;
-    }
-
-    private void attach(boolean attach)
-    {
-        if (mIsAttached == attach)
-            return;
-
-        if (attach)
-        {
-            if (isShowing())
-            {
-                if (getAnimatorHandler().isHideAnimatorStarted())
-                {
-                    if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "cancel HideAnimator before show");
-
-                    getAnimatorHandler().cancelHideAnimator();
-                } else
-                {
-                    return;
-                }
-            }
-
-            mIsAttached = true;
-
-            if (mIsDebug)
-                Log.i(Dialoger.class.getSimpleName(), "try show");
-
-            onStart();
-            if (mLifecycleCallbacks != null)
-            {
-                for (LifecycleCallback item : mLifecycleCallbacks)
-                {
-                    item.onStart(FDialoger.this);
-                }
-            }
-
-            setDefaultConfigBeforeShow();
-            mDialogerParent.addView(mDialogerView);
-        } else
-        {
-            if (mActivity.isFinishing())
-                return;
-
-            if (!isShowing())
-                return;
-
-            mIsAttached = false;
-
-            mTryStartShowAnimator = false;
-            getAnimatorHandler().setHideAnimator(createAnimator(false));
-            if (getAnimatorHandler().startHideAnimator())
-                return;
-
-            removeDialogerView(false);
-        }
     }
 
     private void setDefaultConfigBeforeShow()
@@ -563,6 +526,7 @@ public class FDialoger implements Dialoger
             Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by hideAnimator:" + removeByHideAnimator);
 
         mRemoveByHideAnimator = removeByHideAnimator;
+        mIsAttach = false;
         getDialog().dismiss();
     }
 
@@ -686,22 +650,10 @@ public class FDialoger implements Dialoger
             super.onAttachedToWindow();
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onAttachedToWindow");
+            if (!mIsAttach)
+                throw new RuntimeException("can not add dialoger view to parent:" + mDialogerView.getParent());
 
             mTryStartShowAnimator = true;
-
-            // notify
-            if (mOnShowListener != null)
-            {
-                getDialogerHandler().post(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        if (mOnShowListener != null)
-                            mOnShowListener.onShow(FDialoger.this);
-                    }
-                });
-            }
         }
 
         @Override
@@ -710,7 +662,7 @@ public class FDialoger implements Dialoger
             super.onDetachedFromWindow();
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
-            if (mIsAttached && !mActivity.isFinishing())
+            if (mIsAttach && !mActivity.isFinishing())
                 throw new RuntimeException("you must call dismiss() method to remove dialoger");
 
             mTryStartShowAnimator = false;
@@ -720,20 +672,6 @@ public class FDialoger implements Dialoger
             if (!mRemoveByHideAnimator)
                 getAnimatorHandler().cancelHideAnimator();
             mRemoveByHideAnimator = false;
-
-            // notify
-            if (mOnDismissListener != null)
-            {
-                getDialogerHandler().post(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        if (mOnDismissListener != null)
-                            mOnDismissListener.onDismiss(FDialoger.this);
-                    }
-                });
-            }
         }
     }
 
@@ -842,6 +780,16 @@ public class FDialoger implements Dialoger
                 {
                     super.onStart();
 
+                    FDialoger.this.onStart();
+                    if (mLifecycleCallbacks != null)
+                    {
+                        for (LifecycleCallback item : mLifecycleCallbacks)
+                        {
+                            item.onStart(FDialoger.this);
+                        }
+                    }
+
+                    setDefaultConfigBeforeShow();
                 }
 
                 @Override
@@ -858,7 +806,31 @@ public class FDialoger implements Dialoger
                         }
                     }
                 }
+
+                @Override
+                public boolean onKeyDown(int keyCode, KeyEvent event)
+                {
+                    return FDialoger.this.onKeyDown(keyCode, event);
+                }
             };
+            mDialog.setOnShowListener(new DialogInterface.OnShowListener()
+            {
+                @Override
+                public void onShow(DialogInterface dialog)
+                {
+                    if (mOnShowListener != null)
+                        mOnShowListener.onShow(FDialoger.this);
+                }
+            });
+            mDialog.setOnDismissListener(new DialogInterface.OnDismissListener()
+            {
+                @Override
+                public void onDismiss(DialogInterface dialog)
+                {
+                    if (mOnDismissListener != null)
+                        mOnDismissListener.onDismiss(FDialoger.this);
+                }
+            });
 
             final WindowManager.LayoutParams params = mDialog.getWindow().getAttributes();
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
