@@ -790,13 +790,17 @@ public class FDialoger implements Dialoger
             {
                 private void setDefaultParams()
                 {
+                    final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
+                    final int targetHeight = mBackgroundView.getBackground() == null
+                            ? (mActivity.getResources().getDisplayMetrics().heightPixels - getActivityStatusBarHeight(mActivity))
+                            : ViewGroup.LayoutParams.MATCH_PARENT;
+
                     final WindowManager.LayoutParams params = getWindow().getAttributes();
-                    if (params.width != ViewGroup.LayoutParams.MATCH_PARENT
-                            || params.height != ViewGroup.LayoutParams.MATCH_PARENT
+                    if (params.width != targetWidth || params.height != targetHeight
                             || params.horizontalMargin != 0 || params.verticalMargin != 0)
                     {
-                        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                        params.width = targetWidth;
+                        params.height = targetHeight;
                         params.horizontalMargin = 0;
                         params.verticalMargin = 0;
                         getWindow().setAttributes(params);
@@ -875,5 +879,28 @@ public class FDialoger implements Dialoger
                     ViewGroup.LayoutParams.MATCH_PARENT));
         }
         return mDialog;
+    }
+
+    private static int getActivityStatusBarHeight(Activity activity)
+    {
+        final boolean isStatusBarVisible = ((activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == 0);
+        if (isStatusBarVisible)
+        {
+            return getStatusBarHeight(activity);
+        } else
+        {
+            return 0;
+        }
+    }
+
+    private static int getStatusBarHeight(Context context)
+    {
+        int result = 0;
+
+        final int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0)
+            result = context.getResources().getDimensionPixelSize(resourceId);
+
+        return result;
     }
 }
