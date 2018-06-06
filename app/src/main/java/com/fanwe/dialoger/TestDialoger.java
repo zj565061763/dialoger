@@ -12,14 +12,9 @@ public class TestDialoger extends FDialoger
     {
         super(activity);
         setDebug(true);
-        /**
-         * 设置窗口内容
-         */
         setContentView(R.layout.dialoger_test);
-        /**
-         * 设置窗口边距
-         */
         setPadding(0, 0, 0, 0);
+        setBackgroundColor(0);
     }
 
     @Override
