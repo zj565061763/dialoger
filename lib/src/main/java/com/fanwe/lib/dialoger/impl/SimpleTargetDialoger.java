@@ -15,7 +15,6 @@
  */
 package com.fanwe.lib.dialoger.impl;
 
-import android.app.Activity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -174,9 +173,6 @@ class SimpleTargetDialoger implements TargetDialoger
                 }
             }
         });
-
-        final Activity activity = (Activity) mDialoger.getContext();
-        mUpdater.setView(activity.findViewById(android.R.id.content));
     }
 
     private void initTracker()
@@ -283,8 +279,10 @@ class SimpleTargetDialoger implements TargetDialoger
 
         mPosition = position;
 
-        mTracker.setSource(mDialoger.getContentView());
+        final View contentView = mDialoger.getContentView();
+        mTracker.setSource(contentView);
         mTracker.setTarget(target);
+        mUpdater.setView(contentView);
 
         mDialoger.show();
     }
