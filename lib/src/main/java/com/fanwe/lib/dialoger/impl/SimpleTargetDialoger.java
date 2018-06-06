@@ -179,9 +179,10 @@ class SimpleTargetDialoger implements TargetDialoger
         mTracker.setCallback(new ViewTracker.Callback()
         {
             @Override
-            public boolean canUpdate(View source, View sourceParent, View target)
+            public boolean canUpdate(View source, View target)
             {
-                return source.getWidth() > 0 && source.getHeight() > 0;
+                return target != null && source != null
+                        && source.getWidth() > 0 && source.getHeight() > 0;
             }
 
             @Override

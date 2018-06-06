@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.fanwe.android:viewtracker:1.0.0'
+    implementation 'com.fanwe.android:viewtracker:1.0.1'
     implementation 'com.fanwe.android:updater:1.0.0'
 }
 
