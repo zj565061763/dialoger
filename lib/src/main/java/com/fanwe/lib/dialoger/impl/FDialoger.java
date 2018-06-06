@@ -776,19 +776,22 @@ public class FDialoger implements Dialoger
         {
             mDialog = new Dialog(mActivity, R.style.lib_dialoger_dialoger)
             {
-                @Override
-                public void setContentView(View view)
+                private void setDefaultParams()
                 {
-                    final ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(mDialogerParent.getWidth(),
-                            mDialogerParent.getHeight());
-
-                    super.setContentView(view, params);
+                    final WindowManager.LayoutParams params = getWindow().getAttributes();
+                    params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                    params.horizontalMargin = 0;
+                    params.verticalMargin = 0;
+                    getWindow().setAttributes(params);
+                    getWindow().getDecorView().setPadding(0, 0, 0, 0);
                 }
 
                 @Override
                 protected void onStart()
                 {
                     super.onStart();
+                    setDefaultParams();
 
                     FDialoger.this.onStart();
                     if (mLifecycleCallbacks != null)
@@ -823,6 +826,8 @@ public class FDialoger implements Dialoger
                     return FDialoger.this.onKeyDown(keyCode, event);
                 }
             };
+            mDialog.setCanceledOnTouchOutside(false);
+            mDialog.setCancelable(false);
             mDialog.setOnShowListener(new DialogInterface.OnShowListener()
             {
                 @Override
@@ -842,16 +847,8 @@ public class FDialoger implements Dialoger
                 }
             });
 
-            final WindowManager.LayoutParams params = mDialog.getWindow().getAttributes();
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            params.horizontalMargin = 0;
-            params.verticalMargin = 0;
-            mDialog.getWindow().setAttributes(params);
-
-            mDialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
-            mDialog.setCanceledOnTouchOutside(false);
-            mDialog.setCancelable(false);
+            mDialog.setContentView(mDialogerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
         }
         return mDialog;
     }
