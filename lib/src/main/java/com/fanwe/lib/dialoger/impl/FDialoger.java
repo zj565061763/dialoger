@@ -774,7 +774,7 @@ public class FDialoger implements Dialoger
     {
         if (mDialog == null)
         {
-            mDialog = new Dialog(mActivity, R.style.libDialog_dialog)
+            mDialog = new Dialog(mActivity, R.style.lib_dialoger_dialoger)
             {
                 @Override
                 public void setContentView(View view)
