@@ -40,7 +40,6 @@ class SimpleTargetDialoger implements TargetDialoger
 
     private boolean mPaddingToPosition;
     private DialogerBackup mDialogerBackup;
-
     private boolean mModifyAnimatorCreater;
 
     public SimpleTargetDialoger(Dialoger dialoger)
