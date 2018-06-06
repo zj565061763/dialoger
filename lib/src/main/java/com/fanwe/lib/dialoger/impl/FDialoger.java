@@ -52,7 +52,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
-    private final ViewGroup mDialogerParent;
     private final View mDialogerView;
     private final LinearLayout mContainerView;
     private final View mBackgroundView;
@@ -83,7 +82,6 @@ public class FDialoger implements Dialoger
             throw new NullPointerException("activity is null");
 
         mActivity = activity;
-        mDialogerParent = activity.findViewById(android.R.id.content);
 
         final InternalDialogerView dialogerView = new InternalDialogerView(activity);
         mDialogerView = dialogerView;
@@ -665,7 +663,7 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onAttachedToWindow");
             if (!mIsAttach)
-                throw new RuntimeException("can not add dialoger view to parent:" + mDialogerView.getParent());
+                throw new RuntimeException("can not add dialoger view to parent:" + getParent());
         }
 
         @Override
@@ -828,7 +826,6 @@ public class FDialoger implements Dialoger
                     }
 
                     setDefaultConfigBeforeShow();
-
                     mTryStartShowAnimator = true;
                 }
 
