@@ -789,12 +789,23 @@ public class FDialoger implements Dialoger
                 private void setDefaultParams()
                 {
                     final WindowManager.LayoutParams params = getWindow().getAttributes();
-                    params.width = ViewGroup.LayoutParams.MATCH_PARENT;
-                    params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-                    params.horizontalMargin = 0;
-                    params.verticalMargin = 0;
-                    getWindow().setAttributes(params);
-                    getWindow().getDecorView().setPadding(0, 0, 0, 0);
+                    if (params.width != ViewGroup.LayoutParams.MATCH_PARENT
+                            || params.height != ViewGroup.LayoutParams.MATCH_PARENT
+                            || params.horizontalMargin != 0 || params.verticalMargin != 0)
+                    {
+                        params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                        params.height = ViewGroup.LayoutParams.MATCH_PARENT;
+                        params.horizontalMargin = 0;
+                        params.verticalMargin = 0;
+                        getWindow().setAttributes(params);
+                    }
+
+                    final View view = getWindow().getDecorView();
+                    if (view.getPaddingLeft() != 0 || view.getPaddingTop() != 0
+                            || view.getPaddingRight() != 0 || view.getPaddingBottom() != 0)
+                    {
+                        getWindow().getDecorView().setPadding(0, 0, 0, 0);
+                    }
                 }
 
                 @Override
