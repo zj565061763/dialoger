@@ -66,7 +66,7 @@ public class FDialoger implements Dialoger
     private OnShowListener mOnShowListener;
     private List<LifecycleCallback> mLifecycleCallbacks;
 
-    private boolean mIsAttach;
+    private boolean mAttachState;
 
     private VisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mAnimatorCreater;
@@ -304,7 +304,7 @@ public class FDialoger implements Dialoger
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "try show");
 
-        mIsAttach = true;
+        mAttachState = true;
         getDialog().show();
     }
 
@@ -324,6 +324,8 @@ public class FDialoger implements Dialoger
 
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try dismiss");
+
+            mAttachState = false;
 
             mTryStartShowAnimator = false;
             getAnimatorHandler().setHideAnimator(createAnimator(false));
@@ -538,7 +540,6 @@ public class FDialoger implements Dialoger
             Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by hideAnimator:" + removeByHideAnimator);
 
         mRemoveByHideAnimator = removeByHideAnimator;
-        mIsAttach = false;
         getDialog().dismiss();
     }
 
@@ -637,6 +638,9 @@ public class FDialoger implements Dialoger
         @Override
         public boolean onTouchEvent(MotionEvent event)
         {
+            if (!mAttachState)
+                return false;
+
             if (event.getAction() == MotionEvent.ACTION_DOWN)
             {
                 if (!isViewUnder(mContentView, (int) event.getX(), (int) event.getY()))
@@ -662,8 +666,6 @@ public class FDialoger implements Dialoger
             super.onAttachedToWindow();
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onAttachedToWindow");
-            if (!mIsAttach)
-                throw new RuntimeException("can not add dialoger view to parent:" + getParent());
         }
 
         @Override
@@ -672,9 +674,8 @@ public class FDialoger implements Dialoger
             super.onDetachedFromWindow();
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
-            if (mIsAttach && !mActivity.isFinishing())
-                throw new RuntimeException("you must call dismiss() method to remove dialoger");
 
+            mAttachState = false;
             mTryStartShowAnimator = false;
             stopDismissRunnable();
 
@@ -851,6 +852,9 @@ public class FDialoger implements Dialoger
                 @Override
                 public boolean onKeyDown(int keyCode, KeyEvent event)
                 {
+                    if (!mAttachState)
+                        return false;
+
                     return FDialoger.this.onKeyDown(keyCode, event);
                 }
             };
