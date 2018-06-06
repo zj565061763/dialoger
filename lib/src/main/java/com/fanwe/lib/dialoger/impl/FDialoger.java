@@ -324,6 +324,9 @@ public class FDialoger implements Dialoger
             if (getAnimatorHandler().isHideAnimatorStarted())
                 return;
 
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "try dismiss");
+
             mTryStartShowAnimator = false;
             getAnimatorHandler().setHideAnimator(createAnimator(false));
             if (getAnimatorHandler().startHideAnimator())
@@ -663,8 +666,6 @@ public class FDialoger implements Dialoger
                 Log.i(Dialoger.class.getSimpleName(), "onAttachedToWindow");
             if (!mIsAttach)
                 throw new RuntimeException("can not add dialoger view to parent:" + mDialogerView.getParent());
-
-            mTryStartShowAnimator = true;
         }
 
         @Override
@@ -827,6 +828,8 @@ public class FDialoger implements Dialoger
                     }
 
                     setDefaultConfigBeforeShow();
+
+                    mTryStartShowAnimator = true;
                 }
 
                 @Override
