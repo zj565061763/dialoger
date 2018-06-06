@@ -40,7 +40,9 @@ class SimpleTargetDialoger implements TargetDialoger
 
     private boolean mPaddingToPosition;
     private DialogerBackup mDialogerBackup;
-    private boolean mModifyAnimatorCreater;
+
+    private boolean mIsAnimatorCreaterModified;
+    private Dialoger.AnimatorCreater mModifyAnimatorCreater;
 
     public SimpleTargetDialoger(Dialoger dialoger)
     {
@@ -123,7 +125,7 @@ class SimpleTargetDialoger implements TargetDialoger
                 mUpdater.stop();
                 mTracker.setSource(null).setTarget(null);
                 mPosition = null;
-                mModifyAnimatorCreater = false;
+                mIsAnimatorCreaterModified = false;
             }
         });
     }
@@ -133,7 +135,9 @@ class SimpleTargetDialoger implements TargetDialoger
         if (mDialoger.getAnimatorCreater() == null)
         {
             mDialoger.setAnimatorCreater(creater);
-            mModifyAnimatorCreater = true;
+
+            mIsAnimatorCreaterModified = true;
+            mModifyAnimatorCreater = creater;
         }
     }
 
@@ -167,7 +171,7 @@ class SimpleTargetDialoger implements TargetDialoger
                 {
                     getDialogerBackup().restore(mDialoger);
 
-                    if (mModifyAnimatorCreater)
+                    if (mIsAnimatorCreaterModified && mModifyAnimatorCreater == mDialoger.getAnimatorCreater())
                         mDialoger.setAnimatorCreater(null);
                 }
             }
