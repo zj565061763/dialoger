@@ -304,6 +304,7 @@ public class FDialoger implements Dialoger
             Log.i(Dialoger.class.getSimpleName(), "try show");
 
         mIsAttach = true;
+        getDialog().setContentView(mDialogerView);
         getDialog().show();
     }
 
@@ -776,6 +777,15 @@ public class FDialoger implements Dialoger
             mDialog = new Dialog(mActivity, R.style.libDialog_dialog)
             {
                 @Override
+                public void setContentView(View view)
+                {
+                    final ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(mDialogerParent.getWidth(),
+                            mDialogerParent.getHeight());
+
+                    super.setContentView(view, params);
+                }
+
+                @Override
                 protected void onStart()
                 {
                     super.onStart();
@@ -842,9 +852,6 @@ public class FDialoger implements Dialoger
             mDialog.getWindow().getDecorView().setPadding(0, 0, 0, 0);
             mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
-
-            mDialog.setContentView(mDialogerView, new ViewGroup.LayoutParams(mDialogerParent.getWidth(),
-                    mDialogerParent.getHeight()));
         }
         return mDialog;
     }
