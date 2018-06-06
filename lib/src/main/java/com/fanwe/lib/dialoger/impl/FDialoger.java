@@ -143,7 +143,7 @@ public class FDialoger implements Dialoger
             p.height = params.height;
         }
 
-        final View old = mContainerView;
+        final View old = mContentView;
         mContentView = view;
 
         mContainerView.removeView(old);

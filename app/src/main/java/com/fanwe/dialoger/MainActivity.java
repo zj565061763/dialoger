@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.fanwe.lib.dialoger.Dialoger;
+import com.fanwe.lib.dialoger.TargetDialoger;
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
 import com.fanwe.lib.dialoger.impl.FDialoger;
 
@@ -23,9 +24,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
     }
 
+    FDialoger dialoger;
+
     private void showSimpleDemo()
     {
-        final FDialoger dialoger = new FDialoger(this);
+        if (dialoger == null)
+            dialoger = new FDialoger(this);
 
         /**
          * 设置调试模式，内部会输出日志，日志tag：Dialoger
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
          * 设置重力属性，默认居中显示
          */
-        dialoger.setGravity(Gravity.CENTER);
+//        dialoger.setGravity(Gravity.CENTER);
 
         /**
          * 设置窗口内容view动画创建对象，此处设置为透明度变化，可以实现AnimatorCreater接口来实现自定义动画
@@ -104,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          * Gravity.BOTTOM | Gravity.CENTER:     SlideTopBottomCreater
          *
          */
-        dialoger.setAnimatorCreater(new AlphaCreater());
+//        dialoger.setAnimatorCreater(new AlphaCreater());
 
         /**
          * 显示窗口
@@ -121,7 +125,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 showSimpleDemo();
                 break;
             case R.id.btn_target:
-                new PositionDialoger(this, v).show();
+                dialoger.target().showPosition(v, TargetDialoger.Position.TopOutsideCenter);
+
+//                new PositionDialoger(this, v).show();
                 break;
         }
     }
