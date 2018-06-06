@@ -66,7 +66,7 @@ public class FDialoger implements Dialoger
     private OnShowListener mOnShowListener;
     private List<LifecycleCallback> mLifecycleCallbacks;
 
-    private boolean mLockDialog;
+    private boolean mLockDialoger;
 
     private VisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mAnimatorCreater;
@@ -304,7 +304,7 @@ public class FDialoger implements Dialoger
         if (mIsDebug)
             Log.i(Dialoger.class.getSimpleName(), "try show");
 
-        mLockDialog = false;
+        mLockDialoger = false;
         getDialog().show();
     }
 
@@ -325,7 +325,7 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try dismiss");
 
-            mLockDialog = true;
+            mLockDialoger = true;
 
             mTryStartShowAnimator = false;
             getAnimatorHandler().setHideAnimator(createAnimator(false));
@@ -638,7 +638,7 @@ public class FDialoger implements Dialoger
         @Override
         public boolean onInterceptTouchEvent(MotionEvent ev)
         {
-            if (mLockDialog)
+            if (mLockDialoger)
                 return true;
             return super.onInterceptTouchEvent(ev);
         }
@@ -646,7 +646,7 @@ public class FDialoger implements Dialoger
         @Override
         public boolean onTouchEvent(MotionEvent event)
         {
-            if (mLockDialog)
+            if (mLockDialoger)
                 return false;
 
             if (event.getAction() == MotionEvent.ACTION_DOWN)
@@ -683,7 +683,7 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
 
-            mLockDialog = true;
+            mLockDialoger = true;
             mTryStartShowAnimator = false;
             stopDismissRunnable();
 
@@ -860,7 +860,7 @@ public class FDialoger implements Dialoger
                 @Override
                 public boolean onKeyDown(int keyCode, KeyEvent event)
                 {
-                    if (mLockDialog)
+                    if (mLockDialoger)
                         return false;
 
                     return FDialoger.this.onKeyDown(keyCode, event);
