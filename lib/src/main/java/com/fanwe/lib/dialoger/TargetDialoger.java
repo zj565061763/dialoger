@@ -20,6 +20,14 @@ import android.view.View;
 public interface TargetDialoger
 {
     /**
+     * 设置是否设置paddding来限制边界，默认false
+     *
+     * @param padding
+     * @return
+     */
+    TargetDialoger setPaddingToPosition(boolean padding);
+
+    /**
      * x方向偏移量，大于0-向右；小于0-向左
      *
      * @param marginX

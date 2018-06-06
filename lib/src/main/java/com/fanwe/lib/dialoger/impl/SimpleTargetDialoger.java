@@ -38,6 +38,7 @@ class SimpleTargetDialoger implements TargetDialoger
     private final ViewTracker mTracker = new FViewTracker();
     private Position mPosition;
 
+    private boolean mPaddingToPosition;
     private DialogerBackup mDialogerBackup;
 
     private boolean mModifyAnimatorCreater;
@@ -161,7 +162,8 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (started)
                 {
-                    getDialogerBackup().backup(mDialoger);
+                    if (mPaddingToPosition)
+                        getDialogerBackup().backup(mDialoger);
                 } else
                 {
                     getDialogerBackup().restore(mDialoger);
@@ -193,31 +195,34 @@ class SimpleTargetDialoger implements TargetDialoger
 
                 Log.i(SimpleTargetDialoger.class.getSimpleName(), x + "," + y);
 
-                switch (mPosition)
+                if (mPaddingToPosition)
                 {
-                    case LeftOutsideTop:
-                    case LeftOutsideCenter:
-                    case LeftOutsideBottom:
-                        showLeftOfTarget(x, y, source, sourceParent, target);
-                        break;
+                    switch (mPosition)
+                    {
+                        case LeftOutsideTop:
+                        case LeftOutsideCenter:
+                        case LeftOutsideBottom:
+                            showLeftOfTarget(x, y, source, sourceParent, target);
+                            break;
 
-                    case TopOutsideLeft:
-                    case TopOutsideCenter:
-                    case TopOutsideRight:
-                        showTopOfTarget(x, y, source, sourceParent, target);
-                        break;
+                        case TopOutsideLeft:
+                        case TopOutsideCenter:
+                        case TopOutsideRight:
+                            showTopOfTarget(x, y, source, sourceParent, target);
+                            break;
 
-                    case RightOutsideTop:
-                    case RightOutsideCenter:
-                    case RightOutsideBottom:
-                        showRightOfTarget(x, y, source, sourceParent, target);
-                        break;
+                        case RightOutsideTop:
+                        case RightOutsideCenter:
+                        case RightOutsideBottom:
+                            showRightOfTarget(x, y, source, sourceParent, target);
+                            break;
 
-                    case BottomOutsideLeft:
-                    case BottomOutsideCenter:
-                    case BottomOutsideRight:
-                        showBottomOfTarget(x, y, source, sourceParent, target);
-                        break;
+                        case BottomOutsideLeft:
+                        case BottomOutsideCenter:
+                        case BottomOutsideRight:
+                            showBottomOfTarget(x, y, source, sourceParent, target);
+                            break;
+                    }
                 }
             }
 
@@ -253,6 +258,13 @@ class SimpleTargetDialoger implements TargetDialoger
                         mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
             }
         });
+    }
+
+    @Override
+    public TargetDialoger setPaddingToPosition(boolean padding)
+    {
+        mPaddingToPosition = padding;
+        return this;
     }
 
     @Override
@@ -293,6 +305,8 @@ class SimpleTargetDialoger implements TargetDialoger
         private int mPaddingBottom;
         private int mGravity;
 
+        private boolean mHasBackup;
+
         public void backup(Dialoger dialoger)
         {
             mPaddingLeft = dialoger.getPaddingLeft();
@@ -300,12 +314,18 @@ class SimpleTargetDialoger implements TargetDialoger
             mPaddingRight = dialoger.getPaddingRight();
             mPaddingBottom = dialoger.getPaddingBottom();
             mGravity = dialoger.getGravity();
+
+            mHasBackup = true;
         }
 
         public void restore(Dialoger dialoger)
         {
-            dialoger.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
-            dialoger.setGravity(mGravity);
+            if (mHasBackup)
+            {
+                dialoger.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
+                dialoger.setGravity(mGravity);
+            }
+            mHasBackup = false;
         }
     }
 }
