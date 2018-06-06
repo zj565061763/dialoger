@@ -89,7 +89,7 @@ public class FDialoger implements Dialoger
         mBackgroundView = dialogerView.mBackgroundView;
 
         final int defaultPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
-//        setPadding(defaultPadding, defaultPadding, defaultPadding, defaultPadding);
+        setPadding(defaultPadding, defaultPadding, defaultPadding, defaultPadding);
 
         setGravity(Gravity.NO_GRAVITY);
         setBackgroundColor(Color.parseColor("#66000000"));
