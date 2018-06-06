@@ -321,6 +321,9 @@ public class FDialoger implements Dialoger
     {
         if (isShowing())
         {
+            if (getAnimatorHandler().isHideAnimatorStarted())
+                return;
+
             mTryStartShowAnimator = false;
             getAnimatorHandler().setHideAnimator(createAnimator(false));
             if (getAnimatorHandler().startHideAnimator())
