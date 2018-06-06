@@ -73,6 +73,8 @@ public class FDialoger implements Dialoger
     private AnimatorCreater mAnimatorCreater;
     private boolean mTryStartShowAnimator;
 
+    private boolean mIsAnimatorCreaterModifiedInternal;
+
     private boolean mIsDebug;
 
     public FDialoger(Activity activity)
@@ -233,6 +235,7 @@ public class FDialoger implements Dialoger
     public void setAnimatorCreater(AnimatorCreater creater)
     {
         mAnimatorCreater = creater;
+        mIsAnimatorCreaterModifiedInternal = false;
     }
 
     @Override
@@ -387,22 +390,27 @@ public class FDialoger implements Dialoger
             {
                 case Gravity.CENTER:
                     setAnimatorCreater(new AlphaCreater());
+                    mIsAnimatorCreaterModifiedInternal = true;
                     break;
                 case Gravity.LEFT:
                 case Gravity.LEFT | Gravity.CENTER:
                     setAnimatorCreater(new SlideRightLeftCreater());
+                    mIsAnimatorCreaterModifiedInternal = true;
                     break;
                 case Gravity.TOP:
                 case Gravity.TOP | Gravity.CENTER:
                     setAnimatorCreater(new SlideBottomTopCreater());
+                    mIsAnimatorCreaterModifiedInternal = true;
                     break;
                 case Gravity.RIGHT:
                 case Gravity.RIGHT | Gravity.CENTER:
                     setAnimatorCreater(new SlideLeftRightCreater());
+                    mIsAnimatorCreaterModifiedInternal = true;
                     break;
                 case Gravity.BOTTOM:
                 case Gravity.BOTTOM | Gravity.CENTER:
                     setAnimatorCreater(new SlideTopBottomCreater());
+                    mIsAnimatorCreaterModifiedInternal = true;
                     break;
             }
         }
@@ -672,6 +680,9 @@ public class FDialoger implements Dialoger
             if (!mRemoveByHideAnimator)
                 getAnimatorHandler().cancelHideAnimator();
             mRemoveByHideAnimator = false;
+
+            if (mIsAnimatorCreaterModifiedInternal)
+                setAnimatorCreater(null);
         }
     }
 
