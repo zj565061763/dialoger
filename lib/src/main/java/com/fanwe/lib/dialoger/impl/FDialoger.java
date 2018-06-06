@@ -304,7 +304,6 @@ public class FDialoger implements Dialoger
             Log.i(Dialoger.class.getSimpleName(), "try show");
 
         mIsAttach = true;
-        getDialog().setContentView(mDialogerView);
         getDialog().show();
     }
 
