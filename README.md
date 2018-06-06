@@ -5,7 +5,7 @@
 ![](http://thumbsnap.com/i/u0mq5f46.gif?0605)
 
 # Gradle
-`implementation 'com.fanwe.android:dialoger:1.0.0-rc1'`
+`implementation 'com.fanwe.android:dialoger:1.0.0-rc2'`
 
 # 简单demo
 ```java
@@ -142,6 +142,14 @@ TargetDialoger接口：
 ```java
 public interface TargetDialoger
 {
+    /**
+     * 设置是否设置paddding来限制边界，默认false
+     *
+     * @param padding
+     * @return
+     */
+    TargetDialoger setPaddingToPosition(boolean padding);
+
     /**
      * x方向偏移量，大于0-向右；小于0-向左
      *
