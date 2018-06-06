@@ -804,7 +804,7 @@ public class FDialoger implements Dialoger
                     if (view.getPaddingLeft() != 0 || view.getPaddingTop() != 0
                             || view.getPaddingRight() != 0 || view.getPaddingBottom() != 0)
                     {
-                        getWindow().getDecorView().setPadding(0, 0, 0, 0);
+                        view.setPadding(0, 0, 0, 0);
                     }
                 }
 
