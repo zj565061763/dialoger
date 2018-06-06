@@ -38,11 +38,7 @@ class SimpleTargetDialoger implements TargetDialoger
     private final ViewTracker mTracker = new FViewTracker();
     private Position mPosition;
 
-    private int mPaddingLeft;
-    private int mPaddingTop;
-    private int mPaddingRight;
-    private int mPaddingBottom;
-    private int mGravity;
+    private DialogerBackup mDialogerBackup;
 
     private boolean mModifyAnimatorCreater;
 
@@ -141,6 +137,13 @@ class SimpleTargetDialoger implements TargetDialoger
         }
     }
 
+    private DialogerBackup getDialogerBackup()
+    {
+        if (mDialogerBackup == null)
+            mDialogerBackup = new DialogerBackup();
+        return mDialogerBackup;
+    }
+
     private void initUpdater()
     {
         mUpdater.setUpdatable(new Updater.Updatable()
@@ -158,15 +161,10 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (started)
                 {
-                    mPaddingLeft = mDialoger.getPaddingLeft();
-                    mPaddingTop = mDialoger.getPaddingTop();
-                    mPaddingRight = mDialoger.getPaddingRight();
-                    mPaddingBottom = mDialoger.getPaddingBottom();
-                    mGravity = mDialoger.getGravity();
+                    getDialogerBackup().backup(mDialoger);
                 } else
                 {
-                    mDialoger.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
-                    mDialoger.setGravity(mGravity);
+                    getDialogerBackup().restore(mDialoger);
 
                     if (mModifyAnimatorCreater)
                         mDialoger.setAnimatorCreater(null);
@@ -285,5 +283,29 @@ class SimpleTargetDialoger implements TargetDialoger
         mUpdater.setView(contentView);
 
         mDialoger.show();
+    }
+
+    private static class DialogerBackup
+    {
+        private int mPaddingLeft;
+        private int mPaddingTop;
+        private int mPaddingRight;
+        private int mPaddingBottom;
+        private int mGravity;
+
+        public void backup(Dialoger dialoger)
+        {
+            mPaddingLeft = dialoger.getPaddingLeft();
+            mPaddingTop = dialoger.getPaddingTop();
+            mPaddingRight = dialoger.getPaddingRight();
+            mPaddingBottom = dialoger.getPaddingBottom();
+            mGravity = dialoger.getGravity();
+        }
+
+        public void restore(Dialoger dialoger)
+        {
+            dialoger.setPadding(mPaddingLeft, mPaddingTop, mPaddingRight, mPaddingBottom);
+            dialoger.setGravity(mGravity);
+        }
     }
 }
