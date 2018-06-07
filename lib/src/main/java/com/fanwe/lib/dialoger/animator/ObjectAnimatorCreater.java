@@ -42,7 +42,7 @@ public abstract class ObjectAnimatorCreater extends BaseAnimatorCreater
     protected abstract String getPropertyName();
 
     /**
-     * 返回处于显示状态时候的值
+     * 返回动画执行到于显示状态的值
      *
      * @param view
      * @return
@@ -50,7 +50,7 @@ public abstract class ObjectAnimatorCreater extends BaseAnimatorCreater
     protected abstract float getValueShown(View view);
 
     /**
-     * 返回处于隐藏状态时候的值
+     * 返回动画执行到于隐藏状态的值
      *
      * @param view
      * @return
@@ -65,6 +65,11 @@ public abstract class ObjectAnimatorCreater extends BaseAnimatorCreater
      */
     protected abstract float getValueCurrent(View view);
 
+    /**
+     * 返回动画时长，默认300毫秒
+     *
+     * @return
+     */
     protected long getDuration()
     {
         return 300;
