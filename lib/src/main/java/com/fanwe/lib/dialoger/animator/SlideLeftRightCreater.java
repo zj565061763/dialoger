@@ -23,15 +23,15 @@ import android.view.View;
 public class SlideLeftRightCreater extends SlideHorizontalCreater
 {
     @Override
-    protected float getValueShown(View view)
-    {
-        return 0.0f;
-    }
-
-    @Override
     protected float getValueHidden(View view)
     {
         return view.getWidth();
+    }
+
+    @Override
+    protected float getValueShown(View view)
+    {
+        return 0.0f;
     }
 
     @Override

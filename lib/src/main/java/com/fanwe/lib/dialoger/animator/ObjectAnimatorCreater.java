@@ -27,8 +27,8 @@ public abstract class ObjectAnimatorCreater extends BaseAnimatorCreater
         final ObjectAnimator animator = new ObjectAnimator();
         animator.setPropertyName(getPropertyName());
 
-        final float valueShown = getValueShown(view);
         final float valueHidden = getValueHidden(view);
+        final float valueShown = getValueShown(view);
         final float[] values = show ? new float[]{valueHidden, valueShown} : new float[]{getValueCurrent(view), valueHidden};
         animator.setFloatValues(values);
 
@@ -42,20 +42,20 @@ public abstract class ObjectAnimatorCreater extends BaseAnimatorCreater
     protected abstract String getPropertyName();
 
     /**
-     * 返回动画执行到于显示状态的值
-     *
-     * @param view
-     * @return
-     */
-    protected abstract float getValueShown(View view);
-
-    /**
      * 返回动画执行到于隐藏状态的值
      *
      * @param view
      * @return
      */
     protected abstract float getValueHidden(View view);
+
+    /**
+     * 返回动画执行到于显示状态的值
+     *
+     * @param view
+     * @return
+     */
+    protected abstract float getValueShown(View view);
 
     /**
      * 返回当前的值
