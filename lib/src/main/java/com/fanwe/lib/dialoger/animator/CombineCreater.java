@@ -21,7 +21,7 @@ import android.view.View;
 
 import com.fanwe.lib.dialoger.Dialoger;
 
-public class CombineCreater implements Dialoger.AnimatorCreater
+public class CombineCreater extends BaseAnimatorCreater
 {
     private final Dialoger.AnimatorCreater[] mCreaters;
 
@@ -71,9 +71,20 @@ public class CombineCreater implements Dialoger.AnimatorCreater
     }
 
     @Override
-    public Animator createAnimator(boolean show, View view)
+    protected Animator onCreateAnimator(boolean show, View view)
     {
-        final Animator animator = getAnimator(show, view);
-        return animator == null ? null : animator;
+        return getAnimator(show, view);
+    }
+
+    @Override
+    protected void onAnimationStart(boolean show, View view)
+    {
+
+    }
+
+    @Override
+    protected void onAnimationEnd(boolean show, View view)
+    {
+
     }
 }
