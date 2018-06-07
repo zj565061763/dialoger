@@ -7,7 +7,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 20180607
-        versionName "1.0.0-beta8"
+        versionName "1.0.0-beta9"
     }
 
     buildTypes {
@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    implementation 'com.fanwe.android:viewtracker:1.0.1'
+    implementation 'com.fanwe.android:viewtracker:1.0.2'
     implementation 'com.fanwe.android:updater:1.0.0'
 }
 
@@ -28,7 +28,7 @@ publish {
     groupId = 'com.fanwe.android'
 
     artifactId = 'dialoger'
-    publishVersion = '1.0.0-beta8'
+    publishVersion = '1.0.0-beta9'
     desc = 'android dialoger library'
     website = 'https://github.com/zj565061763/dialoger'
 }
