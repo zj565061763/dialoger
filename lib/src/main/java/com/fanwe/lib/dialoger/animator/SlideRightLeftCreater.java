@@ -30,7 +30,7 @@ public class SlideRightLeftCreater extends SlideHorizontalCreater
             return new float[]{-view.getWidth(), 0};
         } else
         {
-            return new float[]{0, -view.getWidth()};
+            return new float[]{view.getTranslationX(), -view.getWidth()};
         }
     }
 

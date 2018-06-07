@@ -30,7 +30,7 @@ public class SlideBottomTopCreater extends SlideVerticalCreater
             return new float[]{-view.getHeight(), 0};
         } else
         {
-            return new float[]{0, -view.getHeight()};
+            return new float[]{view.getTranslationY(), -view.getHeight()};
         }
     }
 
