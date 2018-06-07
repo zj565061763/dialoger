@@ -43,6 +43,7 @@ public class SlideLeftRightCreater extends SlideHorizontalCreater
     @Override
     protected void onAnimationEnd(boolean show, View view)
     {
-        view.setTranslationX(0);
+        if (!show)
+            view.setTranslationX(0);
     }
 }

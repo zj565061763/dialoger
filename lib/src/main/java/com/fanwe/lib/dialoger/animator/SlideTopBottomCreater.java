@@ -43,6 +43,7 @@ public class SlideTopBottomCreater extends SlideVerticalCreater
     @Override
     protected void onAnimationEnd(boolean show, View view)
     {
-        view.setTranslationY(0);
+        if (!show)
+            view.setTranslationY(0);
     }
 }

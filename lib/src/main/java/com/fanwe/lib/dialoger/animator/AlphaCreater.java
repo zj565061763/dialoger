@@ -24,18 +24,12 @@ import android.view.View;
  */
 public class AlphaCreater extends BaseAnimatorCreater
 {
-    private ObjectAnimator getObjectAnimator(float... values)
-    {
-        final ObjectAnimator objectAnimator = new ObjectAnimator();
-        objectAnimator.setPropertyName(View.ALPHA.getName());
-        objectAnimator.setFloatValues(values);
-        return objectAnimator;
-    }
-
     @Override
     protected Animator onCreateAnimator(boolean show, View view)
     {
-        final Animator animator = show ? getObjectAnimator(0, 1.0f) : getObjectAnimator(1.0f, 0);
+        final ObjectAnimator animator = new ObjectAnimator();
+        animator.setPropertyName(View.ALPHA.getName());
+        animator.setFloatValues(show ? new float[]{0, 1.0f} : new float[]{view.getAlpha(), 0});
         animator.setTarget(view);
         return animator;
     }
@@ -49,6 +43,7 @@ public class AlphaCreater extends BaseAnimatorCreater
     @Override
     protected void onAnimationEnd(boolean show, View view)
     {
-        view.setAlpha(1.0f);
+        if (!show)
+            view.setAlpha(1.0f);
     }
 }

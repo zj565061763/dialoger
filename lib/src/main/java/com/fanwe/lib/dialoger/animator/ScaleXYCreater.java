@@ -25,29 +25,19 @@ import android.view.View;
  */
 public class ScaleXYCreater extends BaseAnimatorCreater
 {
-    private ObjectAnimator[] getObjectAnimator(float... values)
-    {
-        final ObjectAnimator[] animators = new ObjectAnimator[2];
-
-        final ObjectAnimator scaleX = new ObjectAnimator();
-        scaleX.setPropertyName(View.SCALE_X.getName());
-        scaleX.setFloatValues(values);
-
-        final ObjectAnimator scaleY = new ObjectAnimator();
-        scaleY.setPropertyName(View.SCALE_Y.getName());
-        scaleY.setFloatValues(values);
-
-        animators[0] = scaleX;
-        animators[1] = scaleY;
-        return animators;
-    }
-
     @Override
     protected Animator onCreateAnimator(boolean show, View view)
     {
-        final ObjectAnimator[] animators = show ? getObjectAnimator(0, 1.0f) : getObjectAnimator(1.0f, 0);
+        final ObjectAnimator scaleX = new ObjectAnimator();
+        scaleX.setPropertyName(View.SCALE_X.getName());
+        scaleX.setFloatValues(show ? new float[]{0, 1.0f} : new float[]{view.getScaleX(), 0});
+
+        final ObjectAnimator scaleY = new ObjectAnimator();
+        scaleY.setPropertyName(View.SCALE_Y.getName());
+        scaleY.setFloatValues(show ? new float[]{0, 1.0f} : new float[]{view.getScaleY(), 0});
+
         final AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(animators[0]).with(animators[1]);
+        animatorSet.play(scaleX).with(scaleY);
         animatorSet.setTarget(view);
         return animatorSet;
     }
@@ -61,7 +51,10 @@ public class ScaleXYCreater extends BaseAnimatorCreater
     @Override
     protected void onAnimationEnd(boolean show, View view)
     {
-        view.setScaleX(1.0f);
-        view.setScaleY(1.0f);
+        if (!show)
+        {
+            view.setScaleX(1.0f);
+            view.setScaleY(1.0f);
+        }
     }
 }
