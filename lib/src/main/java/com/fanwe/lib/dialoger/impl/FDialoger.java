@@ -618,18 +618,6 @@ public class FDialoger implements Dialoger
             super.setVisibility(visibility);
         }
 
-        @Override
-        protected void onLayout(boolean changed, int l, int t, int r, int b)
-        {
-            super.onLayout(changed, l, t, r, b);
-            if (mTryStartShowAnimator)
-            {
-                getAnimatorHandler().setShowAnimator(createAnimator(true));
-                getAnimatorHandler().startShowAnimator();
-                mTryStartShowAnimator = false;
-            }
-        }
-
         private boolean isViewUnder(View view, int x, int y)
         {
             if (view == null)
@@ -748,7 +736,7 @@ public class FDialoger implements Dialoger
         public void onViewRemoved(View child)
         {
             super.onViewRemoved(child);
-            if (child == mContentView && isShowing())
+            if (child == mContentView)
             {
                 // 外部直接移除内容view的话，关闭窗口
                 dismiss();
@@ -761,6 +749,13 @@ public class FDialoger implements Dialoger
             super.onLayout(changed, l, t, r, b);
             if (changed)
                 FDialoger.this.checkLayoutParams(this);
+
+            if (mTryStartShowAnimator)
+            {
+                getAnimatorHandler().setShowAnimator(createAnimator(true));
+                getAnimatorHandler().startShowAnimator();
+                mTryStartShowAnimator = false;
+            }
         }
     }
 
