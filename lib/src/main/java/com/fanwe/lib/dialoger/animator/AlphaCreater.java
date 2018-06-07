@@ -15,39 +15,41 @@
  */
 package com.fanwe.lib.dialoger.animator;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.view.View;
 
 /**
  * 透明度
  */
-public class AlphaCreater extends BaseAnimatorCreater
+public class AlphaCreater extends ObjectAnimatorCreater
 {
     @Override
-    protected Animator onCreateAnimator(boolean show, View view)
+    protected final String getPropertyName()
     {
-        final ObjectAnimator animator = new ObjectAnimator();
-        animator.setPropertyName(View.ALPHA.getName());
-        final float[] values = show ? new float[]{0, 1.0f} : new float[]{view.getAlpha(), 0};
-        animator.setFloatValues(values);
-
-        final long duration = getScaledDuration(values[0], values[1], 1.0f, 300);
-        animator.setDuration(duration);
-
-        animator.setTarget(view);
-        return animator;
+        return View.ALPHA.getName();
     }
 
     @Override
-    protected void onAnimationStart(boolean show, View view)
+    protected float getValueShown(View view)
     {
+        return 1.0f;
+    }
 
+    @Override
+    protected float getValueHidden(View view)
+    {
+        return 0.0f;
+    }
+
+    @Override
+    protected float getValueCurrent(View view)
+    {
+        return view.getAlpha();
     }
 
     @Override
     protected void onAnimationEnd(boolean show, View view)
     {
+        super.onAnimationEnd(show, view);
         if (!show)
             view.setAlpha(1.0f);
     }

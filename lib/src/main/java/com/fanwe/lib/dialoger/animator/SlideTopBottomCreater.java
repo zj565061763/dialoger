@@ -23,26 +23,21 @@ import android.view.View;
 public class SlideTopBottomCreater extends SlideVerticalCreater
 {
     @Override
-    protected float[] getFloatValues(boolean show, View view)
+    protected float getValueShown(View view)
     {
-        if (show)
-        {
-            return new float[]{view.getHeight(), 0};
-        } else
-        {
-            return new float[]{view.getTranslationY(), view.getHeight()};
-        }
+        return 0.0f;
     }
 
     @Override
-    protected void onAnimationStart(boolean show, View view)
+    protected float getValueHidden(View view)
     {
-
+        return view.getHeight();
     }
 
     @Override
     protected void onAnimationEnd(boolean show, View view)
     {
+        super.onAnimationEnd(show, view);
         if (!show)
             view.setTranslationY(0);
     }

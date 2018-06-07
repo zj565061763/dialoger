@@ -23,26 +23,21 @@ import android.view.View;
 public class SlideLeftRightCreater extends SlideHorizontalCreater
 {
     @Override
-    protected float[] getFloatValues(boolean show, View view)
+    protected float getValueShown(View view)
     {
-        if (show)
-        {
-            return new float[]{view.getWidth(), 0};
-        } else
-        {
-            return new float[]{view.getTranslationX(), view.getWidth()};
-        }
+        return 0.0f;
     }
 
     @Override
-    protected void onAnimationStart(boolean show, View view)
+    protected float getValueHidden(View view)
     {
-
+        return view.getWidth();
     }
 
     @Override
     protected void onAnimationEnd(boolean show, View view)
     {
+        super.onAnimationEnd(show, view);
         if (!show)
             view.setTranslationX(0);
     }

@@ -46,20 +46,9 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
                     BaseAnimatorCreater.this.onAnimationEnd(show, view);
                 }
             });
-            onCreated(show, view, animator);
+            onAnimatorCreated(show, view, animator);
         }
         return animator;
-    }
-
-    /**
-     * 动画被创建后回调
-     *
-     * @param show
-     * @param view
-     * @param animator
-     */
-    protected void onCreated(boolean show, View view, Animator animator)
-    {
     }
 
     /**
@@ -72,43 +61,46 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
     protected abstract Animator onCreateAnimator(boolean show, View view);
 
     /**
-     * 动画开始
+     * 动画被创建后回调
+     *
+     * @param show
+     * @param view
+     * @param animator
+     */
+    protected void onAnimatorCreated(boolean show, View view, Animator animator)
+    {
+    }
+
+    /**
+     * 动画开始回调
      *
      * @param show
      * @param view
      */
-    protected abstract void onAnimationStart(boolean show, View view);
+    protected void onAnimationStart(boolean show, View view)
+    {
+    }
 
     /**
-     * 动画结束
+     * 动画结束回调
      *
      * @param show
      * @param view
      */
-    protected abstract void onAnimationEnd(boolean show, View view);
+    protected void onAnimationEnd(boolean show, View view)
+    {
+    }
 
-    /**
-     * 计算动画时长
-     *
-     * @param startValue  开始值
-     * @param endValue    结束值
-     * @param maxValue    最大值
-     * @param maxDuration 最大动画时长
-     * @return
-     */
-    protected static long getScaledDuration(float startValue, float endValue, float maxValue, long maxDuration)
+    protected static long getScaledDuration(float deltaValue, float maxValue, long maxDuration)
     {
         if (maxDuration <= 0)
             return 0;
-
         if (maxValue == 0)
             return 0;
-
-        final float delta = startValue - endValue;
-        if (delta == 0)
+        if (deltaValue == 0)
             return 0;
 
-        final float percent = Math.abs(delta / maxValue);
+        final float percent = Math.abs(deltaValue / maxValue);
         long duration = (long) (percent * maxDuration);
         if (duration > maxDuration)
             return maxDuration;

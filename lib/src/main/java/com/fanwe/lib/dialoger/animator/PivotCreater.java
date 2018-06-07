@@ -63,12 +63,14 @@ public class PivotCreater extends BaseAnimatorCreater
     @Override
     protected void onAnimationStart(boolean show, View view)
     {
+        super.onAnimationStart(show, view);
         getPivotHolder().setPivotXY(mPosition, view);
     }
 
     @Override
     protected void onAnimationEnd(boolean show, View view)
     {
+        super.onAnimationEnd(show, view);
         getPivotHolder().restore(view);
     }
 }

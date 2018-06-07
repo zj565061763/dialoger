@@ -15,51 +15,13 @@
  */
 package com.fanwe.lib.dialoger.animator;
 
-import android.animation.Animator;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.view.View;
-
 /**
- * 缩放
+ * 缩放xy
  */
-public class ScaleXYCreater extends BaseAnimatorCreater
+public class ScaleXYCreater extends CombineCreater
 {
-    @Override
-    protected Animator onCreateAnimator(boolean show, View view)
+    public ScaleXYCreater()
     {
-        final ObjectAnimator scaleX = new ObjectAnimator();
-        scaleX.setPropertyName(View.SCALE_X.getName());
-        final float[] valuesX = show ? new float[]{0, 1.0f} : new float[]{view.getScaleX(), 0};
-        scaleX.setFloatValues(valuesX);
-        final long durationX = getScaledDuration(valuesX[0], valuesX[1], 1.0f, 300);
-
-        final ObjectAnimator scaleY = new ObjectAnimator();
-        scaleY.setPropertyName(View.SCALE_Y.getName());
-        final float[] valuesY = show ? new float[]{0, 1.0f} : new float[]{view.getScaleY(), 0};
-        scaleY.setFloatValues(valuesY);
-        final long durationY = getScaledDuration(valuesY[0], valuesY[1], 1.0f, 300);
-
-        final AnimatorSet animatorSet = new AnimatorSet();
-        animatorSet.play(scaleX).with(scaleY);
-        animatorSet.setTarget(view);
-        animatorSet.setDuration(Math.max(durationX, durationY));
-        return animatorSet;
-    }
-
-    @Override
-    protected void onAnimationStart(boolean show, View view)
-    {
-
-    }
-
-    @Override
-    protected void onAnimationEnd(boolean show, View view)
-    {
-        if (!show)
-        {
-            view.setScaleX(1.0f);
-            view.setScaleY(1.0f);
-        }
+        super(new ScaleXCreater(), new ScaleYCreater());
     }
 }

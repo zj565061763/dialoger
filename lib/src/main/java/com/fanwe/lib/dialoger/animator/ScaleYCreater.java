@@ -18,19 +18,39 @@ package com.fanwe.lib.dialoger.animator;
 import android.view.View;
 
 /**
- * 竖直方向滑动
+ * 缩放y
  */
-public abstract class SlideVerticalCreater extends ObjectAnimatorCreater
+public class ScaleYCreater extends ObjectAnimatorCreater
 {
     @Override
     protected final String getPropertyName()
     {
-        return View.TRANSLATION_Y.getName();
+        return View.SCALE_Y.getName();
     }
 
     @Override
-    protected final float getValueCurrent(View view)
+    protected float getValueShown(View view)
     {
-        return view.getTranslationY();
+        return 1.0f;
+    }
+
+    @Override
+    protected float getValueHidden(View view)
+    {
+        return 0.0f;
+    }
+
+    @Override
+    protected float getValueCurrent(View view)
+    {
+        return view.getScaleY();
+    }
+
+    @Override
+    protected void onAnimationEnd(boolean show, View view)
+    {
+        super.onAnimationEnd(show, view);
+        if (!show)
+            view.setScaleY(1.0f);
     }
 }

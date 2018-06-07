@@ -75,16 +75,4 @@ public class CombineCreater extends BaseAnimatorCreater
     {
         return getAnimator(show, view);
     }
-
-    @Override
-    protected void onAnimationStart(boolean show, View view)
-    {
-
-    }
-
-    @Override
-    protected void onAnimationEnd(boolean show, View view)
-    {
-
-    }
 }

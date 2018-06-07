@@ -20,7 +20,7 @@ import android.view.View;
 /**
  * 水平方向滑动
  */
-public abstract class SlideHorizontalCreater extends SlideCreater
+public abstract class SlideHorizontalCreater extends ObjectAnimatorCreater
 {
     @Override
     protected final String getPropertyName()
@@ -28,5 +28,9 @@ public abstract class SlideHorizontalCreater extends SlideCreater
         return View.TRANSLATION_X.getName();
     }
 
-    protected abstract float[] getFloatValues(boolean show, View view);
+    @Override
+    protected final float getValueCurrent(View view)
+    {
+        return view.getTranslationX();
+    }
 }
