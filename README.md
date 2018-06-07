@@ -122,7 +122,9 @@ interface AnimatorCreater
 
 库中已经提供的实现类有：
 * AlphaCreater 透明度
-* ScaleXYCreater 宽高同时缩放
+* ScaleXCreater 缩放宽度
+* ScaleYCreater 缩放高度
+* ScaleXYCreater 缩放宽高
 * SlideBottomTopCreater 向下滑入，向上滑出，默认距离为内容view的高度
 * SlideTopBottomCreater 向上滑入，向下滑出，默认距离为内容view的高度
 * SlideLeftRightCreater 向左滑入，向右滑出，默认距离为内容view的宽度
