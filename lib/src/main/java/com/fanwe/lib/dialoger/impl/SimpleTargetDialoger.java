@@ -199,7 +199,6 @@ class SimpleTargetDialoger implements TargetDialoger
                     switch (mPosition)
                     {
                         case LeftOutside:
-                            y = source.getTop();
                         case LeftOutsideTop:
                         case LeftOutsideCenter:
                         case LeftOutsideBottom:
@@ -207,7 +206,6 @@ class SimpleTargetDialoger implements TargetDialoger
                             break;
 
                         case TopOutside:
-                            x = source.getLeft();
                         case TopOutsideLeft:
                         case TopOutsideCenter:
                         case TopOutsideRight:
@@ -215,7 +213,6 @@ class SimpleTargetDialoger implements TargetDialoger
                             break;
 
                         case RightOutside:
-                            y = source.getTop();
                         case RightOutsideTop:
                         case RightOutsideCenter:
                         case RightOutsideBottom:
@@ -223,13 +220,24 @@ class SimpleTargetDialoger implements TargetDialoger
                             break;
 
                         case BottomOutside:
-                            x = source.getLeft();
                         case BottomOutsideLeft:
                         case BottomOutsideCenter:
                         case BottomOutsideRight:
                             showBottomOfTarget(x, y, source, sourceParent, target);
                             break;
                     }
+                }
+
+                switch (mPosition)
+                {
+                    case LeftOutside:
+                    case RightOutside:
+                        y = source.getTop();
+                        break;
+                    case TopOutside:
+                    case BottomOutside:
+                        x = source.getLeft();
+                        break;
                 }
 
                 final int dx = x - source.getLeft();
