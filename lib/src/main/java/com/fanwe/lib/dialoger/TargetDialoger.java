@@ -54,6 +54,10 @@ public interface TargetDialoger
     enum Position
     {
         /**
+         * 在target左边外侧
+         */
+        LeftOutside,
+        /**
          * 在target的左边外侧靠顶部对齐
          */
         LeftOutsideTop,
@@ -66,6 +70,10 @@ public interface TargetDialoger
          */
         LeftOutsideBottom,
 
+        /**
+         * 在target的顶部外侧
+         */
+        TopOutside,
         /**
          * 在target的顶部外侧靠左对齐
          */
@@ -80,6 +88,10 @@ public interface TargetDialoger
         TopOutsideRight,
 
         /**
+         * 在target的右边外侧
+         */
+        RightOutside,
+        /**
          * 在target的右边外侧靠顶部对齐
          */
         RightOutsideTop,
@@ -92,6 +104,10 @@ public interface TargetDialoger
          */
         RightOutsideBottom,
 
+        /**
+         * 在target的底部外侧
+         */
+        BottomOutside,
         /**
          * 在target的底部外侧靠左对齐
          */

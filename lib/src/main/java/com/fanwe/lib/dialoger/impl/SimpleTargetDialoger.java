@@ -192,35 +192,38 @@ class SimpleTargetDialoger implements TargetDialoger
             @Override
             public void onUpdate(int x, int y, View source, View sourceParent, View target)
             {
-                final int dx = x - source.getLeft();
-                final int dy = y - source.getTop();
-                source.offsetLeftAndRight(dx);
-                source.offsetTopAndBottom(dy);
-
                 Log.i(SimpleTargetDialoger.class.getSimpleName(), x + "," + y);
 
                 if (mPaddingToPosition)
                 {
                     switch (mPosition)
                     {
+                        case LeftOutside:
+                            y = source.getTop();
                         case LeftOutsideTop:
                         case LeftOutsideCenter:
                         case LeftOutsideBottom:
                             showLeftOfTarget(x, y, source, sourceParent, target);
                             break;
 
+                        case TopOutside:
+                            x = source.getLeft();
                         case TopOutsideLeft:
                         case TopOutsideCenter:
                         case TopOutsideRight:
                             showTopOfTarget(x, y, source, sourceParent, target);
                             break;
 
+                        case RightOutside:
+                            y = source.getTop();
                         case RightOutsideTop:
                         case RightOutsideCenter:
                         case RightOutsideBottom:
                             showRightOfTarget(x, y, source, sourceParent, target);
                             break;
 
+                        case BottomOutside:
+                            x = source.getLeft();
                         case BottomOutsideLeft:
                         case BottomOutsideCenter:
                         case BottomOutsideRight:
@@ -228,6 +231,11 @@ class SimpleTargetDialoger implements TargetDialoger
                             break;
                     }
                 }
+
+                final int dx = x - source.getLeft();
+                final int dy = y - source.getTop();
+                source.offsetLeftAndRight(dx);
+                source.offsetTopAndBottom(dy);
             }
 
             private void showLeftOfTarget(int x, int y, View source, View sourceParent, View target)
