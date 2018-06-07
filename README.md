@@ -5,7 +5,7 @@
 ![](http://thumbsnap.com/i/u0mq5f46.gif?0605)
 
 # Gradle
-`implementation 'com.fanwe.android:dialoger:1.0.0-beta4'`
+`implementation 'com.fanwe.android:dialoger:1.0.0-beta5'`
 
 # 简单demo
 ```java
