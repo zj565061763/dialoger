@@ -518,6 +518,11 @@ public class FDialoger implements Dialoger
 
         if (animatorBackground != null && animatorContent != null)
         {
+            final long duration = getAnimatorDuration(animatorContent);
+            if (duration < 0)
+                throw new RuntimeException("Illegal duration:" + duration);
+            animatorBackground.setDuration(duration);
+
             final AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.play(animatorBackground).with(animatorContent);
             animator = animatorSet;
@@ -914,5 +919,24 @@ public class FDialoger implements Dialoger
             result = context.getResources().getDimensionPixelSize(resourceId);
 
         return result;
+    }
+
+    private static long getAnimatorDuration(Animator animator)
+    {
+        long duration = animator.getDuration();
+        if (duration < 0)
+        {
+            if (animator instanceof AnimatorSet)
+            {
+                final List<Animator> list = ((AnimatorSet) animator).getChildAnimations();
+                for (Animator item : list)
+                {
+                    final long durationItem = getAnimatorDuration(item);
+                    if (durationItem > duration)
+                        duration = durationItem;
+                }
+            }
+        }
+        return duration;
     }
 }
