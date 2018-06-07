@@ -128,29 +128,33 @@ public class FDialoger implements Dialoger
 
     private void setDialogerView(View view)
     {
-        if (mContentView == view)
-            return;
-
-        final ViewGroup.LayoutParams p = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        final ViewGroup.LayoutParams params = view.getLayoutParams();
-        if (params != null)
-        {
-            p.width = params.width;
-            p.height = params.height;
-        }
-
         final View old = mContentView;
-        mContentView = view;
+        if (old != view)
+        {
+            mContentView = view;
 
-        mContainerView.removeView(old);
-        mContainerView.addView(view, p);
+            if (old != null)
+                mContainerView.removeView(old);
 
-        onContentViewAdded(view);
+            if (view != null)
+            {
+                final ViewGroup.LayoutParams p = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        if (mIsDebug)
-            Log.i(Dialoger.class.getSimpleName(), "contentView:" + view);
+                final ViewGroup.LayoutParams params = view.getLayoutParams();
+                if (params != null)
+                {
+                    p.width = params.width;
+                    p.height = params.height;
+                }
+
+                mContainerView.addView(view, p);
+                onContentViewAdded(view);
+
+                if (mIsDebug)
+                    Log.i(Dialoger.class.getSimpleName(), "contentView:" + view);
+            }
+        }
     }
 
     protected void onContentViewAdded(View contentView)
