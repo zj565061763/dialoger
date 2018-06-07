@@ -744,8 +744,11 @@ public class FDialoger implements Dialoger
         public void onViewRemoved(View child)
         {
             super.onViewRemoved(child);
-            if (child == mContentView)
-                throw new RuntimeException("you must call Dialoger.setContentView(null) instead");
+            if (child == mContentView && isShowing())
+            {
+                // 外部直接移除内容view的话，关闭窗口
+                dismiss();
+            }
         }
 
         @Override
