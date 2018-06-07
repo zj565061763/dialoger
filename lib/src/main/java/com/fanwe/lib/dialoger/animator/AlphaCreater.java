@@ -29,7 +29,6 @@ public class AlphaCreater extends BaseAnimatorCreater
     {
         final ObjectAnimator animator = new ObjectAnimator();
         animator.setPropertyName(View.ALPHA.getName());
-
         final float[] values = show ? new float[]{0, 1.0f} : new float[]{view.getAlpha(), 0};
         animator.setFloatValues(values);
 

@@ -30,15 +30,20 @@ public class ScaleXYCreater extends BaseAnimatorCreater
     {
         final ObjectAnimator scaleX = new ObjectAnimator();
         scaleX.setPropertyName(View.SCALE_X.getName());
-        scaleX.setFloatValues(show ? new float[]{0, 1.0f} : new float[]{view.getScaleX(), 0});
+        final float[] valuesX = show ? new float[]{0, 1.0f} : new float[]{view.getScaleX(), 0};
+        scaleX.setFloatValues(valuesX);
+        final long durationX = getScaledDuration(valuesX[0], valuesX[1], 1.0f, 300);
 
         final ObjectAnimator scaleY = new ObjectAnimator();
         scaleY.setPropertyName(View.SCALE_Y.getName());
-        scaleY.setFloatValues(show ? new float[]{0, 1.0f} : new float[]{view.getScaleY(), 0});
+        final float[] valuesY = show ? new float[]{0, 1.0f} : new float[]{view.getScaleY(), 0};
+        scaleY.setFloatValues(valuesY);
+        final long durationY = getScaledDuration(valuesY[0], valuesY[1], 1.0f, 300);
 
         final AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.play(scaleX).with(scaleY);
         animatorSet.setTarget(view);
+        animatorSet.setDuration(Math.max(durationX, durationY));
         return animatorSet;
     }
 
