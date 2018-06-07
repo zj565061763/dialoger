@@ -2,10 +2,10 @@
 对dialog进行封装，提供更好用的api，可以让窗口显示在某个view的上下左右，实现原理：<br>
 ![](http://thumbsnap.com/i/I5BJBy0e.png?0605)
 <br>
-![](http://thumbsnap.com/i/u0mq5f46.gif?0605)
+![](http://thumbsnap.com/i/qNJUXTJN.gif?0607)
 
 # Gradle
-`implementation 'com.fanwe.android:dialoger:1.0.0-beta7'`
+`implementation 'com.fanwe.android:dialoger:1.0.0-beta8'`
 
 # 简单demo
 ```java
