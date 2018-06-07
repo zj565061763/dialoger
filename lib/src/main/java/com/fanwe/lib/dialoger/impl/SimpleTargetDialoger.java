@@ -62,59 +62,74 @@ class SimpleTargetDialoger implements TargetDialoger
                 {
                     switch (mPosition)
                     {
+                        case LeftOutside:
+                            mTracker.setPosition(ViewTracker.Position.Left);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.RightCenter));
+                            break;
                         case LeftOutsideTop:
-                            mTracker.setPosition(ViewTracker.Position.LeftOutsideTop);
+                            mTracker.setPosition(ViewTracker.Position.TopLeft);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopRight));
                             break;
-                        case LeftOutside:
                         case LeftOutsideCenter:
-                            mTracker.setPosition(ViewTracker.Position.LeftOutsideCenter);
+                            mTracker.setPosition(ViewTracker.Position.LeftCenter);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.RightCenter));
                             break;
                         case LeftOutsideBottom:
-                            mTracker.setPosition(ViewTracker.Position.LeftOutsideBottom);
+                            mTracker.setPosition(ViewTracker.Position.BottomLeft);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomRight));
                             break;
 
+
+                        case TopOutside:
+                            mTracker.setPosition(ViewTracker.Position.Top);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomCenter));
+                            break;
                         case TopOutsideLeft:
-                            mTracker.setPosition(ViewTracker.Position.TopOutsideLeft);
+                            mTracker.setPosition(ViewTracker.Position.TopLeft);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomLeft));
                             break;
-                        case TopOutside:
                         case TopOutsideCenter:
-                            mTracker.setPosition(ViewTracker.Position.TopOutsideCenter);
+                            mTracker.setPosition(ViewTracker.Position.TopCenter);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomCenter));
                             break;
                         case TopOutsideRight:
-                            mTracker.setPosition(ViewTracker.Position.TopOutsideRight);
+                            mTracker.setPosition(ViewTracker.Position.TopRight);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomRight));
                             break;
 
+
+                        case RightOutside:
+                            mTracker.setPosition(ViewTracker.Position.Right);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.LeftCenter));
+                            break;
                         case RightOutsideTop:
-                            mTracker.setPosition(ViewTracker.Position.RightOutsideTop);
+                            mTracker.setPosition(ViewTracker.Position.TopRight);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopLeft));
                             break;
-                        case RightOutside:
                         case RightOutsideCenter:
-                            mTracker.setPosition(ViewTracker.Position.RightOutsideCenter);
+                            mTracker.setPosition(ViewTracker.Position.RightCenter);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.LeftCenter));
                             break;
                         case RightOutsideBottom:
-                            mTracker.setPosition(ViewTracker.Position.RightOutsideBottom);
+                            mTracker.setPosition(ViewTracker.Position.BottomRight);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomLeft));
                             break;
 
+
+                        case BottomOutside:
+                            mTracker.setPosition(ViewTracker.Position.Bottom);
+                            setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopCenter));
+                            break;
                         case BottomOutsideLeft:
-                            mTracker.setPosition(ViewTracker.Position.BottomOutsideLeft);
+                            mTracker.setPosition(ViewTracker.Position.BottomLeft);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopLeft));
                             break;
-                        case BottomOutside:
                         case BottomOutsideCenter:
-                            mTracker.setPosition(ViewTracker.Position.BottomOutsideCenter);
+                            mTracker.setPosition(ViewTracker.Position.BottomCenter);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopCenter));
                             break;
                         case BottomOutsideRight:
-                            mTracker.setPosition(ViewTracker.Position.BottomOutsideRight);
+                            mTracker.setPosition(ViewTracker.Position.BottomRight);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopRight));
                             break;
                     }
@@ -198,49 +213,38 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 Log.i(SimpleTargetDialoger.class.getSimpleName(), x + "," + y);
 
-                if (mPaddingToPosition)
-                {
-                    switch (mPosition)
-                    {
-                        case LeftOutside:
-                        case LeftOutsideTop:
-                        case LeftOutsideCenter:
-                        case LeftOutsideBottom:
-                            showLeftOfTarget(x, y, source, sourceParent, target);
-                            break;
-
-                        case TopOutside:
-                        case TopOutsideLeft:
-                        case TopOutsideCenter:
-                        case TopOutsideRight:
-                            showTopOfTarget(x, y, source, sourceParent, target);
-                            break;
-
-                        case RightOutside:
-                        case RightOutsideTop:
-                        case RightOutsideCenter:
-                        case RightOutsideBottom:
-                            showRightOfTarget(x, y, source, sourceParent, target);
-                            break;
-
-                        case BottomOutside:
-                        case BottomOutsideLeft:
-                        case BottomOutsideCenter:
-                        case BottomOutsideRight:
-                            showBottomOfTarget(x, y, source, sourceParent, target);
-                            break;
-                    }
-                }
-
                 switch (mPosition)
                 {
                     case LeftOutside:
-                    case RightOutside:
-                        y = source.getTop();
+                    case LeftOutsideTop:
+                    case LeftOutsideCenter:
+                    case LeftOutsideBottom:
+                        x -= source.getWidth();
+                        showLeftOfTarget(x, y, source, sourceParent, target);
                         break;
+
                     case TopOutside:
+                    case TopOutsideLeft:
+                    case TopOutsideCenter:
+                    case TopOutsideRight:
+                        y -= source.getHeight();
+                        showTopOfTarget(x, y, source, sourceParent, target);
+                        break;
+
+                    case RightOutside:
+                    case RightOutsideTop:
+                    case RightOutsideCenter:
+                    case RightOutsideBottom:
+                        x += source.getWidth();
+                        showRightOfTarget(x, y, source, sourceParent, target);
+                        break;
+
                     case BottomOutside:
-                        x = source.getLeft();
+                    case BottomOutsideLeft:
+                    case BottomOutsideCenter:
+                    case BottomOutsideRight:
+                        y += source.getHeight();
+                        showBottomOfTarget(x, y, source, sourceParent, target);
                         break;
                 }
 
@@ -252,34 +256,46 @@ class SimpleTargetDialoger implements TargetDialoger
 
             private void showLeftOfTarget(int x, int y, View source, View sourceParent, View target)
             {
-                mDialoger.setGravity(Gravity.RIGHT);
-                final int padding = sourceParent.getWidth() - x - source.getWidth();
-                mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
-                        padding, mDialoger.getPaddingBottom());
+                if (mPaddingToPosition)
+                {
+                    mDialoger.setGravity(Gravity.RIGHT);
+                    final int padding = sourceParent.getWidth() - x - source.getWidth();
+                    mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
+                            padding, mDialoger.getPaddingBottom());
+                }
             }
 
             private void showTopOfTarget(int x, int y, View source, View sourceParent, View target)
             {
-                mDialoger.setGravity(Gravity.BOTTOM);
-                final int padding = sourceParent.getHeight() - y - source.getHeight();
-                mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
-                        mDialoger.getPaddingRight(), padding);
+                if (mPaddingToPosition)
+                {
+                    mDialoger.setGravity(Gravity.BOTTOM);
+                    final int padding = sourceParent.getHeight() - y - source.getHeight();
+                    mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
+                            mDialoger.getPaddingRight(), padding);
+                }
             }
 
             private void showRightOfTarget(int x, int y, View source, View sourceParent, View target)
             {
-                mDialoger.setGravity(Gravity.LEFT);
-                final int padding = x;
-                mDialoger.setPadding(padding, mDialoger.getPaddingTop(),
-                        mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
+                if (mPaddingToPosition)
+                {
+                    mDialoger.setGravity(Gravity.LEFT);
+                    final int padding = x;
+                    mDialoger.setPadding(padding, mDialoger.getPaddingTop(),
+                            mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
+                }
             }
 
             private void showBottomOfTarget(int x, int y, View source, View sourceParent, View target)
             {
-                mDialoger.setGravity(Gravity.TOP);
-                final int padding = y;
-                mDialoger.setPadding(mDialoger.getPaddingLeft(), padding,
-                        mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
+                if (mPaddingToPosition)
+                {
+                    mDialoger.setGravity(Gravity.TOP);
+                    final int padding = y;
+                    mDialoger.setPadding(mDialoger.getPaddingLeft(), padding,
+                            mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
+                }
             }
         });
     }
