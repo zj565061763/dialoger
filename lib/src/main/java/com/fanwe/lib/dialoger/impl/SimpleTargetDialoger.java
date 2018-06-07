@@ -66,6 +66,7 @@ class SimpleTargetDialoger implements TargetDialoger
                             mTracker.setPosition(ViewTracker.Position.LeftOutsideTop);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopRight));
                             break;
+                        case LeftOutside:
                         case LeftOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.LeftOutsideCenter);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.RightCenter));
@@ -79,6 +80,7 @@ class SimpleTargetDialoger implements TargetDialoger
                             mTracker.setPosition(ViewTracker.Position.TopOutsideLeft);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomLeft));
                             break;
+                        case TopOutside:
                         case TopOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.TopOutsideCenter);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.BottomCenter));
@@ -92,6 +94,7 @@ class SimpleTargetDialoger implements TargetDialoger
                             mTracker.setPosition(ViewTracker.Position.RightOutsideTop);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopLeft));
                             break;
+                        case RightOutside:
                         case RightOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.RightOutsideCenter);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.LeftCenter));
@@ -105,6 +108,7 @@ class SimpleTargetDialoger implements TargetDialoger
                             mTracker.setPosition(ViewTracker.Position.BottomOutsideLeft);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopLeft));
                             break;
+                        case BottomOutside:
                         case BottomOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.BottomOutsideCenter);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), PivotHolder.Position.TopCenter));
