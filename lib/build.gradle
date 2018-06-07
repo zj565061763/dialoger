@@ -7,7 +7,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 20180606
-        versionName "1.0.0-rc8"
+        versionName "1.0.0-beta4"
     }
 
     buildTypes {
@@ -28,7 +28,7 @@ publish {
     groupId = 'com.fanwe.android'
 
     artifactId = 'dialoger'
-    publishVersion = '1.0.0-rc8'
+    publishVersion = '1.0.0-beta4'
     desc = 'android dialoger library'
     website = 'https://github.com/zj565061763/dialoger'
 }

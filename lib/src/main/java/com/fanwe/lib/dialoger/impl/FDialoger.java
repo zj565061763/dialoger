@@ -319,7 +319,7 @@ public class FDialoger implements Dialoger
     {
         if (isShowing())
         {
-            if (getAnimatorHandler().isHideAnimatorStarted())
+            if (mLockDialoger)
                 return;
 
             if (mIsDebug)
@@ -800,9 +800,7 @@ public class FDialoger implements Dialoger
                 private void setDefaultParams()
                 {
                     final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-                    final int targetHeight = mBackgroundView.getBackground() == null
-                            ? (mActivity.getResources().getDisplayMetrics().heightPixels - getActivityStatusBarHeight(mActivity))
-                            : ViewGroup.LayoutParams.MATCH_PARENT;
+                    final int targetHeight = mActivity.getResources().getDisplayMetrics().heightPixels - getActivityStatusBarHeight(mActivity);
 
                     final WindowManager.LayoutParams params = getWindow().getAttributes();
                     if (params.width != targetWidth || params.height != targetHeight
