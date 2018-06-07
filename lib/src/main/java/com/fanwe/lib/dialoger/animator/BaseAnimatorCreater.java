@@ -86,4 +86,33 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
      * @param view
      */
     protected abstract void onAnimationEnd(boolean show, View view);
+
+    /**
+     * 计算动画时长
+     *
+     * @param startValue  开始值
+     * @param endValue    结束值
+     * @param maxValue    最大值
+     * @param maxDuration 最大动画时长
+     * @return
+     */
+    protected static long getScaledDuration(float startValue, float endValue, float maxValue, long maxDuration)
+    {
+        if (maxDuration <= 0)
+            return 0;
+
+        if (maxValue == 0)
+            return 0;
+
+        final float delta = startValue - endValue;
+        if (delta == 0)
+            return 0;
+
+        final float percent = Math.abs(delta / maxValue);
+        long duration = (long) (percent * maxDuration);
+        if (duration > maxDuration)
+            return maxDuration;
+
+        return duration;
+    }
 }

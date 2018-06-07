@@ -29,7 +29,13 @@ public class AlphaCreater extends BaseAnimatorCreater
     {
         final ObjectAnimator animator = new ObjectAnimator();
         animator.setPropertyName(View.ALPHA.getName());
-        animator.setFloatValues(show ? new float[]{0, 1.0f} : new float[]{view.getAlpha(), 0});
+
+        final float[] values = show ? new float[]{0, 1.0f} : new float[]{view.getAlpha(), 0};
+        animator.setFloatValues(values);
+
+        final long duration = getScaledDuration(values[0], values[1], 1.0f, 300);
+        animator.setDuration(duration);
+
         animator.setTarget(view);
         return animator;
     }
