@@ -811,12 +811,14 @@ public class FDialoger implements Dialoger
 
                     final WindowManager.LayoutParams params = getWindow().getAttributes();
                     if (params.width != targetWidth || params.height != targetHeight
-                            || params.horizontalMargin != 0 || params.verticalMargin != 0)
+                            || params.horizontalMargin != 0 || params.verticalMargin != 0
+                            || params.gravity != Gravity.BOTTOM)
                     {
                         params.width = targetWidth;
                         params.height = targetHeight;
                         params.horizontalMargin = 0;
                         params.verticalMargin = 0;
+                        params.gravity = Gravity.BOTTOM;
                         getWindow().setAttributes(params);
                     }
 
