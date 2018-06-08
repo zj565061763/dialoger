@@ -18,6 +18,7 @@ package com.fanwe.lib.dialoger.impl;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.TargetDialoger;
@@ -248,17 +249,20 @@ class SimpleTargetDialoger implements TargetDialoger
                         break;
                 }
 
-                final int dx = x - source.getLeft();
-                final int dy = y - source.getTop();
-                source.offsetLeftAndRight(dx);
-                source.offsetTopAndBottom(dy);
+                mDialoger.setGravity(Gravity.TOP | Gravity.LEFT);
+                final ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) source.getLayoutParams();
+                if (params.leftMargin != x || params.topMargin != y)
+                {
+                    params.leftMargin = x;
+                    params.topMargin = y;
+                    source.setLayoutParams(params);
+                }
             }
 
             private void showLeftOfTarget(int x, int y, View source, View sourceParent, View target)
             {
                 if (mPaddingToPosition)
                 {
-                    mDialoger.setGravity(Gravity.RIGHT);
                     final int padding = sourceParent.getWidth() - x - source.getWidth();
                     mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
                             padding, mDialoger.getPaddingBottom());
@@ -269,7 +273,6 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (mPaddingToPosition)
                 {
-                    mDialoger.setGravity(Gravity.BOTTOM);
                     final int padding = sourceParent.getHeight() - y - source.getHeight();
                     mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
                             mDialoger.getPaddingRight(), padding);
@@ -280,7 +283,6 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (mPaddingToPosition)
                 {
-                    mDialoger.setGravity(Gravity.LEFT);
                     final int padding = x;
                     mDialoger.setPadding(padding, mDialoger.getPaddingTop(),
                             mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
@@ -291,7 +293,6 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (mPaddingToPosition)
                 {
-                    mDialoger.setGravity(Gravity.TOP);
                     final int padding = y;
                     mDialoger.setPadding(mDialoger.getPaddingLeft(), padding,
                             mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
