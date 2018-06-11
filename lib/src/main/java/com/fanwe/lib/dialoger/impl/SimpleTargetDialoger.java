@@ -16,9 +16,7 @@
 package com.fanwe.lib.dialoger.impl;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.TargetDialoger;
@@ -39,7 +37,6 @@ class SimpleTargetDialoger implements TargetDialoger
     private final ViewTracker mTracker = new FViewTracker();
     private Position mPosition;
 
-    private boolean mPaddingToPosition;
     private DialogerBackup mDialogerBackup;
 
     private boolean mIsAnimatorCreaterModified;
@@ -201,8 +198,7 @@ class SimpleTargetDialoger implements TargetDialoger
             {
                 if (started)
                 {
-                    if (mPaddingToPosition)
-                        getDialogerBackup().backup(mDialoger);
+                    getDialogerBackup().backup(mDialoger);
                 } else
                 {
                     getDialogerBackup().restore(mDialoger);
@@ -228,96 +224,19 @@ class SimpleTargetDialoger implements TargetDialoger
             @Override
             public void onUpdate(int x, int y, View source, View sourceParent, View target)
             {
-                Log.i(SimpleTargetDialoger.class.getSimpleName(), x + "," + y);
+                final int left = x;
+                final int top = y;
+                final int right = sourceParent.getWidth() - x - source.getWidth();
+                final int bottom = sourceParent.getHeight() - y - source.getHeight();
 
-                switch (mPosition)
-                {
-                    case LeftOutside:
-                    case LeftOutsideTop:
-                    case LeftOutsideCenter:
-                    case LeftOutsideBottom:
-                        showLeftOfTarget(x, y, source, sourceParent, target);
-                        break;
+                Log.i(SimpleTargetDialoger.class.getSimpleName(), left + "," + top + "," + right + "," + bottom);
 
-                    case TopOutside:
-                    case TopOutsideLeft:
-                    case TopOutsideCenter:
-                    case TopOutsideRight:
-                        showTopOfTarget(x, y, source, sourceParent, target);
-                        break;
+                mDialoger.setPadding(left, top, right, bottom);
 
-                    case RightOutside:
-                    case RightOutsideTop:
-                    case RightOutsideCenter:
-                    case RightOutsideBottom:
-                        showRightOfTarget(x, y, source, sourceParent, target);
-                        break;
-
-                    case BottomOutside:
-                    case BottomOutsideLeft:
-                    case BottomOutsideCenter:
-                    case BottomOutsideRight:
-                        showBottomOfTarget(x, y, source, sourceParent, target);
-                        break;
-                }
-
-                mDialoger.setGravity(Gravity.TOP | Gravity.LEFT);
-                final ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) source.getLayoutParams();
-                if (params.leftMargin != x || params.topMargin != y)
-                {
-                    params.leftMargin = x;
-                    params.topMargin = y;
-                    source.setLayoutParams(params);
-                }
-            }
-
-            private void showLeftOfTarget(int x, int y, View source, View sourceParent, View target)
-            {
-                if (mPaddingToPosition)
-                {
-                    final int padding = sourceParent.getWidth() - x - source.getWidth();
-                    mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
-                            padding, mDialoger.getPaddingBottom());
-                }
-            }
-
-            private void showTopOfTarget(int x, int y, View source, View sourceParent, View target)
-            {
-                if (mPaddingToPosition)
-                {
-                    final int padding = sourceParent.getHeight() - y - source.getHeight();
-                    mDialoger.setPadding(mDialoger.getPaddingLeft(), mDialoger.getPaddingTop(),
-                            mDialoger.getPaddingRight(), padding);
-                }
-            }
-
-            private void showRightOfTarget(int x, int y, View source, View sourceParent, View target)
-            {
-                if (mPaddingToPosition)
-                {
-                    final int padding = x;
-                    mDialoger.setPadding(padding, mDialoger.getPaddingTop(),
-                            mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
-                }
-            }
-
-            private void showBottomOfTarget(int x, int y, View source, View sourceParent, View target)
-            {
-                if (mPaddingToPosition)
-                {
-                    final int padding = y;
-                    mDialoger.setPadding(mDialoger.getPaddingLeft(), padding,
-                            mDialoger.getPaddingRight(), mDialoger.getPaddingBottom());
-                }
+                source.offsetLeftAndRight(x - source.getLeft());
+                source.offsetTopAndBottom(y - source.getTop());
             }
         });
-    }
-
-    @Override
-    public TargetDialoger setPaddingToPosition(boolean padding)
-    {
-        mPaddingToPosition = padding;
-        return this;
     }
 
     @Override
