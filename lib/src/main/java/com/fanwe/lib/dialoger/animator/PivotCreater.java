@@ -19,7 +19,6 @@ import android.animation.Animator;
 import android.view.View;
 
 import com.fanwe.lib.dialoger.Dialoger;
-import com.fanwe.lib.dialoger.utils.PivotHolder;
 
 /**
  * 在动画开始的时候修改view的锚点，动画结束后还原view的锚点
@@ -27,19 +26,19 @@ import com.fanwe.lib.dialoger.utils.PivotHolder;
 public class PivotCreater extends BaseAnimatorCreater
 {
     private final Dialoger.AnimatorCreater mCreater;
+    private final float mPivotXPercent;
+    private final float mPivotYPercent;
 
     private PivotHolder mPivotHolder;
-    private final PivotHolder.Position mPosition;
 
-    public PivotCreater(Dialoger.AnimatorCreater creater, PivotHolder.Position position)
+    public PivotCreater(Dialoger.AnimatorCreater creater, float pivotXPercent, float pivotYPercent)
     {
         if (creater == null)
             throw new NullPointerException("creater is null");
-        if (position == null)
-            throw new NullPointerException("position is null");
 
         mCreater = creater;
-        mPosition = position;
+        mPivotXPercent = pivotXPercent;
+        mPivotYPercent = pivotYPercent;
     }
 
     protected final PivotHolder getPivotHolder()
@@ -47,11 +46,6 @@ public class PivotCreater extends BaseAnimatorCreater
         if (mPivotHolder == null)
             mPivotHolder = new PivotHolder();
         return mPivotHolder;
-    }
-
-    protected final PivotHolder.Position getPosition()
-    {
-        return mPosition;
     }
 
     @Override
@@ -64,7 +58,7 @@ public class PivotCreater extends BaseAnimatorCreater
     protected void onAnimationStart(boolean show, View view)
     {
         super.onAnimationStart(show, view);
-        getPivotHolder().setPivotXY(mPosition, view);
+        getPivotHolder().setPivotXY(mPivotXPercent * view.getWidth(), mPivotYPercent * view.getHeight(), view);
     }
 
     @Override
@@ -72,5 +66,31 @@ public class PivotCreater extends BaseAnimatorCreater
     {
         super.onAnimationEnd(show, view);
         getPivotHolder().restore(view);
+    }
+
+    private static class PivotHolder
+    {
+        private final float[] mPivotXYOriginal = new float[2];
+
+        public void setPivotXY(float pivotX, float pivotY, View view)
+        {
+            if (view == null)
+                return;
+
+            mPivotXYOriginal[0] = view.getPivotX();
+            mPivotXYOriginal[1] = view.getPivotY();
+
+            view.setPivotX(pivotX);
+            view.setPivotY(pivotY);
+        }
+
+        public void restore(View view)
+        {
+            if (view == null)
+                return;
+
+            view.setPivotX(mPivotXYOriginal[0]);
+            view.setPivotY(mPivotXYOriginal[1]);
+        }
     }
 }
