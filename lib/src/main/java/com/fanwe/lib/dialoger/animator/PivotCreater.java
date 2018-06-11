@@ -31,6 +31,11 @@ public class PivotCreater extends BaseAnimatorCreater
 
     private PivotHolder mPivotHolder;
 
+    /**
+     * @param creater
+     * @param pivotXPercent x方向锚点百分比[0-1]
+     * @param pivotYPercent y方向锚点百分比[0-1]
+     */
     public PivotCreater(Dialoger.AnimatorCreater creater, float pivotXPercent, float pivotYPercent)
     {
         if (creater == null)
