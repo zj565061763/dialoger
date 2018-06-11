@@ -41,7 +41,7 @@ public interface TargetDialoger
      * @param target   目标view
      * @param position 显示的位置{@link Position}
      */
-    void showPosition(View target, Position position);
+    void show(View target, Position position);
 
     enum Position
     {

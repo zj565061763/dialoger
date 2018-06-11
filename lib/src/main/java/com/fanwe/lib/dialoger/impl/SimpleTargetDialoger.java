@@ -253,7 +253,7 @@ class SimpleTargetDialoger implements TargetDialoger
     }
 
     @Override
-    public void showPosition(View target, Position position)
+    public void show(View target, Position position)
     {
         if (position == null)
             throw new NullPointerException("position is null");

@@ -66,43 +66,43 @@ public class PositionDialoger extends FDialoger implements View.OnClickListener
         switch (v.getId())
         {
             case R.id.btn_left_top:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.LeftOutsideTop);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.LeftOutsideTop);
                 break;
             case R.id.btn_left_center:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.LeftOutsideCenter);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.LeftOutsideCenter);
                 break;
             case R.id.btn_left_bottom:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.LeftOutsideBottom);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.LeftOutsideBottom);
                 break;
 
             case R.id.btn_right_top:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.RightOutsideTop);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.RightOutsideTop);
                 break;
             case R.id.btn_right_center:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.RightOutsideCenter);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.RightOutsideCenter);
                 break;
             case R.id.btn_right_bottom:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.RightOutsideBottom);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.RightOutsideBottom);
                 break;
 
             case R.id.btn_top_left:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.TopOutsideLeft);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.TopOutsideLeft);
                 break;
             case R.id.btn_top_center:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.TopOutsideCenter);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.TopOutsideCenter);
                 break;
             case R.id.btn_top_right:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.TopOutsideRight);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.TopOutsideRight);
                 break;
 
             case R.id.btn_bottom_left:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.BottomOutsideLeft);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.BottomOutsideLeft);
                 break;
             case R.id.btn_bottom_center:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.BottomOutsideCenter);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.BottomOutsideCenter);
                 break;
             case R.id.btn_bottom_right:
-                dialoger.target().showPosition(mTargetView, TargetDialoger.Position.BottomOutsideRight);
+                dialoger.target().show(mTargetView, TargetDialoger.Position.BottomOutsideRight);
                 break;
         }
     }

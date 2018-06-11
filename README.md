@@ -138,7 +138,7 @@ interface AnimatorCreater
 /**
  * target()方法返回一个TargetDialoger对象，可以指定窗口要显示在某个view的什么位置
  */
-dialoger.target().showPosition(mTargetView, TargetDialoger.Position.LeftOutsideTop);
+dialoger.target().show(mTargetView, TargetDialoger.Position.LeftOutsideTop);
 ```
 TargetDialoger接口：
 ```java
@@ -166,7 +166,7 @@ public interface TargetDialoger
      * @param target   目标view
      * @param position 显示的位置{@link Position}
      */
-    void showPosition(View target, Position position);
+    void show(View target, Position position);
 
     enum Position
     {
