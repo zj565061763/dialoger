@@ -16,6 +16,7 @@
 package com.fanwe.lib.dialoger;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -31,6 +32,8 @@ public interface Dialoger
     void setDebug(boolean debug);
 
     Context getContext();
+
+    Activity getOwnerActivity();
 
     /**
      * 返回窗口的内容view

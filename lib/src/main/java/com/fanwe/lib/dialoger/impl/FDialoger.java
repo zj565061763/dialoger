@@ -108,6 +108,12 @@ public class FDialoger implements Dialoger
     }
 
     @Override
+    public Activity getOwnerActivity()
+    {
+        return mActivity;
+    }
+
+    @Override
     public View getContentView()
     {
         return mContentView;

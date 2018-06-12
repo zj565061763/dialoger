@@ -5,7 +5,7 @@
 ![](http://thumbsnap.com/i/qNJUXTJN.gif?0607)
 
 # Gradle
-`implementation 'com.fanwe.android:dialoger:1.0.0'`
+`implementation 'com.fanwe.android:dialoger:1.0.1-rc1'`
 
 # 简单demo
 ```java
@@ -254,6 +254,8 @@ public interface Dialoger
     void setDebug(boolean debug);
 
     Context getContext();
+
+    Activity getOwnerActivity();
 
     /**
      * 返回窗口的内容view
