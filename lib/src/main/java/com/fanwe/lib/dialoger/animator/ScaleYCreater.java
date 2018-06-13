@@ -22,14 +22,14 @@ import android.view.View;
  */
 public class ScaleYCreater extends ObjectAnimatorCreater
 {
-    private float mScaleYOriginal;
+    private float mValueOriginal;
 
     @Override
     protected void beforeCreateAnimator(boolean show, View view)
     {
         super.beforeCreateAnimator(show, view);
         if (show)
-            mScaleYOriginal = view.getScaleY();
+            mValueOriginal = view.getScaleY();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ScaleYCreater extends ObjectAnimatorCreater
     @Override
     protected float getValueShown(View view)
     {
-        return mScaleYOriginal;
+        return mValueOriginal;
     }
 
     @Override
@@ -61,6 +61,6 @@ public class ScaleYCreater extends ObjectAnimatorCreater
     {
         super.onAnimationEnd(show, view);
         if (!show)
-            view.setScaleY(mScaleYOriginal);
+            view.setScaleY(mValueOriginal);
     }
 }

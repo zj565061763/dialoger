@@ -22,14 +22,14 @@ import android.view.View;
  */
 public class AlphaCreater extends ObjectAnimatorCreater
 {
-    private float mAlphaOriginal;
+    private float mValueOriginal;
 
     @Override
     protected void beforeCreateAnimator(boolean show, View view)
     {
         super.beforeCreateAnimator(show, view);
         if (show)
-            mAlphaOriginal = view.getAlpha();
+            mValueOriginal = view.getAlpha();
     }
 
     @Override
@@ -47,7 +47,7 @@ public class AlphaCreater extends ObjectAnimatorCreater
     @Override
     protected float getValueShown(View view)
     {
-        return mAlphaOriginal;
+        return mValueOriginal;
     }
 
     @Override
@@ -61,6 +61,6 @@ public class AlphaCreater extends ObjectAnimatorCreater
     {
         super.onAnimationEnd(show, view);
         if (!show)
-            view.setAlpha(mAlphaOriginal);
+            view.setAlpha(mValueOriginal);
     }
 }

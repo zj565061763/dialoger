@@ -22,6 +22,16 @@ import android.view.View;
  */
 public class SlideRightLeftCreater extends SlideHorizontalCreater
 {
+    private float mValueOriginal;
+
+    @Override
+    protected void beforeCreateAnimator(boolean show, View view)
+    {
+        super.beforeCreateAnimator(show, view);
+        if (show)
+            mValueOriginal = view.getTranslationX();
+    }
+
     @Override
     protected float getValueHidden(View view)
     {
@@ -31,7 +41,7 @@ public class SlideRightLeftCreater extends SlideHorizontalCreater
     @Override
     protected float getValueShown(View view)
     {
-        return 0.0f;
+        return mValueOriginal;
     }
 
     @Override
@@ -39,6 +49,6 @@ public class SlideRightLeftCreater extends SlideHorizontalCreater
     {
         super.onAnimationEnd(show, view);
         if (!show)
-            view.setTranslationX(0);
+            view.setTranslationX(mValueOriginal);
     }
 }
