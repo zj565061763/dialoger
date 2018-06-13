@@ -26,6 +26,8 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
     @Override
     public final Animator createAnimator(final boolean show, final View view)
     {
+        beforeCreateAnimator(show, view);
+
         final Animator animator = onCreateAnimator(show, view);
         if (animator != null)
         {
@@ -52,6 +54,16 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
     }
 
     /**
+     * 在动画要创建之前回调
+     *
+     * @param show
+     * @param view
+     */
+    protected void beforeCreateAnimator(boolean show, View view)
+    {
+    }
+
+    /**
      * 创建动画
      *
      * @param show
@@ -59,6 +71,7 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
      * @return
      */
     protected abstract Animator onCreateAnimator(boolean show, View view);
+
 
     /**
      * 动画被创建后回调
