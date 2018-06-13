@@ -22,6 +22,16 @@ import android.view.View;
  */
 public class AlphaCreater extends ObjectAnimatorCreater
 {
+    private float mAlphaOriginal;
+
+    @Override
+    protected void beforeCreateAnimator(boolean show, View view)
+    {
+        super.beforeCreateAnimator(show, view);
+        if (show)
+            mAlphaOriginal = view.getAlpha();
+    }
+
     @Override
     protected final String getPropertyName()
     {
@@ -37,7 +47,7 @@ public class AlphaCreater extends ObjectAnimatorCreater
     @Override
     protected float getValueShown(View view)
     {
-        return 1.0f;
+        return mAlphaOriginal;
     }
 
     @Override
@@ -51,6 +61,6 @@ public class AlphaCreater extends ObjectAnimatorCreater
     {
         super.onAnimationEnd(show, view);
         if (!show)
-            view.setAlpha(1.0f);
+            view.setAlpha(mAlphaOriginal);
     }
 }

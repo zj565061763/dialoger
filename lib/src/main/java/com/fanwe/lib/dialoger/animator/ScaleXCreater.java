@@ -22,6 +22,16 @@ import android.view.View;
  */
 public class ScaleXCreater extends ObjectAnimatorCreater
 {
+    private float mScaleXOriginal;
+
+    @Override
+    protected void beforeCreateAnimator(boolean show, View view)
+    {
+        super.beforeCreateAnimator(show, view);
+        if (show)
+            mScaleXOriginal = view.getScaleX();
+    }
+
     @Override
     protected final String getPropertyName()
     {
@@ -37,7 +47,7 @@ public class ScaleXCreater extends ObjectAnimatorCreater
     @Override
     protected float getValueShown(View view)
     {
-        return 1.0f;
+        return mScaleXOriginal;
     }
 
     @Override
@@ -51,6 +61,6 @@ public class ScaleXCreater extends ObjectAnimatorCreater
     {
         super.onAnimationEnd(show, view);
         if (!show)
-            view.setScaleX(1.0f);
+            view.setScaleX(mScaleXOriginal);
     }
 }
