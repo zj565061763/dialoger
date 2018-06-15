@@ -4,7 +4,9 @@
 ![](http://thumbsnap.com/i/qNJUXTJN.gif?0607)
 
 # Gradle
-[![](https://jitpack.io/v/zj565061763/dialoger.svg)](https://jitpack.io/#zj565061763/dialoger)
+```
+implementation 'com.fanwe.android:dialoger:1.0.1-rc7'
+```
 
 # 简单demo
 ```java
