@@ -5,7 +5,7 @@
 
 # Gradle
 ```
-implementation 'com.fanwe.android:dialoger:1.0.1-rc7'
+implementation 'com.fanwe.android:dialoger:1.0.1-rc8'
 ```
 
 # 简单demo
