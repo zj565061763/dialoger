@@ -337,6 +337,12 @@ public class FDialoger implements Dialoger
 
             mLockDialoger = true;
 
+            if (mActivity.isFinishing())
+            {
+                removeDialogerView(false);
+                return;
+            }
+
             mTryStartShowAnimator = false;
             getAnimatorHandler().setHideAnimator(createAnimator(false));
             if (getAnimatorHandler().startHideAnimator())
@@ -344,13 +350,6 @@ public class FDialoger implements Dialoger
 
             removeDialogerView(false);
         }
-    }
-
-    @Override
-    public void dismissImmediately()
-    {
-        if (isShowing())
-            removeDialogerView(false);
     }
 
     @Override
