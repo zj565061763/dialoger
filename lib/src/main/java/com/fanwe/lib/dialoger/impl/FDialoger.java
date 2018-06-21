@@ -347,6 +347,13 @@ public class FDialoger implements Dialoger
     }
 
     @Override
+    public void dismissImmediately()
+    {
+        if (isShowing())
+            removeDialogerView(false);
+    }
+
+    @Override
     public void startDismissRunnable(long delay)
     {
         stopDismissRunnable();
@@ -548,9 +555,6 @@ public class FDialoger implements Dialoger
 
     private void removeDialogerView(boolean removeByHideAnimator)
     {
-        if (mActivity.isFinishing())
-            return;
-
         if (mIsDebug)
             Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by hideAnimator:" + removeByHideAnimator);
 

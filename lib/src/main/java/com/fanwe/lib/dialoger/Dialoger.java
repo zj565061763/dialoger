@@ -200,6 +200,11 @@ public interface Dialoger
     void dismiss();
 
     /**
+     * 立即关闭窗口，不执行关闭动画
+     */
+    void dismissImmediately();
+
+    /**
      * 延迟多久后关闭dialog
      *
      * @param delay （毫秒）
