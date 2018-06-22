@@ -966,7 +966,7 @@ public class FDialoger implements Dialoger
 
     private InternalActivityLifecycleCallbacks mActivityLifecycleCallbacks;
 
-    public InternalActivityLifecycleCallbacks getActivityLifecycleCallbacks()
+    private InternalActivityLifecycleCallbacks getActivityLifecycleCallbacks()
     {
         if (mActivityLifecycleCallbacks == null)
             mActivityLifecycleCallbacks = new InternalActivityLifecycleCallbacks();
@@ -977,7 +977,10 @@ public class FDialoger implements Dialoger
     {
         public void register(boolean register)
         {
-
+            final Application application = mActivity.getApplication();
+            application.unregisterActivityLifecycleCallbacks(this);
+            if (register)
+                application.registerActivityLifecycleCallbacks(this);
         }
 
         @Override
