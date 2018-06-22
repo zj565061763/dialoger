@@ -19,10 +19,12 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.app.Activity;
+import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -853,6 +855,7 @@ public class FDialoger implements Dialoger
                 {
                     super.onStart();
                     setDefaultParams();
+                    getActivityLifecycleCallbacks().register(true);
 
                     FDialoger.this.onStart();
                     if (mLifecycleCallbacks != null)
@@ -871,6 +874,7 @@ public class FDialoger implements Dialoger
                 protected void onStop()
                 {
                     super.onStop();
+                    getActivityLifecycleCallbacks().register(false);
 
                     FDialoger.this.onStop();
                     if (mLifecycleCallbacks != null)
@@ -958,5 +962,59 @@ public class FDialoger implements Dialoger
             }
         }
         return duration;
+    }
+
+    private InternalActivityLifecycleCallbacks mActivityLifecycleCallbacks;
+
+    public InternalActivityLifecycleCallbacks getActivityLifecycleCallbacks()
+    {
+        if (mActivityLifecycleCallbacks == null)
+            mActivityLifecycleCallbacks = new InternalActivityLifecycleCallbacks();
+        return mActivityLifecycleCallbacks;
+    }
+
+    private final class InternalActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks
+    {
+        public void register(boolean register)
+        {
+
+        }
+
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState)
+        {
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity)
+        {
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity)
+        {
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity)
+        {
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity)
+        {
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState)
+        {
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity)
+        {
+            if (activity == mActivity)
+                dismiss();
+        }
     }
 }
