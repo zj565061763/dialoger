@@ -22,11 +22,10 @@ import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.TargetDialoger;
 import com.fanwe.lib.dialoger.animator.PivotCreater;
 import com.fanwe.lib.dialoger.animator.ScaleXYCreater;
-import com.fanwe.lib.updater.Updater;
-import com.fanwe.lib.updater.ViewUpdater;
-import com.fanwe.lib.updater.impl.OnGlobalLayoutChangeUpdater;
 import com.fanwe.lib.viewtracker.FViewTracker;
 import com.fanwe.lib.viewtracker.ViewTracker;
+import com.fanwe.lib.viewupdater.ViewUpdater;
+import com.fanwe.lib.viewupdater.impl.OnGlobalLayoutChangeUpdater;
 
 class SimpleTargetDialoger implements TargetDialoger
 {
@@ -182,7 +181,7 @@ class SimpleTargetDialoger implements TargetDialoger
 
     private void initUpdater()
     {
-        mUpdater.setUpdatable(new Updater.Updatable()
+        mUpdater.setUpdatable(new ViewUpdater.Updatable()
         {
             @Override
             public void update()
@@ -190,10 +189,10 @@ class SimpleTargetDialoger implements TargetDialoger
                 mTracker.update();
             }
         });
-        mUpdater.setOnStateChangeCallback(new Updater.OnStateChangeCallback()
+        mUpdater.setOnStateChangeCallback(new ViewUpdater.OnStateChangeCallback()
         {
             @Override
-            public void onStateChanged(boolean started, Updater updater)
+            public void onStateChanged(boolean started, ViewUpdater updater)
             {
                 if (started)
                 {
