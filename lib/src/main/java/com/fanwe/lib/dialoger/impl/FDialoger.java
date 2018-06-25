@@ -299,26 +299,45 @@ public class FDialoger implements Dialoger
     @Override
     public void show()
     {
-        if (isShowing())
+        if (Looper.myLooper() == Looper.getMainLooper())
         {
-            if (getAnimatorHandler().isHideAnimatorStarted())
-            {
-                if (mIsDebug)
-                    Log.i(Dialoger.class.getSimpleName(), "cancel HideAnimator before show");
-
-                getAnimatorHandler().cancelHideAnimator();
-            } else
-            {
-                return;
-            }
+            mShowRunnable.run();
+        } else
+        {
+            getDialogerHandler().removeCallbacks(mShowRunnable);
+            getDialogerHandler().post(mShowRunnable);
         }
-
-        if (mIsDebug)
-            Log.i(Dialoger.class.getSimpleName(), "try show");
-
-        mLockDialoger = false;
-        getDialog().show();
     }
+
+    private final Runnable mShowRunnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            if (mActivity.isFinishing())
+                return;
+
+            if (isShowing())
+            {
+                if (getAnimatorHandler().isHideAnimatorStarted())
+                {
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "cancel HideAnimator before show");
+
+                    getAnimatorHandler().cancelHideAnimator();
+                } else
+                {
+                    return;
+                }
+            }
+
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "try show");
+
+            mLockDialoger = false;
+            getDialog().show();
+        }
+    };
 
     @Override
     public boolean isShowing()
@@ -329,42 +348,58 @@ public class FDialoger implements Dialoger
     @Override
     public void dismiss()
     {
-        if (isShowing())
+        if (Looper.myLooper() == Looper.getMainLooper())
         {
-            if (mLockDialoger)
-                return;
-
-            if (mIsDebug)
-                Log.i(Dialoger.class.getSimpleName(), "try dismiss");
-
-            mLockDialoger = true;
-
-            if (mActivity.isFinishing())
-            {
-                removeDialogerView(false);
-                return;
-            }
-
-            mTryStartShowAnimator = false;
-            getAnimatorHandler().setHideAnimator(createAnimator(false));
-            if (getAnimatorHandler().startHideAnimator())
-                return;
-
-            removeDialogerView(false);
+            mDismissRunnable.run();
+        } else
+        {
+            getDialogerHandler().removeCallbacks(mDismissRunnable);
+            getDialogerHandler().post(mDismissRunnable);
         }
     }
+
+    private final Runnable mDismissRunnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            if (isShowing())
+            {
+                if (mLockDialoger)
+                    return;
+
+                if (mIsDebug)
+                    Log.i(Dialoger.class.getSimpleName(), "try dismiss");
+
+                mLockDialoger = true;
+
+                if (mActivity.isFinishing())
+                {
+                    removeDialogerView(false);
+                    return;
+                }
+
+                mTryStartShowAnimator = false;
+                getAnimatorHandler().setHideAnimator(createAnimator(false));
+                if (getAnimatorHandler().startHideAnimator())
+                    return;
+
+                removeDialogerView(false);
+            }
+        }
+    };
 
     @Override
     public void startDismissRunnable(long delay)
     {
         stopDismissRunnable();
-        getDialogerHandler().postDelayed(mDismissRunnable, delay);
+        getDialogerHandler().postDelayed(mDelayedDismissRunnable, delay);
     }
 
     @Override
     public void stopDismissRunnable()
     {
-        getDialogerHandler().removeCallbacks(mDismissRunnable);
+        getDialogerHandler().removeCallbacks(mDelayedDismissRunnable);
     }
 
     private Handler mDialogerHandler;
@@ -376,7 +411,7 @@ public class FDialoger implements Dialoger
         return mDialogerHandler;
     }
 
-    private final Runnable mDismissRunnable = new Runnable()
+    private final Runnable mDelayedDismissRunnable = new Runnable()
     {
         @Override
         public void run()
