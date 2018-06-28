@@ -42,6 +42,7 @@ import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.R;
 import com.fanwe.lib.dialoger.TargetDialoger;
 import com.fanwe.lib.dialoger.animator.AlphaCreater;
+import com.fanwe.lib.dialoger.animator.ObjectAnimatorCreater;
 import com.fanwe.lib.dialoger.animator.SlideBottomTopCreater;
 import com.fanwe.lib.dialoger.animator.SlideLeftRightCreater;
 import com.fanwe.lib.dialoger.animator.SlideRightLeftCreater;
@@ -55,13 +56,14 @@ public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
     private final View mDialogerView;
-    private final LinearLayout mContainerView;
     private final View mBackgroundView;
-
+    private final LinearLayout mContainerView;
     private View mContentView;
+
+    private AnimatorCreater mBackgroundViewAnimatorCreater;
+
     private boolean mCancelable = true;
     private boolean mCanceledOnTouchOutside = true;
-
     private int mGravity = Gravity.NO_GRAVITY;
 
     private OnDismissListener mOnDismissListener;
@@ -540,27 +542,61 @@ public class FDialoger implements Dialoger
         return mAnimatorHandler;
     }
 
+    private AnimatorCreater getBackgroundViewAnimatorCreater()
+    {
+        if (mBackgroundViewAnimatorCreater == null)
+        {
+            mBackgroundViewAnimatorCreater = new ObjectAnimatorCreater()
+            {
+                @Override
+                protected String getPropertyName()
+                {
+                    return View.ALPHA.getName();
+                }
+
+                @Override
+                protected float getValueHidden(View view)
+                {
+                    return 0.0f;
+                }
+
+                @Override
+                protected float getValueShown(View view)
+                {
+                    return 1.0f;
+                }
+
+                @Override
+                protected float getValueCurrent(View view)
+                {
+                    return view.getAlpha();
+                }
+
+                @Override
+                protected void onAnimationStart(boolean show, View view)
+                {
+                    super.onAnimationStart(show, view);
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected void onAnimationEnd(boolean show, View view)
+                {
+                    super.onAnimationEnd(show, view);
+                    if (!show)
+                        view.setVisibility(View.INVISIBLE);
+                }
+            };
+        }
+        return mBackgroundViewAnimatorCreater;
+    }
+
     private Animator createAnimator(boolean show)
     {
         Animator animator = null;
 
-        final Animator animatorBackground = (mBackgroundView.getBackground() == null) ? null : new AlphaCreater()
-        {
-            @Override
-            protected void onAnimationStart(boolean show, View view)
-            {
-                super.onAnimationStart(show, view);
-                view.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            protected void onAnimationEnd(boolean show, View view)
-            {
-                super.onAnimationEnd(show, view);
-                if (!show)
-                    view.setVisibility(View.INVISIBLE);
-            }
-        }.createAnimator(show, mBackgroundView);
+        final Animator animatorBackground = (mBackgroundView.getBackground() == null) ?
+                null : getBackgroundViewAnimatorCreater().createAnimator(show, mBackgroundView);
 
         final Animator animatorContent = (mAnimatorCreater == null || mContentView == null) ?
                 null : mAnimatorCreater.createAnimator(show, mContentView);
