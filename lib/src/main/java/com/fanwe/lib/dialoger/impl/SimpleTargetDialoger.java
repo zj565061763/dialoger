@@ -35,6 +35,9 @@ class SimpleTargetDialoger implements TargetDialoger
     private final ViewTracker mTracker = new FViewTracker();
     private Position mPosition;
 
+    private int mMarginX;
+    private int mMarginY;
+
     private DialogerBackup mDialogerBackup;
 
     private boolean mIsAnimatorCreaterModified;
@@ -60,88 +63,72 @@ class SimpleTargetDialoger implements TargetDialoger
                     {
                         case LeftOutside:
                             mTracker.setPosition(ViewTracker.Position.Left);
-                            mTracker.setMarginX(mTracker.getSource(), false);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 0.5f));
                             break;
                         case LeftOutsideTop:
                             mTracker.setPosition(ViewTracker.Position.TopLeft);
-                            mTracker.setMarginX(mTracker.getSource(), false);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 0.0f));
                             break;
                         case LeftOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.LeftCenter);
-                            mTracker.setMarginX(mTracker.getSource(), false);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 0.5f));
                             break;
                         case LeftOutsideBottom:
                             mTracker.setPosition(ViewTracker.Position.BottomLeft);
-                            mTracker.setMarginX(mTracker.getSource(), false);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 1.0f));
                             break;
 
 
                         case TopOutside:
                             mTracker.setPosition(ViewTracker.Position.Top);
-                            mTracker.setMarginY(mTracker.getSource(), false);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.5f, 1.0f));
                             break;
                         case TopOutsideLeft:
                             mTracker.setPosition(ViewTracker.Position.TopLeft);
-                            mTracker.setMarginY(mTracker.getSource(), false);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 1.0f));
                             break;
                         case TopOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.TopCenter);
-                            mTracker.setMarginY(mTracker.getSource(), false);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.5f, 1.0f));
                             break;
                         case TopOutsideRight:
                             mTracker.setPosition(ViewTracker.Position.TopRight);
-                            mTracker.setMarginY(mTracker.getSource(), false);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 1.0f));
                             break;
 
 
                         case RightOutside:
                             mTracker.setPosition(ViewTracker.Position.Right);
-                            mTracker.setMarginX(mTracker.getSource(), true);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 0.5f));
                             break;
                         case RightOutsideTop:
                             mTracker.setPosition(ViewTracker.Position.TopRight);
-                            mTracker.setMarginX(mTracker.getSource(), true);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 0.0f));
                             break;
                         case RightOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.RightCenter);
-                            mTracker.setMarginX(mTracker.getSource(), true);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 0.5f));
                             break;
                         case RightOutsideBottom:
                             mTracker.setPosition(ViewTracker.Position.BottomRight);
-                            mTracker.setMarginX(mTracker.getSource(), true);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 1.0f));
                             break;
 
 
                         case BottomOutside:
                             mTracker.setPosition(ViewTracker.Position.Bottom);
-                            mTracker.setMarginY(mTracker.getSource(), true);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.5f, 0.0f));
                             break;
                         case BottomOutsideLeft:
                             mTracker.setPosition(ViewTracker.Position.BottomLeft);
-                            mTracker.setMarginY(mTracker.getSource(), true);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 0.0f));
                             break;
                         case BottomOutsideCenter:
                             mTracker.setPosition(ViewTracker.Position.BottomCenter);
-                            mTracker.setMarginY(mTracker.getSource(), true);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.5f, 0.0f));
                             break;
                         case BottomOutsideRight:
                             mTracker.setPosition(ViewTracker.Position.BottomRight);
-                            mTracker.setMarginY(mTracker.getSource(), true);
                             setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 0.0f));
                             break;
                     }
@@ -220,8 +207,46 @@ class SimpleTargetDialoger implements TargetDialoger
             }
 
             @Override
-            public void onUpdate(int x, int y, View source, View sourceParent, View target)
+            public void onUpdate(int x, int y, View source, View target)
             {
+                x += mMarginX;
+                y += mMarginY;
+
+                switch (mPosition)
+                {
+                    case LeftOutside:
+                    case LeftOutsideTop:
+                    case LeftOutsideCenter:
+                    case LeftOutsideBottom:
+                        x -= source.getWidth();
+                        break;
+
+                    case TopOutside:
+                    case TopOutsideLeft:
+                    case TopOutsideCenter:
+                    case TopOutsideRight:
+                        y -= source.getHeight();
+                        break;
+
+                    case RightOutside:
+                    case RightOutsideTop:
+                    case RightOutsideCenter:
+                    case RightOutsideBottom:
+                        x += source.getWidth();
+                        break;
+
+
+                    case BottomOutside:
+                    case BottomOutsideLeft:
+                    case BottomOutsideCenter:
+                    case BottomOutsideRight:
+                        y += source.getHeight();
+                        break;
+                }
+
+
+                final View sourceParent = (View) source.getParent();
+
                 final int left = x;
                 final int top = y;
                 final int right = sourceParent.getWidth() - x - source.getWidth();
@@ -238,16 +263,16 @@ class SimpleTargetDialoger implements TargetDialoger
     }
 
     @Override
-    public TargetDialoger setMarginX(int marginX)
+    public TargetDialoger setMarginX(int margin)
     {
-        mTracker.setMarginX(marginX);
+        mMarginX = margin;
         return this;
     }
 
     @Override
-    public TargetDialoger setMarginY(int marginY)
+    public TargetDialoger setMarginY(int margin)
     {
-        mTracker.setMarginY(marginY);
+        mMarginY = margin;
         return this;
     }
 
