@@ -1,10 +1,10 @@
-package com.fanwe.dialoger;
+package com.sd.dialoger;
 
 import android.app.Activity;
 import android.view.View;
 import android.widget.Toast;
 
-import com.fanwe.lib.dialoger.impl.FDialoger;
+import com.sd.lib.dialoger.impl.FDialoger;
 
 public class TestDialoger extends FDialoger
 {

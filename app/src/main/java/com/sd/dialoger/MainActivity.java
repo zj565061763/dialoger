@@ -1,4 +1,4 @@
-package com.fanwe.dialoger;
+package com.sd.dialoger;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 
-import com.fanwe.lib.dialoger.Dialoger;
-import com.fanwe.lib.dialoger.animator.AlphaCreater;
-import com.fanwe.lib.dialoger.impl.FDialoger;
+import com.sd.lib.dialoger.Dialoger;
+import com.sd.lib.dialoger.animator.AlphaCreater;
+import com.sd.lib.dialoger.impl.FDialoger;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
 {
