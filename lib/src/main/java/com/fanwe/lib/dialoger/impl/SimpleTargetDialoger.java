@@ -31,7 +31,7 @@ class SimpleTargetDialoger implements TargetDialoger
 {
     private final Dialoger mDialoger;
 
-    private final ViewUpdater mUpdater = new OnGlobalLayoutChangeUpdater();
+    private ViewUpdater mUpdater;
     private final ViewTracker mTracker = new FViewTracker();
     private Position mPosition;
 
@@ -49,7 +49,6 @@ class SimpleTargetDialoger implements TargetDialoger
             throw new NullPointerException("dialoger is null");
 
         mDialoger = dialoger;
-        initUpdater();
         initTracker();
 
         dialoger.addLifecycleCallback(new Dialoger.LifecycleCallback()
@@ -133,14 +132,14 @@ class SimpleTargetDialoger implements TargetDialoger
                             break;
                     }
 
-                    mUpdater.start();
+                    getUpdater().start();
                 }
             }
 
             @Override
             public void onStop(Dialoger dialoger)
             {
-                mUpdater.stop();
+                getUpdater().stop();
                 mTracker.setSource(null).setTarget(null);
                 mPosition = null;
                 mIsAnimatorCreaterModified = false;
@@ -166,33 +165,38 @@ class SimpleTargetDialoger implements TargetDialoger
         return mDialogerBackup;
     }
 
-    private void initUpdater()
+    private ViewUpdater getUpdater()
     {
-        mUpdater.setUpdatable(new ViewUpdater.Updatable()
+        if (mUpdater == null)
         {
-            @Override
-            public void update()
+            mUpdater = new OnGlobalLayoutChangeUpdater();
+            mUpdater.setUpdatable(new ViewUpdater.Updatable()
             {
-                mTracker.update();
-            }
-        });
-        mUpdater.setOnStateChangeCallback(new ViewUpdater.OnStateChangeCallback()
-        {
-            @Override
-            public void onStateChanged(boolean started, ViewUpdater updater)
-            {
-                if (started)
+                @Override
+                public void update()
                 {
-                    getDialogerBackup().backup(mDialoger);
-                } else
-                {
-                    getDialogerBackup().restore(mDialoger);
-
-                    if (mIsAnimatorCreaterModified && mModifyAnimatorCreater == mDialoger.getAnimatorCreater())
-                        mDialoger.setAnimatorCreater(null);
+                    mTracker.update();
                 }
-            }
-        });
+            });
+            mUpdater.setOnStateChangeCallback(new ViewUpdater.OnStateChangeCallback()
+            {
+                @Override
+                public void onStateChanged(boolean started, ViewUpdater updater)
+                {
+                    if (started)
+                    {
+                        getDialogerBackup().backup(mDialoger);
+                    } else
+                    {
+                        getDialogerBackup().restore(mDialoger);
+
+                        if (mIsAnimatorCreaterModified && mModifyAnimatorCreater == mDialoger.getAnimatorCreater())
+                            mDialoger.setAnimatorCreater(null);
+                    }
+                }
+            });
+        }
+        return mUpdater;
     }
 
     private void initTracker()
@@ -287,7 +291,7 @@ class SimpleTargetDialoger implements TargetDialoger
         final View contentView = mDialoger.getContentView();
         mTracker.setSource(contentView);
         mTracker.setTarget(target);
-        mUpdater.setView(contentView);
+        getUpdater().setView(contentView);
 
         mDialoger.show();
     }
