@@ -22,10 +22,10 @@ import com.fanwe.lib.dialoger.Dialoger;
 import com.fanwe.lib.dialoger.TargetDialoger;
 import com.fanwe.lib.dialoger.animator.PivotCreater;
 import com.fanwe.lib.dialoger.animator.ScaleXYCreater;
-import com.fanwe.lib.viewtracker.FViewTracker;
-import com.fanwe.lib.viewtracker.ViewTracker;
-import com.fanwe.lib.viewupdater.ViewUpdater;
-import com.fanwe.lib.viewupdater.impl.OnGlobalLayoutChangeUpdater;
+import com.sd.lib.viewtracker.FViewTracker;
+import com.sd.lib.viewtracker.ViewTracker;
+import com.sd.lib.viewupdater.ViewUpdater;
+import com.sd.lib.viewupdater.impl.OnGlobalLayoutChangeUpdater;
 
 class SimpleTargetDialoger implements TargetDialoger
 {
