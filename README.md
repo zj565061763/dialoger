@@ -1,5 +1,5 @@
 # About
-对dialog进行封装，提供更好用的api，可以让窗口显示在某个view的上下左右，实现原理：<br>
+对dialog进行封装，提供更好用的api，可以让窗口显示在某个view的上下左右<br>
 <br>
 ![](http://thumbsnap.com/i/qNJUXTJN.gif?0607)
 
