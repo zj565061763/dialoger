@@ -51,12 +51,12 @@ public abstract class ObjectAnimatorCreater extends BaseAnimatorCreater
     protected abstract float getValueCurrent(View view);
 
     /**
-     * 返回动画时长，默认300毫秒
+     * 返回动画时长，默认250毫秒
      *
      * @return
      */
     protected long getDuration()
     {
-        return 300;
+        return 250;
     }
 }
