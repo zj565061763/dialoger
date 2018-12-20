@@ -360,6 +360,14 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try dismiss");
 
+            if (getAnimatorHandler().isShowAnimatorStarted())
+            {
+                if (mIsDebug)
+                    Log.i(Dialoger.class.getSimpleName(), "cancel ShowAnimator before dismiss");
+
+                getAnimatorHandler().cancelShowAnimator();
+            }
+
             setLockDialoger(true);
             setTryStartShowAnimator(false);
 
