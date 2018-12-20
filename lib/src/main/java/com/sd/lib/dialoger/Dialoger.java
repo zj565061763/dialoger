@@ -205,7 +205,7 @@ public interface Dialoger
     boolean onTouchEvent(MotionEvent event);
 
     /**
-     * Activity需要调用此方法，如果此方法返回true的话，Activity那边的重写方法也要返回true
+     * 按键事件回调
      */
     boolean onKeyDown(int keyCode, KeyEvent event);
 
