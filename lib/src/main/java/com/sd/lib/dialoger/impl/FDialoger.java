@@ -341,7 +341,7 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try show");
 
-            mLockDialoger = false;
+            setLockDialoger(false);
             getDialog().show();
         }
     };
@@ -359,7 +359,7 @@ public class FDialoger implements Dialoger
                 if (mIsDebug)
                     Log.i(Dialoger.class.getSimpleName(), "try dismiss");
 
-                mLockDialoger = true;
+                setLockDialoger(true);
 
                 if (mActivity.isFinishing())
                 {
@@ -376,6 +376,16 @@ public class FDialoger implements Dialoger
             }
         }
     };
+
+    private void setLockDialoger(boolean lock)
+    {
+        if (mLockDialoger != lock)
+        {
+            mLockDialoger = lock;
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "setLockDialoger:" + lock);
+        }
+    }
 
     @Override
     public void startDismissRunnable(long delay)
@@ -748,7 +758,7 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
 
-            mLockDialoger = true;
+            setLockDialoger(true);
             mTryStartShowAnimator = false;
             stopDismissRunnable();
 
