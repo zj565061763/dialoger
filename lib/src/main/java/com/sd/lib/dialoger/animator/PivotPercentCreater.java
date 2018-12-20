@@ -10,77 +10,41 @@ import com.sd.lib.dialoger.Dialoger;
  */
 public class PivotPercentCreater extends BaseAnimatorCreater
 {
-    private final Dialoger.AnimatorCreater mCreater;
-    private final float mPivotXPercent;
-    private final float mPivotYPercent;
+    private final float mPivotPercentX;
+    private final float mPivotPercentY;
 
-    private PivotHolder mPivotHolder;
+    private final PivotCreater mPivotCreater;
 
     /**
      * @param creater
-     * @param pivotXPercent x方向锚点百分比[0-1]
-     * @param pivotYPercent y方向锚点百分比[0-1]
+     * @param pivotPercentX x方向锚点百分比[0-1]
+     * @param pivotPercentY y方向锚点百分比[0-1]
      */
-    public PivotPercentCreater(Dialoger.AnimatorCreater creater, float pivotXPercent, float pivotYPercent)
+    public PivotPercentCreater(Dialoger.AnimatorCreater creater, float pivotPercentX, float pivotPercentY)
     {
-        if (creater == null)
-            throw new NullPointerException("creater is null");
+        mPivotPercentX = pivotPercentX;
+        mPivotPercentY = pivotPercentY;
 
-        mCreater = creater;
-        mPivotXPercent = pivotXPercent;
-        mPivotYPercent = pivotYPercent;
-    }
-
-    protected final PivotHolder getPivotHolder()
-    {
-        if (mPivotHolder == null)
-            mPivotHolder = new PivotHolder();
-        return mPivotHolder;
+        mPivotCreater = new PivotCreater(creater, new PivotCreater.PivotProvider()
+        {
+            @Override
+            public float getPivot(boolean show, View view)
+            {
+                return mPivotPercentX * view.getWidth();
+            }
+        }, new PivotCreater.PivotProvider()
+        {
+            @Override
+            public float getPivot(boolean show, View view)
+            {
+                return mPivotPercentY * view.getHeight();
+            }
+        });
     }
 
     @Override
     protected final Animator onCreateAnimator(boolean show, View view)
     {
-        return mCreater.createAnimator(show, view);
-    }
-
-    @Override
-    protected void onAnimationStart(boolean show, View view)
-    {
-        super.onAnimationStart(show, view);
-        getPivotHolder().setPivotXY(mPivotXPercent * view.getWidth(), mPivotYPercent * view.getHeight(), view);
-    }
-
-    @Override
-    protected void onAnimationEnd(boolean show, View view)
-    {
-        super.onAnimationEnd(show, view);
-        getPivotHolder().restore(view);
-    }
-
-    private static class PivotHolder
-    {
-        private final float[] mPivotXYOriginal = new float[2];
-
-        public void setPivotXY(float pivotX, float pivotY, View view)
-        {
-            if (view == null)
-                return;
-
-            mPivotXYOriginal[0] = view.getPivotX();
-            mPivotXYOriginal[1] = view.getPivotY();
-
-            view.setPivotX(pivotX);
-            view.setPivotY(pivotY);
-        }
-
-        public void restore(View view)
-        {
-            if (view == null)
-                return;
-
-            view.setPivotX(mPivotXYOriginal[0]);
-            view.setPivotY(mPivotXYOriginal[1]);
-        }
+        return mPivotCreater.createAnimator(show, view);
     }
 }
