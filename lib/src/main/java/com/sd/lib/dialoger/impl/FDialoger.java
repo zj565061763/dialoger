@@ -991,7 +991,6 @@ public class FDialoger implements Dialoger
 
                     stopDismissRunnable();
 
-                    getAnimatorHandler().cancelShowAnimator();
                     if (!mRemoveByHideAnimator)
                         getAnimatorHandler().cancelHideAnimator();
                     mRemoveByHideAnimator = false;
