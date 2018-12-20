@@ -931,9 +931,9 @@ public class FDialoger implements Dialoger
                 protected void onStart()
                 {
                     super.onStart();
-                    setDefaultParams();
                     getActivityLifecycleCallbacks().register(true);
 
+                    setDefaultParams();
                     FDialoger.this.onStart();
                     if (mLifecycleCallbacks != null)
                     {
