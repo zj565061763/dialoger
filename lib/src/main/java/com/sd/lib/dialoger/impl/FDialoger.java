@@ -51,6 +51,8 @@ public class FDialoger implements Dialoger
     private boolean mCanceledOnTouchOutside = true;
     private int mGravity = Gravity.NO_GRAVITY;
 
+    private State mState = State.Dismissed;
+
     private OnDismissListener mOnDismissListener;
     private OnShowListener mOnShowListener;
     private List<LifecycleCallback> mLifecycleCallbacks;
@@ -321,22 +323,18 @@ public class FDialoger implements Dialoger
         @Override
         public void run()
         {
-            if (mActivity.isFinishing())
+            if (mState.isShowPart())
                 return;
 
-            // 隐藏动画是否正在执行
-            final boolean isHideAnimatorStarted = getAnimatorHandler().isHideAnimatorStarted();
-
-            if (isShowing())
-            {
-                if (!isHideAnimatorStarted)
-                    return;
-            }
+            if (mActivity.isFinishing())
+                return;
 
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try show");
 
-            if (isHideAnimatorStarted)
+            setState(State.TryShow);
+
+            if (getAnimatorHandler().isHideAnimatorStarted())
             {
                 if (mIsDebug)
                     Log.i(Dialoger.class.getSimpleName(), "cancel HideAnimator before show");
@@ -344,8 +342,8 @@ public class FDialoger implements Dialoger
                 getAnimatorHandler().cancelHideAnimator();
             }
 
-            setLockDialoger(false);
             getDialog().show();
+            setState(State.Shown);
         }
     };
 
@@ -354,14 +352,13 @@ public class FDialoger implements Dialoger
         @Override
         public void run()
         {
-            if (!isShowing())
-                return;
-
-            if (mLockDialoger)
+            if (mState.isDismissPart())
                 return;
 
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try dismiss");
+
+            setState(State.TryDismiss);
 
             if (getAnimatorHandler().isShowAnimatorStarted())
             {
@@ -372,7 +369,6 @@ public class FDialoger implements Dialoger
             }
 
             setLockDialoger(true);
-            setTryStartShowAnimator(false);
 
             if (mActivity.isFinishing())
             {
@@ -408,6 +404,28 @@ public class FDialoger implements Dialoger
             mTryStartShowAnimator = tryShow;
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "setTryStartShowAnimator:" + tryShow);
+        }
+    }
+
+    private void setState(State state)
+    {
+        if (state == null)
+            throw new NullPointerException();
+
+        if (mState != state)
+        {
+            if (mIsDebug)
+                Log.e(Dialoger.class.getSimpleName(), "setState:" + state);
+
+            mState = state;
+
+            if (state.isShowPart())
+            {
+                setLockDialoger(false);
+            } else if (state.isDismissPart())
+            {
+                setTryStartShowAnimator(false);
+            }
         }
     }
 
@@ -652,6 +670,7 @@ public class FDialoger implements Dialoger
 
         mRemoveByHideAnimator = removeByHideAnimator;
         getDialog().dismiss();
+        setState(State.Dismissed);
     }
 
     /**
@@ -937,6 +956,7 @@ public class FDialoger implements Dialoger
                     if (mIsDebug)
                         Log.i(Dialoger.class.getSimpleName(), "onStart");
 
+                    setState(State.OnStart);
                     getActivityLifecycleCallbacks().register(true);
 
                     FDialoger.this.onStart();
@@ -961,18 +981,15 @@ public class FDialoger implements Dialoger
                     if (mIsDebug)
                         Log.i(Dialoger.class.getSimpleName(), "onStop");
 
+                    setState(State.OnStop);
                     getActivityLifecycleCallbacks().register(false);
 
-                    setTryStartShowAnimator(false);
                     stopDismissRunnable();
 
                     getAnimatorHandler().cancelShowAnimator();
                     if (!mRemoveByHideAnimator)
                         getAnimatorHandler().cancelHideAnimator();
                     mRemoveByHideAnimator = false;
-
-                    if (mIsAnimatorCreaterModifiedInternal)
-                        setAnimatorCreater(null);
 
                     FDialoger.this.onStop();
                     if (mLifecycleCallbacks != null)
@@ -982,6 +999,9 @@ public class FDialoger implements Dialoger
                             item.onStop(FDialoger.this);
                         }
                     }
+
+                    if (mIsAnimatorCreaterModifiedInternal)
+                        setAnimatorCreater(null);
                 }
 
                 @Override
@@ -1116,6 +1136,27 @@ public class FDialoger implements Dialoger
         {
             if (activity == mActivity)
                 dismiss();
+        }
+    }
+
+    private enum State
+    {
+        TryShow,
+        OnStart,
+        Shown,
+
+        TryDismiss,
+        OnStop,
+        Dismissed;
+
+        public boolean isShowPart()
+        {
+            return this == Shown || this == OnStart || this == TryShow;
+        }
+
+        public boolean isDismissPart()
+        {
+            return this == Dismissed || this == OnStop || this == TryDismiss;
         }
     }
 }
