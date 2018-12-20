@@ -829,7 +829,7 @@ public class FDialoger implements Dialoger
         {
             super.onLayout(changed, l, t, r, b);
             if (changed)
-                FDialoger.this.checkLayoutParams(this);
+                FDialoger.this.checkMatchLayoutParams(this);
 
             if (mTryStartShowAnimator)
             {
@@ -852,11 +852,11 @@ public class FDialoger implements Dialoger
         {
             super.onLayout(changed, left, top, right, bottom);
             if (changed)
-                FDialoger.this.checkLayoutParams(this);
+                FDialoger.this.checkMatchLayoutParams(this);
         }
     }
 
-    private void checkLayoutParams(View view)
+    private void checkMatchLayoutParams(View view)
     {
         final FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) view.getLayoutParams();
         if (params.width != ViewGroup.LayoutParams.MATCH_PARENT
