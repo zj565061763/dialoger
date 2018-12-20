@@ -648,8 +648,7 @@ public class FDialoger implements Dialoger
      */
     protected void onStart()
     {
-        if (mIsDebug)
-            Log.i(Dialoger.class.getSimpleName(), "onStart");
+
     }
 
     /**
@@ -657,8 +656,7 @@ public class FDialoger implements Dialoger
      */
     protected void onStop()
     {
-        if (mIsDebug)
-            Log.i(Dialoger.class.getSimpleName(), "onStop");
+
     }
 
     private SimpleTargetDialoger mTargetDialoger;
@@ -767,18 +765,6 @@ public class FDialoger implements Dialoger
             super.onDetachedFromWindow();
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
-
-            setLockDialoger(true);
-            setTryStartShowAnimator(false);
-            stopDismissRunnable();
-
-            getAnimatorHandler().cancelShowAnimator();
-            if (!mRemoveByHideAnimator)
-                getAnimatorHandler().cancelHideAnimator();
-            mRemoveByHideAnimator = false;
-
-            if (mIsAnimatorCreaterModifiedInternal)
-                setAnimatorCreater(null);
         }
     }
 
@@ -937,6 +923,9 @@ public class FDialoger implements Dialoger
                 protected void onStart()
                 {
                     super.onStart();
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "onStart");
+
                     getActivityLifecycleCallbacks().register(true);
 
                     FDialoger.this.onStart();
@@ -958,7 +947,21 @@ public class FDialoger implements Dialoger
                 protected void onStop()
                 {
                     super.onStop();
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "onStop");
+
                     getActivityLifecycleCallbacks().register(false);
+
+                    setTryStartShowAnimator(false);
+                    stopDismissRunnable();
+
+                    getAnimatorHandler().cancelShowAnimator();
+                    if (!mRemoveByHideAnimator)
+                        getAnimatorHandler().cancelHideAnimator();
+                    mRemoveByHideAnimator = false;
+
+                    if (mIsAnimatorCreaterModifiedInternal)
+                        setAnimatorCreater(null);
 
                     FDialoger.this.onStop();
                     if (mLifecycleCallbacks != null)
@@ -986,9 +989,6 @@ public class FDialoger implements Dialoger
                 @Override
                 public void onShow(DialogInterface dialog)
                 {
-                    if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "onShow");
-
                     if (mOnShowListener != null)
                         mOnShowListener.onShow(FDialoger.this);
                 }
@@ -998,9 +998,6 @@ public class FDialoger implements Dialoger
                 @Override
                 public void onDismiss(DialogInterface dialog)
                 {
-                    if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "onDismiss");
-
                     if (mOnDismissListener != null)
                         mOnDismissListener.onDismiss(FDialoger.this);
                 }
