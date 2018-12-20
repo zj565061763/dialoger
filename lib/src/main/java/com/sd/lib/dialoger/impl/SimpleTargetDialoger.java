@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.sd.lib.dialoger.Dialoger;
 import com.sd.lib.dialoger.TargetDialoger;
-import com.sd.lib.dialoger.animator.PivotCreater;
+import com.sd.lib.dialoger.animator.PivotPercentCreater;
 import com.sd.lib.dialoger.animator.ScaleXYCreater;
 import com.sd.lib.viewtracker.FViewTracker;
 import com.sd.lib.viewtracker.ViewTracker;
@@ -47,73 +47,73 @@ class SimpleTargetDialoger implements TargetDialoger
                 {
                     case LeftOutside:
                         getTracker().setPosition(ViewTracker.Position.Left);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 0.5f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 1.0f, 0.5f));
                         break;
                     case LeftOutsideTop:
                         getTracker().setPosition(ViewTracker.Position.TopLeft);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 0.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 1.0f, 0.0f));
                         break;
                     case LeftOutsideCenter:
                         getTracker().setPosition(ViewTracker.Position.LeftCenter);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 0.5f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 1.0f, 0.5f));
                         break;
                     case LeftOutsideBottom:
                         getTracker().setPosition(ViewTracker.Position.BottomLeft);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 1.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 1.0f, 1.0f));
                         break;
 
 
                     case TopOutside:
                         getTracker().setPosition(ViewTracker.Position.Top);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.5f, 1.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.5f, 1.0f));
                         break;
                     case TopOutsideLeft:
                         getTracker().setPosition(ViewTracker.Position.TopLeft);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 1.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.0f, 1.0f));
                         break;
                     case TopOutsideCenter:
                         getTracker().setPosition(ViewTracker.Position.TopCenter);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.5f, 1.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.5f, 1.0f));
                         break;
                     case TopOutsideRight:
                         getTracker().setPosition(ViewTracker.Position.TopRight);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 1.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 1.0f, 1.0f));
                         break;
 
 
                     case RightOutside:
                         getTracker().setPosition(ViewTracker.Position.Right);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 0.5f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.0f, 0.5f));
                         break;
                     case RightOutsideTop:
                         getTracker().setPosition(ViewTracker.Position.TopRight);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 0.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.0f, 0.0f));
                         break;
                     case RightOutsideCenter:
                         getTracker().setPosition(ViewTracker.Position.RightCenter);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 0.5f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.0f, 0.5f));
                         break;
                     case RightOutsideBottom:
                         getTracker().setPosition(ViewTracker.Position.BottomRight);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 1.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.0f, 1.0f));
                         break;
 
 
                     case BottomOutside:
                         getTracker().setPosition(ViewTracker.Position.Bottom);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.5f, 0.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.5f, 0.0f));
                         break;
                     case BottomOutsideLeft:
                         getTracker().setPosition(ViewTracker.Position.BottomLeft);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.0f, 0.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.0f, 0.0f));
                         break;
                     case BottomOutsideCenter:
                         getTracker().setPosition(ViewTracker.Position.BottomCenter);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 0.5f, 0.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 0.5f, 0.0f));
                         break;
                     case BottomOutsideRight:
                         getTracker().setPosition(ViewTracker.Position.BottomRight);
-                        setDefaultAnimator(new PivotCreater(new ScaleXYCreater(), 1.0f, 0.0f));
+                        setDefaultAnimator(new PivotPercentCreater(new ScaleXYCreater(), 1.0f, 0.0f));
                         break;
                 }
 

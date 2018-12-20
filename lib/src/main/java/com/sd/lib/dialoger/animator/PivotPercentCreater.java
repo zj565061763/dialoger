@@ -8,7 +8,7 @@ import com.sd.lib.dialoger.Dialoger;
 /**
  * 在动画开始的时候修改view的锚点，动画结束后还原view的锚点
  */
-public class PivotCreater extends BaseAnimatorCreater
+public class PivotPercentCreater extends BaseAnimatorCreater
 {
     private final Dialoger.AnimatorCreater mCreater;
     private final float mPivotXPercent;
@@ -21,7 +21,7 @@ public class PivotCreater extends BaseAnimatorCreater
      * @param pivotXPercent x方向锚点百分比[0-1]
      * @param pivotYPercent y方向锚点百分比[0-1]
      */
-    public PivotCreater(Dialoger.AnimatorCreater creater, float pivotXPercent, float pivotYPercent)
+    public PivotPercentCreater(Dialoger.AnimatorCreater creater, float pivotXPercent, float pivotYPercent)
     {
         if (creater == null)
             throw new NullPointerException("creater is null");
