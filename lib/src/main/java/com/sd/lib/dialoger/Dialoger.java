@@ -168,16 +168,16 @@ public interface Dialoger
     int getPaddingBottom();
 
     /**
-     * 显示窗口
-     */
-    void show();
-
-    /**
      * 窗口是否正在显示
      *
      * @return
      */
     boolean isShowing();
+
+    /**
+     * 显示窗口
+     */
+    void show();
 
     /**
      * 关闭窗口

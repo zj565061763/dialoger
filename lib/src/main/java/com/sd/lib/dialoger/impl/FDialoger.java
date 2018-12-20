@@ -285,6 +285,12 @@ public class FDialoger implements Dialoger
     }
 
     @Override
+    public boolean isShowing()
+    {
+        return getDialog().isShowing();
+    }
+
+    @Override
     public void show()
     {
         if (Looper.myLooper() == Looper.getMainLooper())
@@ -294,6 +300,19 @@ public class FDialoger implements Dialoger
         {
             getDialogerHandler().removeCallbacks(mShowRunnable);
             getDialogerHandler().post(mShowRunnable);
+        }
+    }
+
+    @Override
+    public void dismiss()
+    {
+        if (Looper.myLooper() == Looper.getMainLooper())
+        {
+            mDismissRunnable.run();
+        } else
+        {
+            getDialogerHandler().removeCallbacks(mDismissRunnable);
+            getDialogerHandler().post(mDismissRunnable);
         }
     }
 
@@ -326,25 +345,6 @@ public class FDialoger implements Dialoger
             getDialog().show();
         }
     };
-
-    @Override
-    public boolean isShowing()
-    {
-        return getDialog().isShowing();
-    }
-
-    @Override
-    public void dismiss()
-    {
-        if (Looper.myLooper() == Looper.getMainLooper())
-        {
-            mDismissRunnable.run();
-        } else
-        {
-            getDialogerHandler().removeCallbacks(mDismissRunnable);
-            getDialogerHandler().post(mDismissRunnable);
-        }
-    }
 
     private final Runnable mDismissRunnable = new Runnable()
     {
