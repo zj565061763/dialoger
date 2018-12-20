@@ -881,6 +881,13 @@ public class FDialoger implements Dialoger
                 getAnimatorHandler().startShowAnimator();
             }
         }
+
+        @Override
+        protected void onAttachedToWindow()
+        {
+            super.onAttachedToWindow();
+            setTryStartShowAnimator(true);
+        }
     }
 
     private final class InternalBackgroundView extends View
@@ -968,10 +975,8 @@ public class FDialoger implements Dialoger
                         }
                     }
 
-                    setTryStartShowAnimator(true);
-
-                    setDefaultConfigBeforeShow();
                     setDefaultParams();
+                    setDefaultConfigBeforeShow();
                 }
 
                 @Override
