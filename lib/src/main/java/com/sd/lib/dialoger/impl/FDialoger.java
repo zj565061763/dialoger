@@ -512,8 +512,6 @@ public class FDialoger implements Dialoger
         }
     }
 
-    private boolean mRemoveByHideAnimator;
-
     private VisibilityAnimatorHandler getAnimatorHandler()
     {
         if (mAnimatorHandler == null)
@@ -665,7 +663,6 @@ public class FDialoger implements Dialoger
         if (mIsDebug)
             Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by hideAnimator:" + removeByHideAnimator);
 
-        mRemoveByHideAnimator = removeByHideAnimator;
         getDialog().dismiss();
         setState(State.Dismissed);
     }
@@ -989,10 +986,6 @@ public class FDialoger implements Dialoger
                     getActivityLifecycleCallbacks().register(false);
 
                     stopDismissRunnable();
-
-                    if (!mRemoveByHideAnimator)
-                        getAnimatorHandler().cancelHideAnimator();
-                    mRemoveByHideAnimator = false;
 
                     FDialoger.this.onStop();
                     if (mLifecycleCallbacks != null)
