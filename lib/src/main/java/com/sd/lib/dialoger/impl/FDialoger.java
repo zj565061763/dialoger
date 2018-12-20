@@ -367,7 +367,7 @@ public class FDialoger implements Dialoger
                     return;
                 }
 
-                mTryStartShowAnimator = false;
+                setTryStartShowAnimator(false);
                 getAnimatorHandler().setHideAnimator(createAnimator(false));
                 if (getAnimatorHandler().startHideAnimator())
                     return;
@@ -384,6 +384,16 @@ public class FDialoger implements Dialoger
             mLockDialoger = lock;
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "setLockDialoger:" + lock);
+        }
+    }
+
+    private void setTryStartShowAnimator(boolean tryShow)
+    {
+        if (mTryStartShowAnimator != tryShow)
+        {
+            mTryStartShowAnimator = tryShow;
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "setTryStartShowAnimator:" + tryShow);
         }
     }
 
@@ -759,7 +769,7 @@ public class FDialoger implements Dialoger
                 Log.i(Dialoger.class.getSimpleName(), "onDetachedFromWindow");
 
             setLockDialoger(true);
-            mTryStartShowAnimator = false;
+            setTryStartShowAnimator(false);
             stopDismissRunnable();
 
             getAnimatorHandler().cancelShowAnimator();
@@ -844,9 +854,9 @@ public class FDialoger implements Dialoger
 
             if (mTryStartShowAnimator)
             {
+                setTryStartShowAnimator(false);
                 getAnimatorHandler().setShowAnimator(createAnimator(true));
                 getAnimatorHandler().startShowAnimator();
-                mTryStartShowAnimator = false;
             }
         }
     }
@@ -934,7 +944,7 @@ public class FDialoger implements Dialoger
                     }
 
                     setDefaultConfigBeforeShow();
-                    mTryStartShowAnimator = true;
+                    setTryStartShowAnimator(true);
                 }
 
                 @Override
