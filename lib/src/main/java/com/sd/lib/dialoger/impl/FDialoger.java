@@ -324,22 +324,25 @@ public class FDialoger implements Dialoger
             if (mActivity.isFinishing())
                 return;
 
+            // 隐藏动画是否正在执行
+            final boolean isHideAnimatorStarted = getAnimatorHandler().isHideAnimatorStarted();
+
             if (isShowing())
             {
-                if (getAnimatorHandler().isHideAnimatorStarted())
-                {
-                    if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "cancel HideAnimator before show");
-
-                    getAnimatorHandler().cancelHideAnimator();
-                } else
-                {
+                if (!isHideAnimatorStarted)
                     return;
-                }
             }
 
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "try show");
+
+            if (isHideAnimatorStarted)
+            {
+                if (mIsDebug)
+                    Log.i(Dialoger.class.getSimpleName(), "cancel HideAnimator before show");
+
+                getAnimatorHandler().cancelHideAnimator();
+            }
 
             setLockDialoger(false);
             getDialog().show();
