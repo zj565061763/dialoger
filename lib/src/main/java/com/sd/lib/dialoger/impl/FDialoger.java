@@ -653,7 +653,7 @@ public class FDialoger implements Dialoger
         }
 
         if (mIsDebug)
-            Log.i(Dialoger.class.getSimpleName(), "createAnimator " + (show ? "show" : "dismiss") + " " + animator);
+            Log.i(Dialoger.class.getSimpleName(), "createAnimator " + (show ? "show" : "dismiss") + " animator " + (animator == null ? "null" : "not null"));
 
         return animator;
     }
