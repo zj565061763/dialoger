@@ -939,7 +939,6 @@ public class FDialoger implements Dialoger
                     super.onStart();
                     getActivityLifecycleCallbacks().register(true);
 
-                    setDefaultParams();
                     FDialoger.this.onStart();
                     if (mLifecycleCallbacks != null)
                     {
@@ -949,8 +948,10 @@ public class FDialoger implements Dialoger
                         }
                     }
 
-                    setDefaultConfigBeforeShow();
                     setTryStartShowAnimator(true);
+
+                    setDefaultConfigBeforeShow();
+                    setDefaultParams();
                 }
 
                 @Override
