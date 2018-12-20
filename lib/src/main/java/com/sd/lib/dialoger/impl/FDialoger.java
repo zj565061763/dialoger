@@ -985,6 +985,9 @@ public class FDialoger implements Dialoger
                 @Override
                 public void onShow(DialogInterface dialog)
                 {
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "onShow");
+
                     if (mOnShowListener != null)
                         mOnShowListener.onShow(FDialoger.this);
                 }
@@ -994,6 +997,9 @@ public class FDialoger implements Dialoger
                 @Override
                 public void onDismiss(DialogInterface dialog)
                 {
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "onDismiss");
+
                     if (mOnDismissListener != null)
                         mOnDismissListener.onDismiss(FDialoger.this);
                 }
