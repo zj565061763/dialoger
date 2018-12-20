@@ -351,27 +351,30 @@ public class FDialoger implements Dialoger
         @Override
         public void run()
         {
-            if (isShowing())
+            if (!isShowing())
+                return;
+
+            if (mLockDialoger)
+                return;
+
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "try dismiss");
+
+            setLockDialoger(true);
+            setTryStartShowAnimator(false);
+
+            if (mActivity.isFinishing())
             {
-                if (mLockDialoger)
-                    return;
+                removeDialogerView(false);
+                return;
+            }
 
-                if (mIsDebug)
-                    Log.i(Dialoger.class.getSimpleName(), "try dismiss");
-
-                setLockDialoger(true);
-
-                if (mActivity.isFinishing())
-                {
-                    removeDialogerView(false);
-                    return;
-                }
-
-                setTryStartShowAnimator(false);
-                getAnimatorHandler().setHideAnimator(createAnimator(false));
-                if (getAnimatorHandler().startHideAnimator())
-                    return;
-
+            getAnimatorHandler().setHideAnimator(createAnimator(false));
+            if (getAnimatorHandler().startHideAnimator())
+            {
+                // 等待动画结束后让窗口消失
+            } else
+            {
                 removeDialogerView(false);
             }
         }
