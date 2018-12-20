@@ -680,14 +680,11 @@ public class FDialoger implements Dialoger
         {
             super(context);
 
-            final ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT);
-
             mBackgroundView = new InternalBackgroundView(context);
-            addView(mBackgroundView, params);
+            addView(mBackgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             mContainerView = new InernalContainerView(context);
-            addView(mContainerView, params);
+            addView(mContainerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
 
         @Override
