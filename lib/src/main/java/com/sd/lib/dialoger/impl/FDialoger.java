@@ -419,10 +419,7 @@ public class FDialoger implements Dialoger
 
             mState = state;
 
-            if (state.isShowPart())
-            {
-                setLockDialoger(false);
-            } else if (state.isDismissPart())
+            if (state.isDismissPart())
             {
                 setTryStartShowAnimator(false);
             }
@@ -974,6 +971,8 @@ public class FDialoger implements Dialoger
                             item.onStart(FDialoger.this);
                         }
                     }
+
+                    setLockDialoger(false);
 
                     setDefaultParams();
                     setDefaultConfigBeforeShow();
