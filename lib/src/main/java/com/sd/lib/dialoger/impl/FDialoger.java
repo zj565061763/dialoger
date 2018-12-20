@@ -832,6 +832,9 @@ public class FDialoger implements Dialoger
             super.onViewAdded(child);
             if (child != mContentView)
                 throw new RuntimeException("you can not add view to container");
+
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "onContentViewAdded:" + child);
         }
 
         @Override
@@ -843,6 +846,9 @@ public class FDialoger implements Dialoger
                 // 外部直接移除内容view的话，关闭窗口
                 dismiss();
             }
+
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "onContentViewRemoved:" + child);
         }
 
         @Override
