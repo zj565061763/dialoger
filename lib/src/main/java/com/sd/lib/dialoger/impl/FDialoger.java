@@ -147,7 +147,7 @@ public class FDialoger implements Dialoger
             }
 
             if (mIsDebug)
-                Log.i(Dialoger.class.getSimpleName(), "oldView:" + old + " newView:" + view);
+                Log.i(Dialoger.class.getSimpleName(), "onContentViewChanged:" + old + " , " + view);
 
             onContentViewChanged(old, view);
         }
