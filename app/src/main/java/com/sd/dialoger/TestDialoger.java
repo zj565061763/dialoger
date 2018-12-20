@@ -18,9 +18,12 @@ public class TestDialoger extends FDialoger
     }
 
     @Override
-    protected void onContentViewAdded(View contentView)
+    protected void onContentViewChanged(View oldView, View contentView)
     {
-        super.onContentViewAdded(contentView);
+        super.onContentViewChanged(oldView, contentView);
+        if (contentView == null)
+            return;
+
         contentView.findViewById(R.id.btn).setOnClickListener(new View.OnClickListener()
         {
             @Override

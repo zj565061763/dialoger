@@ -144,15 +144,16 @@ public class FDialoger implements Dialoger
                 }
 
                 mContainerView.addView(view, p);
-                onContentViewAdded(view);
-
-                if (mIsDebug)
-                    Log.i(Dialoger.class.getSimpleName(), "contentView:" + view);
             }
+
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "oldView:" + old + " newView:" + view);
+
+            onContentViewChanged(old, view);
         }
     }
 
-    protected void onContentViewAdded(View contentView)
+    protected void onContentViewChanged(View oldView, View contentView)
     {
     }
 
