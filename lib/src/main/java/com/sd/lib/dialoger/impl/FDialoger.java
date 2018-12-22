@@ -469,7 +469,12 @@ public class FDialoger implements Dialoger
         if (keyCode == KeyEvent.KEYCODE_BACK)
         {
             if (mCancelable)
+            {
+                if (mIsDebug)
+                    Log.i(Dialoger.class.getSimpleName(), "KEYCODE_BACK down try dismiss ");
+
                 dismiss();
+            }
             return true;
         }
         return false;
