@@ -59,8 +59,6 @@ public interface Dialoger
 
     /**
      * 设置按返回键是否可以关闭窗口，默认true
-     * <br>
-     * 此方法需要传递按键事件后才有效{@link #onKeyDown(int, KeyEvent)}
      *
      * @param cancel
      */
