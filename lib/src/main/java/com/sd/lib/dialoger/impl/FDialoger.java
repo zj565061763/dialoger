@@ -289,7 +289,7 @@ public class FDialoger implements Dialoger
     @Override
     public boolean isShowing()
     {
-        return getDialog().isShowing();
+        return mState == State.Shown;
     }
 
     @Override
@@ -466,7 +466,7 @@ public class FDialoger implements Dialoger
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
-        if (isShowing() && keyCode == KeyEvent.KEYCODE_BACK)
+        if (keyCode == KeyEvent.KEYCODE_BACK)
         {
             if (mCancelable)
                 dismiss();
