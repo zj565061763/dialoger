@@ -1131,7 +1131,18 @@ public class FDialoger implements Dialoger
         public void onActivityDestroyed(Activity activity)
         {
             if (activity == mActivity)
-                dismiss();
+            {
+                if (mIsDebug)
+                    Log.e(Dialoger.class.getSimpleName(), "onActivityDestroyed try remove dialoger");
+
+                if (getAnimatorHandler().isShowAnimatorStarted())
+                    getAnimatorHandler().cancelShowAnimator();
+
+                if (getAnimatorHandler().isHideAnimatorStarted())
+                    getAnimatorHandler().cancelHideAnimator();
+
+                removeDialogerView(false);
+            }
         }
     }
 
