@@ -767,6 +767,9 @@ public class FDialoger implements Dialoger
                 {
                     if (mCanceledOnTouchOutside)
                     {
+                        if (mIsDebug)
+                            Log.i(Dialoger.class.getSimpleName(), "touch outside try dismiss ");
+
                         dismiss();
                         return true;
                     }
