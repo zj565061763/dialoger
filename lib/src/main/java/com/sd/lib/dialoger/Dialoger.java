@@ -58,7 +58,7 @@ public interface Dialoger
     <T extends View> T findViewById(int id);
 
     /**
-     * 设置按返回键是否可以关闭窗口，默认true
+     * 设置窗口是否可以按返回键或者触摸非内容view区域关闭，默认true
      *
      * @param cancel
      */
@@ -206,6 +206,11 @@ public interface Dialoger
      * 按键事件回调
      */
     boolean onKeyDown(int keyCode, KeyEvent event);
+
+    /**
+     * 返回键按下回调
+     */
+    void onBackPressed();
 
     /**
      * 返回TargetDialoger对象

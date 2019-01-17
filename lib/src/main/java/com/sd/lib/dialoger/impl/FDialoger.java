@@ -466,18 +466,19 @@ public class FDialoger implements Dialoger
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {
-            if (mCancelable)
-            {
-                if (mIsDebug)
-                    Log.i(Dialoger.class.getSimpleName(), "KEYCODE_BACK down try dismiss ");
-
-                dismiss();
-            }
-            return true;
-        }
         return false;
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        if (mCancelable)
+        {
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "onBackPressed try dismiss ");
+
+            dismiss();
+        }
     }
 
     private void setDefaultConfigBeforeShow()
@@ -765,7 +766,7 @@ public class FDialoger implements Dialoger
             {
                 if (!isViewUnder(mContentView, (int) event.getX(), (int) event.getY()))
                 {
-                    if (mCanceledOnTouchOutside)
+                    if (mCanceledOnTouchOutside && mCancelable)
                     {
                         if (mIsDebug)
                             Log.i(Dialoger.class.getSimpleName(), "touch outside try dismiss ");
@@ -1014,7 +1015,16 @@ public class FDialoger implements Dialoger
                     if (mLockDialoger)
                         return false;
 
-                    return FDialoger.this.onKeyDown(keyCode, event);
+                    if (FDialoger.this.onKeyDown(keyCode, event))
+                        return true;
+
+                    return super.onKeyDown(keyCode, event);
+                }
+
+                @Override
+                public void onBackPressed()
+                {
+                    FDialoger.this.onBackPressed();
                 }
             };
             mDialog.setCanceledOnTouchOutside(false);
