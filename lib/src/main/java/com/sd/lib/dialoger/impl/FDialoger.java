@@ -936,18 +936,16 @@ public class FDialoger implements Dialoger
                 private void setDefaultParams()
                 {
                     final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-                    final int targetHeight = mActivity.getResources().getDisplayMetrics().heightPixels - getActivityStatusBarHeight(mActivity);
+                    final int targetHeight = ViewGroup.LayoutParams.MATCH_PARENT;
 
                     final WindowManager.LayoutParams params = getWindow().getAttributes();
                     if (params.width != targetWidth || params.height != targetHeight
-                            || params.horizontalMargin != 0 || params.verticalMargin != 0
-                            || params.gravity != Gravity.BOTTOM)
+                            || params.horizontalMargin != 0 || params.verticalMargin != 0)
                     {
                         params.width = targetWidth;
                         params.height = targetHeight;
                         params.horizontalMargin = 0;
                         params.verticalMargin = 0;
-                        params.gravity = Gravity.BOTTOM;
                         getWindow().setAttributes(params);
                     }
 
