@@ -9,7 +9,7 @@ import com.sd.lib.dialoger.impl.FDialoger;
 
 public class PositionDialoger extends FDialoger implements View.OnClickListener
 {
-    private View mTargetView;
+    private final View mTargetView;
 
     private Button btn_left_top, btn_left_center, btn_left_bottom;
     private Button btn_right_top, btn_right_center, btn_right_bottom;

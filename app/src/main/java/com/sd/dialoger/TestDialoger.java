@@ -12,19 +12,11 @@ public class TestDialoger extends FDialoger
     {
         super(activity);
         setDebug(true);
-        setContentView(R.layout.dialoger_test);
         setPadding(0, 0, 0, 0);
         setBackgroundColor(0);
-    }
 
-    @Override
-    protected void onContentViewChanged(View oldView, View contentView)
-    {
-        super.onContentViewChanged(oldView, contentView);
-        if (contentView == null)
-            return;
-
-        contentView.findViewById(R.id.btn).setOnClickListener(new View.OnClickListener()
+        setContentView(R.layout.dialoger_test);
+        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
