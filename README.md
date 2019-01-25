@@ -46,31 +46,6 @@ private void showSimpleDemo()
     });
 
     /**
-     * 设置按返回键是否可以关闭窗口，默认true
-     */
-    dialoger.setCancelable(true);
-
-    /**
-     * 设置触摸到非内容区域是否关闭窗口，默认true
-     */
-    dialoger.setCanceledOnTouchOutside(true);
-
-    /**
-     * 设置窗口背景颜色，默认#66000000
-     */
-    dialoger.setBackgroundColor(Color.parseColor("#66000000"));
-
-    /**
-     * 设置上下左右间距
-     */
-    dialoger.setPadding(0, 0, 0, 0);
-
-    /**
-     * 设置重力属性，默认居中显示
-     */
-    dialoger.setGravity(Gravity.CENTER);
-
-    /**
      * 设置窗口内容view动画创建对象，此处设置为透明度变化，可以实现AnimatorCreater接口来实现自定义动画
      *
      * 默认规则:
