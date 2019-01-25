@@ -86,6 +86,9 @@ public class FDialoger implements Dialoger
         mContainerView = dialogerView.mContainerView;
         mBackgroundView = dialogerView.mBackgroundView;
 
+        final int defaultPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
+        setPadding(defaultPadding, 0, defaultPadding, 0);
+
         setGravity(Gravity.CENTER);
         setBackgroundColor(Color.parseColor("#66000000"));
     }
