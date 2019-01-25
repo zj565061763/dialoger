@@ -677,20 +677,12 @@ public class FDialoger implements Dialoger
         setState(State.Dismissed);
     }
 
-    /**
-     * dialog显示之前回调
-     */
     protected void onStart()
     {
-
     }
 
-    /**
-     * dialog关闭之前回调
-     */
     protected void onStop()
     {
-
     }
 
     private SimpleTargetDialoger mTargetDialoger;
