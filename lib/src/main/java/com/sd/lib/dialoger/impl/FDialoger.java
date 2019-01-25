@@ -40,12 +40,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
+    private final int mThemeResId;
+
     private final View mDialogerView;
     private final View mBackgroundView;
     private final LinearLayout mContainerView;
     private View mContentView;
-
-    private AnimatorCreater mBackgroundViewAnimatorCreater;
 
     private boolean mCancelable = true;
     private boolean mCanceledOnTouchOutside = true;
@@ -61,18 +61,25 @@ public class FDialoger implements Dialoger
 
     private VisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mAnimatorCreater;
-    private boolean mTryStartShowAnimator;
+    private AnimatorCreater mBackgroundViewAnimatorCreater;
 
+    private boolean mTryStartShowAnimator;
     private boolean mIsAnimatorCreaterModifiedInternal;
 
     private boolean mIsDebug;
 
     public FDialoger(Activity activity)
     {
+        this(activity, R.style.lib_dialoger_default);
+    }
+
+    public FDialoger(Activity activity, int themeResId)
+    {
         if (activity == null)
             throw new NullPointerException("activity is null");
 
         mActivity = activity;
+        mThemeResId = themeResId;
 
         final InternalDialogerView dialogerView = new InternalDialogerView(activity);
         mDialogerView = dialogerView;
@@ -925,100 +932,7 @@ public class FDialoger implements Dialoger
     {
         if (mDialog == null)
         {
-            mDialog = new Dialog(mActivity, R.style.lib_dialoger_default)
-            {
-                private void setDefaultParams()
-                {
-                    final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-                    final int targetHeight = ViewGroup.LayoutParams.MATCH_PARENT;
-
-                    final WindowManager.LayoutParams params = getWindow().getAttributes();
-                    if (params.width != targetWidth || params.height != targetHeight
-                            || params.horizontalMargin != 0 || params.verticalMargin != 0)
-                    {
-                        params.width = targetWidth;
-                        params.height = targetHeight;
-                        params.horizontalMargin = 0;
-                        params.verticalMargin = 0;
-                        getWindow().setAttributes(params);
-                    }
-
-                    final View view = getWindow().getDecorView();
-                    if (view.getPaddingLeft() != 0 || view.getPaddingTop() != 0
-                            || view.getPaddingRight() != 0 || view.getPaddingBottom() != 0)
-                    {
-                        view.setPadding(0, 0, 0, 0);
-                    }
-                }
-
-                @Override
-                protected void onStart()
-                {
-                    super.onStart();
-                    if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "onStart");
-
-                    setState(State.OnStart);
-                    getActivityLifecycleCallbacks().register(true);
-
-                    FDialoger.this.onStart();
-                    if (mLifecycleCallbacks != null)
-                    {
-                        for (LifecycleCallback item : mLifecycleCallbacks)
-                        {
-                            item.onStart(FDialoger.this);
-                        }
-                    }
-
-                    setLockDialoger(false);
-
-                    setDefaultParams();
-                    setDefaultConfigBeforeShow();
-                }
-
-                @Override
-                protected void onStop()
-                {
-                    super.onStop();
-                    if (mIsDebug)
-                        Log.i(Dialoger.class.getSimpleName(), "onStop");
-
-                    setState(State.OnStop);
-                    getActivityLifecycleCallbacks().register(false);
-
-                    stopDismissRunnable();
-
-                    FDialoger.this.onStop();
-                    if (mLifecycleCallbacks != null)
-                    {
-                        for (LifecycleCallback item : mLifecycleCallbacks)
-                        {
-                            item.onStop(FDialoger.this);
-                        }
-                    }
-
-                    if (mIsAnimatorCreaterModifiedInternal)
-                        setAnimatorCreater(null);
-                }
-
-                @Override
-                public boolean onKeyDown(int keyCode, KeyEvent event)
-                {
-                    if (mLockDialoger)
-                        return false;
-
-                    if (FDialoger.this.onKeyDown(keyCode, event))
-                        return true;
-
-                    return super.onKeyDown(keyCode, event);
-                }
-
-                @Override
-                public void onBackPressed()
-                {
-                    FDialoger.this.onBackPressed();
-                }
-            };
+            mDialog = new InternalDialog(mActivity, mThemeResId);
             mDialog.setCanceledOnTouchOutside(false);
             mDialog.setCancelable(false);
             mDialog.setOnShowListener(new DialogInterface.OnShowListener()
@@ -1044,6 +958,106 @@ public class FDialoger implements Dialoger
                     ViewGroup.LayoutParams.MATCH_PARENT));
         }
         return mDialog;
+    }
+
+    private final class InternalDialog extends Dialog
+    {
+        public InternalDialog(Context context, int themeResId)
+        {
+            super(context, themeResId);
+        }
+
+        private void setDefaultParams()
+        {
+            final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
+            final int targetHeight = ViewGroup.LayoutParams.MATCH_PARENT;
+
+            final WindowManager.LayoutParams params = getWindow().getAttributes();
+            if (params.width != targetWidth || params.height != targetHeight
+                    || params.horizontalMargin != 0 || params.verticalMargin != 0)
+            {
+                params.width = targetWidth;
+                params.height = targetHeight;
+                params.horizontalMargin = 0;
+                params.verticalMargin = 0;
+                getWindow().setAttributes(params);
+            }
+
+            final View view = getWindow().getDecorView();
+            if (view.getPaddingLeft() != 0 || view.getPaddingTop() != 0
+                    || view.getPaddingRight() != 0 || view.getPaddingBottom() != 0)
+            {
+                view.setPadding(0, 0, 0, 0);
+            }
+        }
+
+        @Override
+        protected void onStart()
+        {
+            super.onStart();
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "onStart");
+
+            setState(State.OnStart);
+            getActivityLifecycleCallbacks().register(true);
+
+            FDialoger.this.onStart();
+            if (mLifecycleCallbacks != null)
+            {
+                for (LifecycleCallback item : mLifecycleCallbacks)
+                {
+                    item.onStart(FDialoger.this);
+                }
+            }
+
+            setLockDialoger(false);
+
+            setDefaultParams();
+            setDefaultConfigBeforeShow();
+        }
+
+        @Override
+        protected void onStop()
+        {
+            super.onStop();
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "onStop");
+
+            setState(State.OnStop);
+            getActivityLifecycleCallbacks().register(false);
+
+            stopDismissRunnable();
+
+            FDialoger.this.onStop();
+            if (mLifecycleCallbacks != null)
+            {
+                for (LifecycleCallback item : mLifecycleCallbacks)
+                {
+                    item.onStop(FDialoger.this);
+                }
+            }
+
+            if (mIsAnimatorCreaterModifiedInternal)
+                setAnimatorCreater(null);
+        }
+
+        @Override
+        public boolean onKeyDown(int keyCode, KeyEvent event)
+        {
+            if (mLockDialoger)
+                return false;
+
+            if (FDialoger.this.onKeyDown(keyCode, event))
+                return true;
+
+            return super.onKeyDown(keyCode, event);
+        }
+
+        @Override
+        public void onBackPressed()
+        {
+            FDialoger.this.onBackPressed();
+        }
     }
 
     private InternalActivityLifecycleCallbacks mActivityLifecycleCallbacks;
