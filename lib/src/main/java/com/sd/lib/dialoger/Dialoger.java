@@ -128,7 +128,7 @@ public interface Dialoger
     int getGravity();
 
     /**
-     * 设置上下左右间距
+     * 设置上下左右间距，如果某个方向的值小于0，则该方向的padding保持原有的值不变
      *
      * @param left
      * @param top

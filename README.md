@@ -269,9 +269,7 @@ public interface Dialoger
     <T extends View> T findViewById(int id);
 
     /**
-     * 设置按返回键是否可以关闭窗口，默认true
-     * <br>
-     * 此方法需要传递按键事件后才有效{@link #onKeyDown(int, KeyEvent)}
+     * 设置窗口是否可以按返回键或者触摸非内容view区域关闭，默认true
      *
      * @param cancel
      */
@@ -341,7 +339,7 @@ public interface Dialoger
     int getGravity();
 
     /**
-     * 设置上下左右间距
+     * 设置上下左右间距，如果某个方向的值小于0，则该方向的padding保持原有的值不变
      *
      * @param left
      * @param top
@@ -379,16 +377,16 @@ public interface Dialoger
     int getPaddingBottom();
 
     /**
-     * 显示窗口
-     */
-    void show();
-
-    /**
      * 窗口是否正在显示
      *
      * @return
      */
     boolean isShowing();
+
+    /**
+     * 显示窗口
+     */
+    void show();
 
     /**
      * 关闭窗口
@@ -416,9 +414,14 @@ public interface Dialoger
     boolean onTouchEvent(MotionEvent event);
 
     /**
-     * Activity需要调用此方法，如果此方法返回true的话，Activity那边的重写方法也要返回true
+     * 按键事件回调
      */
     boolean onKeyDown(int keyCode, KeyEvent event);
+
+    /**
+     * 返回键按下回调
+     */
+    void onBackPressed();
 
     /**
      * 返回TargetDialoger对象
