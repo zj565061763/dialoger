@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialoger.setCancelable(true);
 
         /**
-         * 设置触摸到非内容区域是否关闭窗口，默认false
+         * 设置触摸到非内容区域是否关闭窗口，默认true
          */
         dialoger.setCanceledOnTouchOutside(true);
 
