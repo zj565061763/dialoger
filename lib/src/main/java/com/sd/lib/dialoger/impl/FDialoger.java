@@ -1052,29 +1052,6 @@ public class FDialoger implements Dialoger
         return mDialog;
     }
 
-    private static int getActivityStatusBarHeight(Activity activity)
-    {
-        final boolean isStatusBarVisible = ((activity.getWindow().getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == 0);
-        if (isStatusBarVisible)
-        {
-            return getStatusBarHeight(activity);
-        } else
-        {
-            return 0;
-        }
-    }
-
-    private static int getStatusBarHeight(Context context)
-    {
-        int result = 0;
-
-        final int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0)
-            result = context.getResources().getDimensionPixelSize(resourceId);
-
-        return result;
-    }
-
     private static long getAnimatorDuration(Animator animator)
     {
         long duration = animator.getDuration();
