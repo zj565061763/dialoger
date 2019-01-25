@@ -104,6 +104,7 @@ interface AnimatorCreater
 * SlideLeftRightCreater 向左滑入，向右滑出，默认距离为内容view的宽度
 * SlideRightLeftCreater 向右滑入，向左滑出，默认距离为内容view的宽度
 * PivotCreater 为包装类，可以在动画开始的时候改变view的锚点
+* PivotPercentCreater 为包装类，可以在动画开始的时候改变view的锚点，根据百分比改变
 * CombineCreater 为组合类，可以同时组合多个不同的creater
 
 # 显示在某个View周围
