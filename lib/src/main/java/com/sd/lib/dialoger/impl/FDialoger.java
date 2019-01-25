@@ -1046,25 +1046,6 @@ public class FDialoger implements Dialoger
         return mDialog;
     }
 
-    private static long getAnimatorDuration(Animator animator)
-    {
-        long duration = animator.getDuration();
-        if (duration < 0)
-        {
-            if (animator instanceof AnimatorSet)
-            {
-                final List<Animator> list = ((AnimatorSet) animator).getChildAnimations();
-                for (Animator item : list)
-                {
-                    final long durationItem = getAnimatorDuration(item);
-                    if (durationItem > duration)
-                        duration = durationItem;
-                }
-            }
-        }
-        return duration;
-    }
-
     private InternalActivityLifecycleCallbacks mActivityLifecycleCallbacks;
 
     private InternalActivityLifecycleCallbacks getActivityLifecycleCallbacks()
@@ -1152,5 +1133,24 @@ public class FDialoger implements Dialoger
         {
             return this == Dismissed || this == OnStop || this == TryDismiss;
         }
+    }
+
+    private static long getAnimatorDuration(Animator animator)
+    {
+        long duration = animator.getDuration();
+        if (duration < 0)
+        {
+            if (animator instanceof AnimatorSet)
+            {
+                final List<Animator> list = ((AnimatorSet) animator).getChildAnimations();
+                for (Animator item : list)
+                {
+                    final long durationItem = getAnimatorDuration(item);
+                    if (durationItem > duration)
+                        duration = durationItem;
+                }
+            }
+        }
+        return duration;
     }
 }
