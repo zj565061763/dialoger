@@ -931,7 +931,7 @@ public class FDialoger implements Dialoger
     {
         if (mDialog == null)
         {
-            mDialog = new Dialog(mActivity, R.style.lib_dialoger_dialoger)
+            mDialog = new Dialog(mActivity, R.style.lib_dialoger_default)
             {
                 private void setDefaultParams()
                 {
