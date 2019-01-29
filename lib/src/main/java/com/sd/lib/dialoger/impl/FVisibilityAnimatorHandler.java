@@ -1,8 +1,8 @@
-package com.sd.lib.dialoger.utils;
+package com.sd.lib.dialoger.impl;
 
 import android.animation.Animator;
 
-public final class VisibilityAnimatorHandler
+class FVisibilityAnimatorHandler
 {
     private Animator mShowAnimator;
     private Animator mHideAnimator;

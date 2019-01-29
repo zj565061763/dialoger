@@ -32,7 +32,6 @@ import com.sd.lib.dialoger.animator.SlideBottomTopCreater;
 import com.sd.lib.dialoger.animator.SlideLeftRightCreater;
 import com.sd.lib.dialoger.animator.SlideRightLeftCreater;
 import com.sd.lib.dialoger.animator.SlideTopBottomCreater;
-import com.sd.lib.dialoger.utils.VisibilityAnimatorHandler;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -59,7 +58,7 @@ public class FDialoger implements Dialoger
 
     private boolean mLockDialoger;
 
-    private VisibilityAnimatorHandler mAnimatorHandler;
+    private FVisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreater mAnimatorCreater;
     private AnimatorCreater mBackgroundViewAnimatorCreater;
 
@@ -522,11 +521,11 @@ public class FDialoger implements Dialoger
         }
     }
 
-    private VisibilityAnimatorHandler getAnimatorHandler()
+    private FVisibilityAnimatorHandler getAnimatorHandler()
     {
         if (mAnimatorHandler == null)
         {
-            mAnimatorHandler = new VisibilityAnimatorHandler();
+            mAnimatorHandler = new FVisibilityAnimatorHandler();
             mAnimatorHandler.setShowAnimatorListener(new AnimatorListenerAdapter()
             {
                 @Override
