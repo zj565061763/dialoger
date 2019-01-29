@@ -10,6 +10,9 @@ public final class VisibilityAnimatorHandler
     private final AnimatorListenerWrapper mShowAnimatorListener = new AnimatorListenerWrapper();
     private final AnimatorListenerWrapper mHideAnimatorListener = new AnimatorListenerWrapper();
 
+
+    //---------- Show start ----------
+
     /**
      * 设置显示动画
      *
@@ -17,15 +20,16 @@ public final class VisibilityAnimatorHandler
      */
     public void setShowAnimator(Animator animator)
     {
-        if (mShowAnimator != animator)
+        final Animator old = mShowAnimator;
+        if (old != animator)
         {
-            if (animator != null)
-                animator.removeListener(mShowAnimatorListener);
+            if (old != null)
+                old.removeListener(mShowAnimatorListener);
 
             mShowAnimator = animator;
 
-            if (mShowAnimator != null)
-                mShowAnimator.addListener(mShowAnimatorListener);
+            if (animator != null)
+                animator.addListener(mShowAnimatorListener);
         }
     }
 
@@ -73,9 +77,14 @@ public final class VisibilityAnimatorHandler
      */
     public void cancelShowAnimator()
     {
-        if (isShowAnimatorStarted())
+        if (mShowAnimator != null)
             mShowAnimator.cancel();
     }
+
+    //---------- Show end ----------
+
+
+    //---------- Hide start ----------
 
     /**
      * 设置隐藏动画
@@ -84,15 +93,16 @@ public final class VisibilityAnimatorHandler
      */
     public void setHideAnimator(Animator animator)
     {
-        if (mHideAnimator != animator)
+        final Animator old = mHideAnimator;
+        if (old != animator)
         {
-            if (animator != null)
-                animator.removeListener(mHideAnimatorListener);
+            if (old != null)
+                old.removeListener(mHideAnimatorListener);
 
             mHideAnimator = animator;
 
-            if (mHideAnimator != null)
-                mHideAnimator.addListener(mHideAnimatorListener);
+            if (animator != null)
+                animator.addListener(mHideAnimatorListener);
         }
     }
 
@@ -140,11 +150,13 @@ public final class VisibilityAnimatorHandler
      */
     public void cancelHideAnimator()
     {
-        if (isHideAnimatorStarted())
+        if (mHideAnimator != null)
             mHideAnimator.cancel();
     }
 
-    private static class AnimatorListenerWrapper implements Animator.AnimatorListener
+    //---------- Hide end ----------
+
+    private static final class AnimatorListenerWrapper implements Animator.AnimatorListener
     {
         private Animator.AnimatorListener mOriginal;
 
