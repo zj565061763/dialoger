@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.sd.lib.dialoger.Dialoger;
 
-public final class EmptyCreater implements Dialoger.AnimatorCreater
+public final class EmptyCreator implements Dialoger.AnimatorCreator
 {
     @Override
     public Animator createAnimator(boolean show, View view)

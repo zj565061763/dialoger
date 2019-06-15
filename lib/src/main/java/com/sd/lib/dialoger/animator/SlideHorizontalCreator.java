@@ -5,7 +5,7 @@ import android.view.View;
 /**
  * 水平方向滑动
  */
-public abstract class SlideHorizontalCreater extends ObjectAnimatorCreater
+public abstract class SlideHorizontalCreator extends ObjectAnimatorCreator
 {
     @Override
     protected final String getPropertyName()

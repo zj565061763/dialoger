@@ -5,7 +5,7 @@ import android.view.View;
 /**
  * 缩放y
  */
-public class ScaleYCreater extends ObjectAnimatorCreater
+public class ScaleYCreator extends ObjectAnimatorCreator
 {
     @Override
     protected final String getPropertyName()

@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.sd.lib.dialoger.Dialoger;
-import com.sd.lib.dialoger.animator.AlphaCreater;
+import com.sd.lib.dialoger.animator.AlphaCreator;
 import com.sd.lib.dialoger.impl.FDialoger;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
@@ -59,25 +59,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         /**
-         * 设置窗口内容view动画创建对象，此处设置为透明度变化，可以实现AnimatorCreater接口来实现自定义动画
+         * 设置窗口内容view动画创建对象，此处设置为透明度变化，可以实现AnimatorCreator接口来实现自定义动画
          *
          * 默认规则:
-         * Gravity.CENTER:                      AlphaCreater 透明度
+         * Gravity.CENTER:                      AlphaCreator 透明度
          *
-         * Gravity.LEFT:                        SlideRightLeftCreater 向右滑入，向左滑出
-         * Gravity.LEFT | Gravity.CENTER:       SlideRightLeftCreater
+         * Gravity.LEFT:                        SlideRightLeftCreator 向右滑入，向左滑出
+         * Gravity.LEFT | Gravity.CENTER:       SlideRightLeftCreator
          *
-         * Gravity.TOP:                         SlideBottomTopCreater 向下滑入，向上滑出
-         * Gravity.TOP | Gravity.CENTER:        SlideBottomTopCreater
+         * Gravity.TOP:                         SlideBottomTopCreator 向下滑入，向上滑出
+         * Gravity.TOP | Gravity.CENTER:        SlideBottomTopCreator
          *
-         * Gravity.RIGHT:                       SlideLeftRightCreater 向左滑入，向右滑出
-         * case Gravity.RIGHT | Gravity.CENTER: SlideLeftRightCreater
+         * Gravity.RIGHT:                       SlideLeftRightCreator 向左滑入，向右滑出
+         * case Gravity.RIGHT | Gravity.CENTER: SlideLeftRightCreator
          *
-         * Gravity.BOTTOM:                      SlideTopBottomCreater 向上滑入，向下滑出
-         * Gravity.BOTTOM | Gravity.CENTER:     SlideTopBottomCreater
+         * Gravity.BOTTOM:                      SlideTopBottomCreator 向上滑入，向下滑出
+         * Gravity.BOTTOM | Gravity.CENTER:     SlideTopBottomCreator
          *
          */
-        dialoger.setAnimatorCreater(new AlphaCreater());
+        dialoger.setAnimatorCreator(new AlphaCreator());
 
         /**
          * 显示窗口

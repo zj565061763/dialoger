@@ -3,14 +3,14 @@ package com.sd.lib.dialoger.animator;
 import android.view.View;
 
 /**
- * 向右滑入，向左滑出
+ * 向上滑入，向下滑出
  */
-public class SlideRightLeftCreater extends SlideHorizontalCreater
+public class SlideTopBottomCreator extends SlideVerticalCreator
 {
     @Override
     protected float getValueHidden(View view)
     {
-        return -view.getWidth();
+        return view.getHeight();
     }
 
     @Override

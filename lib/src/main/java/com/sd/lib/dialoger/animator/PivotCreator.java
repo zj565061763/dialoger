@@ -8,21 +8,21 @@ import com.sd.lib.dialoger.Dialoger;
 /**
  * 在动画开始的时候修改view的锚点，动画结束后还原view的锚点
  */
-public class PivotCreater extends BaseAnimatorCreater
+public class PivotCreator extends BaseAnimatorCreator
 {
-    private final Dialoger.AnimatorCreater mCreater;
+    private final Dialoger.AnimatorCreator mCreator;
 
     private PivotProvider mPivotProviderX;
     private PivotProvider mPivotProviderY;
 
     private PivotHolder mPivotHolder;
 
-    public PivotCreater(Dialoger.AnimatorCreater creater, PivotProvider pivotProviderX, PivotProvider pivotProviderY)
+    public PivotCreator(Dialoger.AnimatorCreator creator, PivotProvider pivotProviderX, PivotProvider pivotProviderY)
     {
-        if (creater == null)
-            throw new NullPointerException("creater is null");
+        if (creator == null)
+            throw new NullPointerException("creator is null");
 
-        mCreater = creater;
+        mCreator = creator;
         mPivotProviderX = pivotProviderX;
         mPivotProviderY = pivotProviderY;
     }
@@ -37,7 +37,7 @@ public class PivotCreater extends BaseAnimatorCreater
     @Override
     protected final Animator onCreateAnimator(boolean show, View view)
     {
-        return mCreater.createAnimator(show, view);
+        return mCreator.createAnimator(show, view);
     }
 
     @Override

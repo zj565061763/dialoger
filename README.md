@@ -46,25 +46,25 @@ private void showSimpleDemo()
     });
 
     /**
-     * 设置窗口内容view动画创建对象，此处设置为透明度变化，可以实现AnimatorCreater接口来实现自定义动画
+     * 设置窗口内容view动画创建对象，此处设置为透明度变化，可以实现AnimatorCreator接口来实现自定义动画
      *
      * 默认规则:
-     * Gravity.CENTER:                      AlphaCreater 透明度
+     * Gravity.CENTER:                      AlphaCreator 透明度
      *
-     * Gravity.LEFT:                        SlideRightLeftCreater 向右滑入，向左滑出
-     * Gravity.LEFT | Gravity.CENTER:       SlideRightLeftCreater
+     * Gravity.LEFT:                        SlideRightLeftCreator 向右滑入，向左滑出
+     * Gravity.LEFT | Gravity.CENTER:       SlideRightLeftCreator
      *
-     * Gravity.TOP:                         SlideBottomTopCreater 向下滑入，向上滑出
-     * Gravity.TOP | Gravity.CENTER:        SlideBottomTopCreater
+     * Gravity.TOP:                         SlideBottomTopCreator 向下滑入，向上滑出
+     * Gravity.TOP | Gravity.CENTER:        SlideBottomTopCreator
      *
-     * Gravity.RIGHT:                       SlideLeftRightCreater 向左滑入，向右滑出
-     * case Gravity.RIGHT | Gravity.CENTER: SlideLeftRightCreater
+     * Gravity.RIGHT:                       SlideLeftRightCreator 向左滑入，向右滑出
+     * case Gravity.RIGHT | Gravity.CENTER: SlideLeftRightCreator
      *
-     * Gravity.BOTTOM:                      SlideTopBottomCreater 向上滑入，向下滑出
-     * Gravity.BOTTOM | Gravity.CENTER:     SlideTopBottomCreater
+     * Gravity.BOTTOM:                      SlideTopBottomCreator 向上滑入，向下滑出
+     * Gravity.BOTTOM | Gravity.CENTER:     SlideTopBottomCreator
      *
      */
-    dialoger.setAnimatorCreater(new AlphaCreater());
+    dialoger.setAnimatorCreator(new AlphaCreator());
 
     /**
      * 显示窗口
@@ -79,7 +79,7 @@ private void showSimpleDemo()
 /**
  * 动画创建接口
  */
-interface AnimatorCreater
+interface AnimatorCreator
 {
     /**
      * 创建动画
@@ -95,17 +95,17 @@ interface AnimatorCreater
 ```
 
 库中已经提供的实现类有：
-* AlphaCreater 透明度
-* ScaleXCreater 缩放宽度
-* ScaleYCreater 缩放高度
-* ScaleXYCreater 缩放宽高
-* SlideBottomTopCreater 向下滑入，向上滑出，默认距离为内容view的高度
-* SlideTopBottomCreater 向上滑入，向下滑出，默认距离为内容view的高度
-* SlideLeftRightCreater 向左滑入，向右滑出，默认距离为内容view的宽度
-* SlideRightLeftCreater 向右滑入，向左滑出，默认距离为内容view的宽度
-* PivotCreater 为包装类，可以在动画开始的时候改变view的锚点
-* PivotPercentCreater 为包装类，可以在动画开始的时候改变view的锚点，根据百分比改变
-* CombineCreater 为组合类，可以同时组合多个不同的creater
+* AlphaCreator 透明度
+* ScaleXCreator 缩放宽度
+* ScaleYCreator 缩放高度
+* ScaleXYCreator 缩放宽高
+* SlideBottomTopCreator 向下滑入，向上滑出，默认距离为内容view的高度
+* SlideTopBottomCreator 向上滑入，向下滑出，默认距离为内容view的高度
+* SlideLeftRightCreator 向左滑入，向右滑出，默认距离为内容view的宽度
+* SlideRightLeftCreator 向右滑入，向左滑出，默认距离为内容view的宽度
+* PivotCreator 为包装类，可以在动画开始的时候改变view的锚点
+* PivotPercentCreator 为包装类，可以在动画开始的时候改变view的锚点，根据百分比改变
+* CombineCreator 为组合类，可以同时组合多个不同的creator
 
 # 显示在某个View周围
 
@@ -261,6 +261,13 @@ public interface Dialoger
     void setBackgroundColor(int color);
 
     /**
+     * 是否显示任务栏
+     *
+     * @param show
+     */
+    void setShowStatusBar(boolean show);
+
+    /**
      * 根据id查找view
      *
      * @param id
@@ -314,16 +321,16 @@ public interface Dialoger
     /**
      * 设置窗口内容view动画创建对象
      *
-     * @param creater
+     * @param creator
      */
-    void setAnimatorCreater(AnimatorCreater creater);
+    void setAnimatorCreator(AnimatorCreator creator);
 
     /**
      * 返回窗口内容view动画创建对象
      *
      * @return
      */
-    AnimatorCreater getAnimatorCreater();
+    AnimatorCreator getAnimatorCreator();
 
     /**
      * 设置重力属性{@link android.view.Gravity}
@@ -460,7 +467,7 @@ public interface Dialoger
     /**
      * 动画创建接口
      */
-    interface AnimatorCreater
+    interface AnimatorCreator
     {
         /**
          * 创建动画

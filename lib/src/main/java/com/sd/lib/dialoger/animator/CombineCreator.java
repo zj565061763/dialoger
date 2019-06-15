@@ -6,38 +6,38 @@ import android.view.View;
 
 import com.sd.lib.dialoger.Dialoger;
 
-public class CombineCreater extends BaseAnimatorCreater
+public class CombineCreator extends BaseAnimatorCreator
 {
-    private final Dialoger.AnimatorCreater[] mCreaters;
+    private final Dialoger.AnimatorCreator[] mCreators;
 
-    public CombineCreater(Dialoger.AnimatorCreater... creaters)
+    public CombineCreator(Dialoger.AnimatorCreator... creators)
     {
-        if (creaters == null || creaters.length <= 0)
-            throw new IllegalArgumentException("creaters is null or empty");
+        if (creators == null || creators.length <= 0)
+            throw new IllegalArgumentException("creators is null or empty");
 
-        for (Dialoger.AnimatorCreater item : creaters)
+        for (Dialoger.AnimatorCreator item : creators)
         {
             if (item == null)
-                throw new NullPointerException("creaters array contains null item");
+                throw new NullPointerException("creators array contains null item");
         }
 
-        mCreaters = creaters;
+        mCreators = creators;
     }
 
-    protected final Dialoger.AnimatorCreater[] getCreaters()
+    protected final Dialoger.AnimatorCreator[] getCreators()
     {
-        return mCreaters;
+        return mCreators;
     }
 
     private Animator getAnimator(boolean show, View view)
     {
-        final Dialoger.AnimatorCreater[] creaters = getCreaters();
+        final Dialoger.AnimatorCreator[] creators = getCreators();
         final AnimatorSet animatorSet = new AnimatorSet();
 
         Animator mLast = null;
-        for (int i = 0; i < creaters.length; i++)
+        for (int i = 0; i < creators.length; i++)
         {
-            final Animator animator = creaters[i].createAnimator(show, view);
+            final Animator animator = creators[i].createAnimator(show, view);
             if (animator == null)
                 continue;
 

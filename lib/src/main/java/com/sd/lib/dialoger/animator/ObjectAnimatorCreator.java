@@ -4,7 +4,7 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.view.View;
 
-public abstract class ObjectAnimatorCreater extends BaseAnimatorCreater
+public abstract class ObjectAnimatorCreator extends BaseAnimatorCreator
 {
     @Override
     protected final Animator onCreateAnimator(boolean show, View view)

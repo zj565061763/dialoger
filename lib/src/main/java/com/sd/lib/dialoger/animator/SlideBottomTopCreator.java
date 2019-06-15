@@ -5,7 +5,7 @@ import android.view.View;
 /**
  * 向下滑入，向上滑出
  */
-public class SlideBottomTopCreater extends SlideVerticalCreater
+public class SlideBottomTopCreator extends SlideVerticalCreator
 {
     @Override
     protected float getValueHidden(View view)

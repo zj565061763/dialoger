@@ -8,31 +8,31 @@ import com.sd.lib.dialoger.Dialoger;
 /**
  * 在动画开始的时候修改view的锚点，动画结束后还原view的锚点
  */
-public class PivotPercentCreater extends BaseAnimatorCreater
+public class PivotPercentCreator extends BaseAnimatorCreator
 {
     private final float mPivotPercentX;
     private final float mPivotPercentY;
 
-    private final PivotCreater mPivotCreater;
+    private final PivotCreator mPivotCreator;
 
     /**
-     * @param creater
+     * @param creator
      * @param pivotPercentX x方向锚点百分比[0-1]
      * @param pivotPercentY y方向锚点百分比[0-1]
      */
-    public PivotPercentCreater(Dialoger.AnimatorCreater creater, float pivotPercentX, float pivotPercentY)
+    public PivotPercentCreator(Dialoger.AnimatorCreator creator, float pivotPercentX, float pivotPercentY)
     {
         mPivotPercentX = pivotPercentX;
         mPivotPercentY = pivotPercentY;
 
-        mPivotCreater = new PivotCreater(creater, new PivotCreater.PivotProvider()
+        mPivotCreator = new PivotCreator(creator, new PivotCreator.PivotProvider()
         {
             @Override
             public float getPivot(boolean show, View view)
             {
                 return mPivotPercentX * view.getWidth();
             }
-        }, new PivotCreater.PivotProvider()
+        }, new PivotCreator.PivotProvider()
         {
             @Override
             public float getPivot(boolean show, View view)
@@ -45,6 +45,6 @@ public class PivotPercentCreater extends BaseAnimatorCreater
     @Override
     protected final Animator onCreateAnimator(boolean show, View view)
     {
-        return mPivotCreater.createAnimator(show, view);
+        return mPivotCreator.createAnimator(show, view);
     }
 }

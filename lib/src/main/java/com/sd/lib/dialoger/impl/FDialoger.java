@@ -26,12 +26,12 @@ import android.widget.LinearLayout;
 import com.sd.lib.dialoger.Dialoger;
 import com.sd.lib.dialoger.R;
 import com.sd.lib.dialoger.TargetDialoger;
-import com.sd.lib.dialoger.animator.AlphaCreater;
-import com.sd.lib.dialoger.animator.ObjectAnimatorCreater;
-import com.sd.lib.dialoger.animator.SlideBottomTopCreater;
-import com.sd.lib.dialoger.animator.SlideLeftRightCreater;
-import com.sd.lib.dialoger.animator.SlideRightLeftCreater;
-import com.sd.lib.dialoger.animator.SlideTopBottomCreater;
+import com.sd.lib.dialoger.animator.AlphaCreator;
+import com.sd.lib.dialoger.animator.ObjectAnimatorCreator;
+import com.sd.lib.dialoger.animator.SlideBottomTopCreator;
+import com.sd.lib.dialoger.animator.SlideLeftRightCreator;
+import com.sd.lib.dialoger.animator.SlideRightLeftCreator;
+import com.sd.lib.dialoger.animator.SlideTopBottomCreator;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -61,11 +61,11 @@ public class FDialoger implements Dialoger
     private boolean mLockDialoger;
 
     private FVisibilityAnimatorHandler mAnimatorHandler;
-    private AnimatorCreater mAnimatorCreater;
-    private AnimatorCreater mBackgroundViewAnimatorCreater;
+    private AnimatorCreator mAnimatorCreator;
+    private AnimatorCreator mBackgroundViewAnimatorCreator;
 
     private boolean mTryStartShowAnimator;
-    private boolean mIsAnimatorCreaterModifiedInternal;
+    private boolean mIsAnimatorCreatorModifiedInternal;
 
     private boolean mIsDebug;
 
@@ -246,16 +246,16 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public void setAnimatorCreater(AnimatorCreater creater)
+    public void setAnimatorCreator(AnimatorCreator creator)
     {
-        mAnimatorCreater = creater;
-        mIsAnimatorCreaterModifiedInternal = false;
+        mAnimatorCreator = creator;
+        mIsAnimatorCreatorModifiedInternal = false;
     }
 
     @Override
-    public AnimatorCreater getAnimatorCreater()
+    public AnimatorCreator getAnimatorCreator()
     {
-        return mAnimatorCreater;
+        return mAnimatorCreator;
     }
 
     @Override
@@ -497,33 +497,33 @@ public class FDialoger implements Dialoger
 
     private void setDefaultConfigBeforeShow()
     {
-        if (mAnimatorCreater == null)
+        if (mAnimatorCreator == null)
         {
             switch (mGravity)
             {
                 case Gravity.CENTER:
-                    setAnimatorCreater(new AlphaCreater());
-                    mIsAnimatorCreaterModifiedInternal = true;
+                    setAnimatorCreator(new AlphaCreator());
+                    mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.LEFT:
                 case Gravity.LEFT | Gravity.CENTER:
-                    setAnimatorCreater(new SlideRightLeftCreater());
-                    mIsAnimatorCreaterModifiedInternal = true;
+                    setAnimatorCreator(new SlideRightLeftCreator());
+                    mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.TOP:
                 case Gravity.TOP | Gravity.CENTER:
-                    setAnimatorCreater(new SlideBottomTopCreater());
-                    mIsAnimatorCreaterModifiedInternal = true;
+                    setAnimatorCreator(new SlideBottomTopCreator());
+                    mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.RIGHT:
                 case Gravity.RIGHT | Gravity.CENTER:
-                    setAnimatorCreater(new SlideLeftRightCreater());
-                    mIsAnimatorCreaterModifiedInternal = true;
+                    setAnimatorCreator(new SlideLeftRightCreator());
+                    mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.BOTTOM:
                 case Gravity.BOTTOM | Gravity.CENTER:
-                    setAnimatorCreater(new SlideTopBottomCreater());
-                    mIsAnimatorCreaterModifiedInternal = true;
+                    setAnimatorCreator(new SlideTopBottomCreator());
+                    mIsAnimatorCreatorModifiedInternal = true;
                     break;
             }
         }
@@ -592,11 +592,11 @@ public class FDialoger implements Dialoger
         return mAnimatorHandler;
     }
 
-    private AnimatorCreater getBackgroundViewAnimatorCreater()
+    private AnimatorCreator getBackgroundViewAnimatorCreator()
     {
-        if (mBackgroundViewAnimatorCreater == null)
+        if (mBackgroundViewAnimatorCreator == null)
         {
-            mBackgroundViewAnimatorCreater = new ObjectAnimatorCreater()
+            mBackgroundViewAnimatorCreator = new ObjectAnimatorCreator()
             {
                 @Override
                 protected String getPropertyName()
@@ -638,7 +638,7 @@ public class FDialoger implements Dialoger
                 }
             };
         }
-        return mBackgroundViewAnimatorCreater;
+        return mBackgroundViewAnimatorCreator;
     }
 
     private Animator createAnimator(boolean show)
@@ -646,10 +646,10 @@ public class FDialoger implements Dialoger
         Animator animator = null;
 
         final Animator animatorBackground = (mBackgroundView.getBackground() == null) ?
-                null : getBackgroundViewAnimatorCreater().createAnimator(show, mBackgroundView);
+                null : getBackgroundViewAnimatorCreator().createAnimator(show, mBackgroundView);
 
-        final Animator animatorContent = (mAnimatorCreater == null || mContentView == null) ?
-                null : mAnimatorCreater.createAnimator(show, mContentView);
+        final Animator animatorContent = (mAnimatorCreator == null || mContentView == null) ?
+                null : mAnimatorCreator.createAnimator(show, mContentView);
 
         if (animatorBackground != null && animatorContent != null)
         {
@@ -1044,8 +1044,8 @@ public class FDialoger implements Dialoger
                 }
             }
 
-            if (mIsAnimatorCreaterModifiedInternal)
-                setAnimatorCreater(null);
+            if (mIsAnimatorCreatorModifiedInternal)
+                setAnimatorCreator(null);
         }
 
         @Override

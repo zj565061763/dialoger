@@ -3,14 +3,14 @@ package com.sd.lib.dialoger.animator;
 import android.view.View;
 
 /**
- * 缩放x
+ * 透明度
  */
-public class ScaleXCreater extends ObjectAnimatorCreater
+public class AlphaCreator extends ObjectAnimatorCreator
 {
     @Override
     protected final String getPropertyName()
     {
-        return View.SCALE_X.getName();
+        return View.ALPHA.getName();
     }
 
     @Override
@@ -28,6 +28,6 @@ public class ScaleXCreater extends ObjectAnimatorCreater
     @Override
     protected float getValueCurrent(View view)
     {
-        return view.getScaleX();
+        return view.getAlpha();
     }
 }

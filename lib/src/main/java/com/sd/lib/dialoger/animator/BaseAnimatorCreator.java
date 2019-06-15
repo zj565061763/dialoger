@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.sd.lib.dialoger.Dialoger;
 
-public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
+public abstract class BaseAnimatorCreator implements Dialoger.AnimatorCreator
 {
     @Override
     public final Animator createAnimator(final boolean show, final View view)
@@ -22,7 +22,7 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
                 public void onAnimationStart(Animator animation)
                 {
                     super.onAnimationStart(animation);
-                    BaseAnimatorCreater.this.onAnimationStart(show, view);
+                    BaseAnimatorCreator.this.onAnimationStart(show, view);
                 }
 
                 @Override
@@ -30,7 +30,7 @@ public abstract class BaseAnimatorCreater implements Dialoger.AnimatorCreater
                 {
                     super.onAnimationEnd(animation);
                     animation.removeListener(this);
-                    BaseAnimatorCreater.this.onAnimationEnd(show, view);
+                    BaseAnimatorCreator.this.onAnimationEnd(show, view);
                 }
             });
             onAnimatorCreated(show, view, animator);

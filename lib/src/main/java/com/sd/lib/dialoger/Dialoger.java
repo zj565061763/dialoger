@@ -109,16 +109,16 @@ public interface Dialoger
     /**
      * 设置窗口内容view动画创建对象
      *
-     * @param creater
+     * @param creator
      */
-    void setAnimatorCreater(AnimatorCreater creater);
+    void setAnimatorCreator(AnimatorCreator creator);
 
     /**
      * 返回窗口内容view动画创建对象
      *
      * @return
      */
-    AnimatorCreater getAnimatorCreater();
+    AnimatorCreator getAnimatorCreator();
 
     /**
      * 设置重力属性{@link android.view.Gravity}
@@ -255,7 +255,7 @@ public interface Dialoger
     /**
      * 动画创建接口
      */
-    interface AnimatorCreater
+    interface AnimatorCreator
     {
         /**
          * 创建动画
