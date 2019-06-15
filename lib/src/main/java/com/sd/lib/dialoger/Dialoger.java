@@ -49,6 +49,13 @@ public interface Dialoger
     void setBackgroundColor(int color);
 
     /**
+     * 是否显示任务栏
+     *
+     * @param show
+     */
+    void setShowStatusBar(boolean show);
+
+    /**
      * 根据id查找view
      *
      * @param id

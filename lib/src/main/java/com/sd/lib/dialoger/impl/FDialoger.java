@@ -52,6 +52,8 @@ public class FDialoger implements Dialoger
 
     private State mState = State.Dismissed;
 
+    private boolean mShowStatusBar = false;
+
     private OnDismissListener mOnDismissListener;
     private OnShowListener mOnShowListener;
     private List<LifecycleCallback> mLifecycleCallbacks;
@@ -172,6 +174,12 @@ public class FDialoger implements Dialoger
             mBackgroundView.setBackgroundDrawable(null);
         else
             mBackgroundView.setBackgroundColor(color);
+    }
+
+    @Override
+    public void setShowStatusBar(boolean show)
+    {
+        mShowStatusBar = show;
     }
 
     @Override
@@ -983,6 +991,11 @@ public class FDialoger implements Dialoger
             {
                 view.setPadding(0, 0, 0, 0);
             }
+
+            if (mShowStatusBar)
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            else
+                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         @Override
