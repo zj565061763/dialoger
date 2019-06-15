@@ -714,7 +714,7 @@ public class FDialoger implements Dialoger
             mBackgroundView = new InternalBackgroundView(context);
             addView(mBackgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
-            mContainerView = new InernalContainerView(context);
+            mContainerView = new InternalContainerView(context);
             addView(mContainerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
 
@@ -804,9 +804,9 @@ public class FDialoger implements Dialoger
         }
     }
 
-    private final class InernalContainerView extends LinearLayout
+    private final class InternalContainerView extends LinearLayout
     {
-        public InernalContainerView(Context context)
+        public InternalContainerView(Context context)
         {
             super(context);
         }
