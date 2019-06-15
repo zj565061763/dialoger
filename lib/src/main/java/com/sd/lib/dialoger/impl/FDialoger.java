@@ -424,7 +424,7 @@ public class FDialoger implements Dialoger
     private void setState(State state)
     {
         if (state == null)
-            throw new NullPointerException();
+            throw new IllegalArgumentException("state is null");
 
         if (mState != state)
         {
