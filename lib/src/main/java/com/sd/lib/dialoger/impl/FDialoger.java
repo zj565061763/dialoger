@@ -52,7 +52,7 @@ public class FDialoger implements Dialoger
 
     private State mState = State.Dismissed;
 
-    private boolean mShowStatusBar = false;
+    private boolean mShowStatusBar = true;
 
     private OnDismissListener mOnDismissListener;
     private OnShowListener mOnShowListener;
