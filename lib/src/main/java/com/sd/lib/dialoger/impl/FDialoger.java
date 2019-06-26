@@ -421,6 +421,19 @@ public class FDialoger implements Dialoger
         }
     }
 
+    private void startShowAnimator()
+    {
+        if (mTryStartShowAnimator)
+        {
+            if (mIsDebug)
+                Log.i(Dialoger.class.getSimpleName(), "startShowAnimator");
+
+            setTryStartShowAnimator(false);
+            getAnimatorHandler().setShowAnimator(createAnimator(true));
+            getAnimatorHandler().startShowAnimator();
+        }
+    }
+
     private void setState(State state)
     {
         if (state == null)
@@ -880,12 +893,7 @@ public class FDialoger implements Dialoger
             if (changed)
                 FDialoger.this.checkMatchLayoutParams(this);
 
-            if (mTryStartShowAnimator)
-            {
-                setTryStartShowAnimator(false);
-                getAnimatorHandler().setShowAnimator(createAnimator(true));
-                getAnimatorHandler().startShowAnimator();
-            }
+            startShowAnimator();
         }
 
         @Override
@@ -893,6 +901,9 @@ public class FDialoger implements Dialoger
         {
             super.onAttachedToWindow();
             setTryStartShowAnimator(true);
+
+            if (getWidth() > 0 && getHeight() > 0)
+                startShowAnimator();
         }
     }
 
