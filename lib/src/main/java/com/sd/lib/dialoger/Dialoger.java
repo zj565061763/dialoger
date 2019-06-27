@@ -51,9 +51,9 @@ public interface Dialoger
     /**
      * 是否显示任务栏，默认true-显示
      *
-     * @param show
+     * @param show true-显示，false-不显示，null-跟随Activity
      */
-    void setShowStatusBar(boolean show);
+    void setShowStatusBar(Boolean show);
 
     /**
      * 根据id查找view

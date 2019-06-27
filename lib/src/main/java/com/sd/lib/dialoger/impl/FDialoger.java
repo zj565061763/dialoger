@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -51,7 +52,7 @@ public class FDialoger implements Dialoger
 
     private State mState = State.Dismissed;
 
-    private boolean mShowStatusBar = true;
+    private Boolean mShowStatusBar = null;
 
     private OnDismissListener mOnDismissListener;
     private OnShowListener mOnShowListener;
@@ -176,7 +177,7 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public void setShowStatusBar(boolean show)
+    public void setShowStatusBar(Boolean show)
     {
         mShowStatusBar = show;
     }
@@ -998,10 +999,11 @@ public class FDialoger implements Dialoger
                 view.setPadding(0, 0, 0, 0);
             }
 
-            if (mShowStatusBar)
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            else
+            final boolean fullScreen = mShowStatusBar != null ? !mShowStatusBar : isFullScreen(mActivity.getWindow());
+            if (fullScreen)
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            else
+                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         @Override
@@ -1179,5 +1181,17 @@ public class FDialoger implements Dialoger
             }
         }
         return duration;
+    }
+
+    private static boolean isFullScreen(Window window)
+    {
+        if (window == null)
+            return false;
+
+        final WindowManager.LayoutParams params = window.getAttributes();
+        if (params == null)
+            return false;
+
+        return (params.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN;
     }
 }
