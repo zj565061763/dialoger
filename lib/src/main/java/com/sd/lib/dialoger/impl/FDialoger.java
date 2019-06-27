@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import com.sd.lib.dialoger.Dialoger;
 import com.sd.lib.dialoger.R;
 import com.sd.lib.dialoger.TargetDialoger;
-import com.sd.lib.dialoger.animator.AlphaCreator;
 import com.sd.lib.dialoger.animator.ObjectAnimatorCreator;
 import com.sd.lib.dialoger.animator.SlideBottomTopCreator;
 import com.sd.lib.dialoger.animator.SlideLeftRightCreator;
@@ -514,10 +513,6 @@ public class FDialoger implements Dialoger
         {
             switch (mGravity)
             {
-                case Gravity.CENTER:
-                    setAnimatorCreator(new AlphaCreator());
-                    mIsAnimatorCreatorModifiedInternal = true;
-                    break;
                 case Gravity.LEFT:
                 case Gravity.LEFT | Gravity.CENTER:
                     setAnimatorCreator(new SlideRightLeftCreator());
