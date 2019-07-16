@@ -49,7 +49,7 @@ public interface Dialoger
     void setBackgroundColor(int color);
 
     /**
-     * 是否显示任务栏，默认true-显示
+     * 是否显示任务栏，默认null-跟随Activity
      *
      * @param show true-显示，false-不显示，null-跟随Activity
      */
