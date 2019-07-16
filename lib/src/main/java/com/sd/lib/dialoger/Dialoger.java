@@ -6,6 +6,7 @@ import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 
 public interface Dialoger
 {
@@ -16,9 +17,26 @@ public interface Dialoger
      */
     void setDebug(boolean debug);
 
+    /**
+     * 返回Context对象
+     *
+     * @return
+     */
     Context getContext();
 
+    /**
+     * 返回构造方法传入的Activity
+     *
+     * @return
+     */
     Activity getOwnerActivity();
+
+    /**
+     * 返回Window对象
+     *
+     * @return
+     */
+    Window getWindow();
 
     /**
      * 返回窗口的内容view
