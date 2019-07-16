@@ -1,12 +1,13 @@
 # About
 对dialog进行封装，提供更好用的api，可以让窗口显示在某个view的上下左右<br>
-<br>
-![](http://thumbsnap.com/i/qNJUXTJN.gif?0607)
 
 # Gradle
 [![](https://jitpack.io/v/zj565061763/dialoger.svg)](https://jitpack.io/#zj565061763/dialoger)
 
 # 简单demo
+
+![](http://thumbsnap.com/i/qNJUXTJN.gif?0607)
+
 ```java
 private void showSimpleDemo()
 {
