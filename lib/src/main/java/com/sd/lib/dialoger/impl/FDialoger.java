@@ -1037,7 +1037,6 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onStart");
 
-            setState(State.OnStart);
             getActivityLifecycleCallbacks().register(true);
             FDialogerHolder.addDialoger(FDialoger.this);
 
@@ -1063,7 +1062,6 @@ public class FDialoger implements Dialoger
             if (mIsDebug)
                 Log.i(Dialoger.class.getSimpleName(), "onStop");
 
-            setState(State.OnStop);
             getActivityLifecycleCallbacks().register(false);
             FDialogerHolder.removeDialoger(FDialoger.this);
 
@@ -1187,21 +1185,19 @@ public class FDialoger implements Dialoger
     private enum State
     {
         TryShow,
-        OnStart,
         Shown,
 
         TryDismiss,
-        OnStop,
         Dismissed;
 
         public boolean isShowPart()
         {
-            return this == Shown || this == OnStart || this == TryShow;
+            return this == Shown || this == TryShow;
         }
 
         public boolean isDismissPart()
         {
-            return this == Dismissed || this == OnStop || this == TryDismiss;
+            return this == Dismissed || this == TryDismiss;
         }
     }
 
