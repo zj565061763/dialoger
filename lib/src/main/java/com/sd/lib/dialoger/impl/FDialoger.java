@@ -1154,7 +1154,7 @@ public class FDialoger implements Dialoger
             if (activity == mActivity)
             {
                 if (mIsDebug)
-                    Log.e(Dialoger.class.getSimpleName(), "onActivityDestroyed try remove dialoger");
+                    Log.e(Dialoger.class.getSimpleName(), "onActivityDestroyed");
 
                 FDialogerHolder.remove(getOwnerActivity());
                 dismiss();
