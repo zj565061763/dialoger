@@ -918,7 +918,9 @@ public class FDialoger implements Dialoger
         protected void onAttachedToWindow()
         {
             super.onAttachedToWindow();
-            setTryStartShowAnimator(true);
+
+            if (mState.isShowPart())
+                setTryStartShowAnimator(true);
 
             if (getWidth() > 0 && getHeight() > 0)
                 startShowAnimator();
