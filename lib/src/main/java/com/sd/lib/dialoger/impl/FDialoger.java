@@ -1026,6 +1026,7 @@ public class FDialoger implements Dialoger
 
             setState(State.OnStart);
             getActivityLifecycleCallbacks().register(true);
+            FDialogerHolder.addDialoger(FDialoger.this);
 
             FDialoger.this.onStart();
             if (mLifecycleCallbacks != null)
@@ -1051,6 +1052,7 @@ public class FDialoger implements Dialoger
 
             setState(State.OnStop);
             getActivityLifecycleCallbacks().register(false);
+            FDialogerHolder.removeDialoger(FDialoger.this);
 
             stopDismissRunnable();
 
@@ -1143,6 +1145,8 @@ public class FDialoger implements Dialoger
                 if (mIsDebug)
                     Log.e(Dialoger.class.getSimpleName(), "onActivityDestroyed try remove dialoger");
 
+                FDialogerHolder.remove(getOwnerActivity());
+
                 if (getAnimatorHandler().isShowAnimatorStarted())
                     getAnimatorHandler().cancelShowAnimator();
 
@@ -1151,6 +1155,26 @@ public class FDialoger implements Dialoger
 
                 removeDialogerView(false);
             }
+        }
+    }
+
+    /**
+     * 关闭指定Activity的所有窗口
+     *
+     * @param activity
+     */
+    public static void dismissAll(Activity activity)
+    {
+        if (activity.isFinishing())
+            return;
+
+        final List<FDialoger> list = FDialogerHolder.get(activity);
+        if (list == null || list.isEmpty())
+            return;
+
+        for (FDialoger item : list)
+        {
+            item.dismiss();
         }
     }
 
