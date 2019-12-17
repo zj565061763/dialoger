@@ -344,14 +344,16 @@ public class FDialoger implements Dialoger
         @Override
         public void run()
         {
-            if (mState.isShowPart())
-                return;
-
-            if (mActivity.isFinishing())
-                return;
+            final boolean isFinishing = mActivity.isFinishing();
 
             if (mIsDebug)
-                Log.i(Dialoger.class.getSimpleName(), "try show");
+                Log.i(Dialoger.class.getSimpleName(), "try show isFinishing:" + isFinishing);
+
+            if (isFinishing)
+                return;
+
+            if (mState.isShowPart())
+                return;
 
             setState(State.TryShow);
 
@@ -373,11 +375,26 @@ public class FDialoger implements Dialoger
         @Override
         public void run()
         {
-            if (mState.isDismissPart())
-                return;
+            final boolean isFinishing = mActivity.isFinishing();
 
             if (mIsDebug)
-                Log.i(Dialoger.class.getSimpleName(), "try dismiss");
+                Log.i(Dialoger.class.getSimpleName(), "try dismiss isFinishing:" + isFinishing);
+
+            if (isFinishing)
+            {
+                if (getAnimatorHandler().isShowAnimatorStarted())
+                    getAnimatorHandler().cancelShowAnimator();
+
+                if (getAnimatorHandler().isHideAnimatorStarted())
+                    getAnimatorHandler().cancelHideAnimator();
+
+                setLockDialoger(true);
+                removeDialogerView(false);
+                return;
+            }
+
+            if (mState.isDismissPart())
+                return;
 
             setState(State.TryDismiss);
 
@@ -390,12 +407,6 @@ public class FDialoger implements Dialoger
             }
 
             setLockDialoger(true);
-
-            if (mActivity.isFinishing())
-            {
-                removeDialogerView(false);
-                return;
-            }
 
             getAnimatorHandler().setHideAnimator(createAnimator(false));
             if (getAnimatorHandler().startHideAnimator())
@@ -1146,14 +1157,7 @@ public class FDialoger implements Dialoger
                     Log.e(Dialoger.class.getSimpleName(), "onActivityDestroyed try remove dialoger");
 
                 FDialogerHolder.remove(getOwnerActivity());
-
-                if (getAnimatorHandler().isShowAnimatorStarted())
-                    getAnimatorHandler().cancelShowAnimator();
-
-                if (getAnimatorHandler().isHideAnimatorStarted())
-                    getAnimatorHandler().cancelHideAnimator();
-
-                removeDialogerView(false);
+                dismiss();
             }
         }
     }
