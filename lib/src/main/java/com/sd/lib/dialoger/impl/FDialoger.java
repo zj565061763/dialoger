@@ -711,8 +711,18 @@ public class FDialoger implements Dialoger
         if (mIsDebug)
             Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by hideAnimator:" + removeByHideAnimator);
 
-        getDialog().dismiss();
-        setState(State.Dismissed);
+        try
+        {
+            getDialog().dismiss();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            if (mIsDebug)
+                Log.e(Dialoger.class.getSimpleName(), "removeDialogerView error:" + e);
+        } finally
+        {
+            setState(State.Dismissed);
+        }
     }
 
     protected void onStart()
