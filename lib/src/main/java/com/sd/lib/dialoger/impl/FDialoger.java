@@ -725,6 +725,14 @@ public class FDialoger implements Dialoger
         }
     }
 
+    protected void onCreate(Bundle savedInstanceState)
+    {
+    }
+
+    protected void onSaveInstanceState(Bundle bundle)
+    {
+    }
+
     protected void onStart()
     {
     }
@@ -1038,6 +1046,21 @@ public class FDialoger implements Dialoger
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             else
                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            FDialoger.this.onCreate(savedInstanceState);
+        }
+
+        @Override
+        public Bundle onSaveInstanceState()
+        {
+            final Bundle bundle = super.onSaveInstanceState();
+            FDialoger.this.onSaveInstanceState(bundle);
+            return bundle;
         }
 
         @Override
