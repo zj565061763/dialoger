@@ -2,6 +2,7 @@ package com.sd.lib.dialoger;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -37,6 +38,13 @@ public interface Dialoger
      * @return
      */
     Window getWindow();
+
+    /**
+     * 返回内部的窗口对象
+     *
+     * @return
+     */
+    Dialog dialog();
 
     /**
      * 返回窗口的内容view

@@ -120,6 +120,12 @@ public class FDialoger implements Dialoger
     }
 
     @Override
+    public Dialog dialog()
+    {
+        return getDialog();
+    }
+
+    @Override
     public View getContentView()
     {
         return mContentView;
