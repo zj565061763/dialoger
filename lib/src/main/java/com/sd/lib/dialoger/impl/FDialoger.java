@@ -53,7 +53,7 @@ public class FDialoger implements Dialoger
 
     private State mState = State.Dismissed;
 
-    private Boolean mShowStatusBar = null;
+    private Boolean mIsFullScreen = null;
 
     private OnDismissListener mOnDismissListener;
     private OnShowListener mOnShowListener;
@@ -190,9 +190,9 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public void setShowStatusBar(Boolean show)
+    public void setFullScreen(Boolean fullScreen)
     {
-        mShowStatusBar = show;
+        mIsFullScreen = fullScreen;
     }
 
     @Override
@@ -1028,13 +1028,14 @@ public class FDialoger implements Dialoger
         {
             final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
             final int targetHeight = ViewGroup.LayoutParams.MATCH_PARENT;
+            final boolean fullScreen = mIsFullScreen != null ? mIsFullScreen : isFullScreen(mActivity.getWindow());
 
             final WindowManager.LayoutParams params = getWindow().getAttributes();
             if (params.width != targetWidth || params.height != targetHeight
                     || params.horizontalMargin != 0 || params.verticalMargin != 0)
             {
                 params.width = targetWidth;
-                params.height = targetHeight;
+                params.height = fullScreen ? targetHeight : params.height;
                 params.horizontalMargin = 0;
                 params.verticalMargin = 0;
                 getWindow().setAttributes(params);
@@ -1047,7 +1048,6 @@ public class FDialoger implements Dialoger
                 view.setPadding(0, 0, 0, 0);
             }
 
-            final boolean fullScreen = mShowStatusBar != null ? !mShowStatusBar : isFullScreen(mActivity.getWindow());
             if (fullScreen)
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             else

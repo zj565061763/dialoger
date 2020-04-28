@@ -75,11 +75,11 @@ public interface Dialoger
     void setBackgroundColor(int color);
 
     /**
-     * 是否显示任务栏，默认null-跟随Activity
+     * 是否全屏，默认null-跟随Activity
      *
-     * @param show true-显示，false-不显示，null-跟随Activity
+     * @param fullScreen true-全屏，false-不全屏，null-跟随Activity
      */
-    void setShowStatusBar(Boolean show);
+    void setFullScreen(Boolean fullScreen);
 
     /**
      * 根据id查找view
