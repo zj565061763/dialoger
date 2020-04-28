@@ -93,6 +93,7 @@ public class FDialoger implements Dialoger
         setPadding(defaultPadding, 0, defaultPadding, 0);
 
         setGravity(Gravity.CENTER);
+        setBackgroundColor(0);
     }
 
     @Override
