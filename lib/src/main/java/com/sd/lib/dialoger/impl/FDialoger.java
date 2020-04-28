@@ -1092,6 +1092,7 @@ public class FDialoger implements Dialoger
 
             getActivityLifecycleCallbacks().register(true);
             FDialogerHolder.addDialoger(FDialoger.this);
+            setDefaultParams();
 
             FDialoger.this.onStart();
             if (mLifecycleCallbacks != null)
@@ -1103,8 +1104,6 @@ public class FDialoger implements Dialoger
             }
 
             setLockDialoger(false);
-
-            setDefaultParams();
             setDefaultConfigBeforeShow();
         }
 
