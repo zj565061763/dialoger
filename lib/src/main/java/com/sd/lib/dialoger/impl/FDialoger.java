@@ -40,7 +40,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
-    private final int mThemeResId;
+    private int mThemeResId;
 
     private final View mDialogerView;
     private final View mBackgroundView;
@@ -178,6 +178,19 @@ public class FDialoger implements Dialoger
 
     protected void onContentViewChanged(View oldView, View contentView)
     {
+    }
+
+    @Override
+    public void setThemeResId(int themeResId)
+    {
+        if (mThemeResId != themeResId)
+        {
+            if (mState != State.Dismissed)
+                throw new RuntimeException("theme can only be changed when state=" + State.Dismissed);
+
+            mThemeResId = themeResId;
+            mDialog = null;
+        }
     }
 
     @Override

@@ -68,6 +68,13 @@ public interface Dialoger
     void setContentView(View view);
 
     /**
+     * 设置主题id
+     *
+     * @param themeResId
+     */
+    void setThemeResId(int themeResId);
+
+    /**
      * 设置窗口背景颜色
      *
      * @param color
