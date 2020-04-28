@@ -73,6 +73,7 @@ public class FDialoger implements Dialoger
     public FDialoger(Activity activity)
     {
         this(activity, R.style.lib_dialoger_default);
+        setBackgroundColor(Color.parseColor("#66000000"));
     }
 
     public FDialoger(Activity activity, int themeResId)
@@ -92,7 +93,6 @@ public class FDialoger implements Dialoger
         setPadding(defaultPadding, 0, defaultPadding, 0);
 
         setGravity(Gravity.CENTER);
-        setBackgroundColor(Color.parseColor("#66000000"));
     }
 
     @Override
