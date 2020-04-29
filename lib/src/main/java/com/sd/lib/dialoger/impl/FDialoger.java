@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -190,7 +191,12 @@ public class FDialoger implements Dialoger
                 throw new RuntimeException("theme can only be changed when state=" + State.Dismissed);
 
             mThemeResId = themeResId;
-            mDialog = null;
+
+            if (mDialog != null)
+            {
+                removeView(mDialogerView);
+                mDialog = null;
+            }
         }
     }
 
@@ -1282,5 +1288,23 @@ public class FDialoger implements Dialoger
             return false;
 
         return (params.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN;
+    }
+
+    private static void removeView(final View view)
+    {
+        if (view == null)
+            return;
+
+        final ViewParent viewParent = view.getParent();
+        if (viewParent instanceof ViewGroup)
+        {
+            try
+            {
+                final ViewGroup viewGroup = (ViewGroup) viewParent;
+                viewGroup.removeView(view);
+            } catch (Exception e)
+            {
+            }
+        }
     }
 }
