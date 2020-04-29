@@ -2,13 +2,11 @@ package com.sd.lib.dialoger.impl;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -28,8 +26,7 @@ import android.widget.LinearLayout;
 import com.sd.lib.dialoger.Dialoger;
 import com.sd.lib.dialoger.R;
 import com.sd.lib.dialoger.TargetDialoger;
-import com.sd.lib.dialoger.animator.AlphaCreator;
-import com.sd.lib.dialoger.animator.ObjectAnimatorCreator;
+import com.sd.lib.dialoger.animator.EmptyCreator;
 import com.sd.lib.dialoger.animator.SlideBottomTopCreator;
 import com.sd.lib.dialoger.animator.SlideLeftRightCreator;
 import com.sd.lib.dialoger.animator.SlideRightLeftCreator;
@@ -44,7 +41,6 @@ public class FDialoger implements Dialoger
     private int mThemeResId;
 
     private final View mDialogerView;
-    private final View mBackgroundView;
     private final LinearLayout mContainerView;
     private View mContentView;
 
@@ -64,7 +60,6 @@ public class FDialoger implements Dialoger
 
     private FVisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreator mAnimatorCreator;
-    private AnimatorCreator mBackgroundViewAnimatorCreator;
 
     private boolean mTryStartShowAnimator;
     private boolean mIsAnimatorCreatorModifiedInternal;
@@ -73,8 +68,7 @@ public class FDialoger implements Dialoger
 
     public FDialoger(Activity activity)
     {
-        this(activity, R.style.lib_dialoger_default);
-        setBackgroundColor(Color.parseColor("#66000000"));
+        this(activity, R.style.lib_dialoger_background_dim);
     }
 
     public FDialoger(Activity activity, int themeResId)
@@ -88,13 +82,11 @@ public class FDialoger implements Dialoger
         final InternalDialogerView dialogerView = new InternalDialogerView(activity);
         mDialogerView = dialogerView;
         mContainerView = dialogerView.mContainerView;
-        mBackgroundView = dialogerView.mBackgroundView;
 
         final int defaultPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
         setPadding(defaultPadding, 0, defaultPadding, 0);
 
         setGravity(Gravity.CENTER);
-        setBackgroundColor(0);
     }
 
     @Override
@@ -204,9 +196,7 @@ public class FDialoger implements Dialoger
     public void setBackgroundColor(int color)
     {
         if (color <= 0)
-            mBackgroundView.setBackgroundDrawable(null);
-        else
-            mBackgroundView.setBackgroundColor(color);
+            setThemeResId(R.style.lib_dialoger_default);
     }
 
     @Override
@@ -559,7 +549,7 @@ public class FDialoger implements Dialoger
             switch (mGravity)
             {
                 case Gravity.CENTER:
-                    setAnimatorCreator(new AlphaCreator());
+                    setAnimatorCreator(new EmptyCreator());
                     mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.LEFT:
@@ -649,79 +639,14 @@ public class FDialoger implements Dialoger
         return mAnimatorHandler;
     }
 
-    private AnimatorCreator getBackgroundViewAnimatorCreator()
-    {
-        if (mBackgroundViewAnimatorCreator == null)
-        {
-            mBackgroundViewAnimatorCreator = new ObjectAnimatorCreator()
-            {
-                @Override
-                protected String getPropertyName()
-                {
-                    return View.ALPHA.getName();
-                }
-
-                @Override
-                protected float getValueHidden(View view)
-                {
-                    return 0.0f;
-                }
-
-                @Override
-                protected float getValueShown(View view)
-                {
-                    return 1.0f;
-                }
-
-                @Override
-                protected float getValueCurrent(View view)
-                {
-                    return view.getAlpha();
-                }
-
-                @Override
-                protected void onAnimationStart(boolean show, View view)
-                {
-                    super.onAnimationStart(show, view);
-                    view.setVisibility(View.VISIBLE);
-                }
-
-                @Override
-                protected void onAnimationEnd(boolean show, View view)
-                {
-                    super.onAnimationEnd(show, view);
-                    if (!show)
-                        view.setVisibility(View.INVISIBLE);
-                }
-            };
-        }
-        return mBackgroundViewAnimatorCreator;
-    }
-
     private Animator createAnimator(boolean show)
     {
         Animator animator = null;
 
-        final Animator animatorBackground = (mBackgroundView.getBackground() == null) ?
-                null : getBackgroundViewAnimatorCreator().createAnimator(show, mBackgroundView);
-
         final Animator animatorContent = (mAnimatorCreator == null || mContentView == null) ?
                 null : mAnimatorCreator.createAnimator(show, mContentView);
 
-        if (animatorBackground != null && animatorContent != null)
-        {
-            final long duration = getAnimatorDuration(animatorContent);
-            if (duration < 0)
-                throw new RuntimeException("Illegal duration:" + duration);
-            animatorBackground.setDuration(duration);
-
-            final AnimatorSet animatorSet = new AnimatorSet();
-            animatorSet.play(animatorBackground).with(animatorContent);
-            animator = animatorSet;
-        } else if (animatorBackground != null)
-        {
-            animator = animatorBackground;
-        } else if (animatorContent != null)
+        if (animatorContent != null)
         {
             animator = animatorContent;
         }
@@ -779,15 +704,11 @@ public class FDialoger implements Dialoger
 
     private final class InternalDialogerView extends FrameLayout
     {
-        private final View mBackgroundView;
         private final LinearLayout mContainerView;
 
         public InternalDialogerView(Context context)
         {
             super(context);
-
-            mBackgroundView = new InternalBackgroundView(context);
-            addView(mBackgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             mContainerView = new InternalContainerView(context);
             addView(mContainerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -797,7 +718,7 @@ public class FDialoger implements Dialoger
         public void onViewAdded(View child)
         {
             super.onViewAdded(child);
-            if (child != mBackgroundView && child != mContainerView)
+            if (child != mContainerView)
                 throw new RuntimeException("you can not add view to dialoger view");
         }
 
@@ -805,7 +726,7 @@ public class FDialoger implements Dialoger
         public void onViewRemoved(View child)
         {
             super.onViewRemoved(child);
-            if (child == mBackgroundView || child == mContainerView)
+            if (child == mContainerView)
                 throw new RuntimeException("you can not remove dialoger child");
         }
 
@@ -968,22 +889,6 @@ public class FDialoger implements Dialoger
 
             if (getWidth() > 0 && getHeight() > 0)
                 startShowAnimator();
-        }
-    }
-
-    private final class InternalBackgroundView extends View
-    {
-        public InternalBackgroundView(Context context)
-        {
-            super(context);
-        }
-
-        @Override
-        protected void onLayout(boolean changed, int left, int top, int right, int bottom)
-        {
-            super.onLayout(changed, left, top, right, bottom);
-            if (changed)
-                FDialoger.this.checkMatchLayoutParams(this);
         }
     }
 
@@ -1257,25 +1162,6 @@ public class FDialoger implements Dialoger
         {
             return this == Dismissed || this == TryDismiss;
         }
-    }
-
-    private static long getAnimatorDuration(Animator animator)
-    {
-        long duration = animator.getDuration();
-        if (duration < 0)
-        {
-            if (animator instanceof AnimatorSet)
-            {
-                final List<Animator> list = ((AnimatorSet) animator).getChildAnimations();
-                for (Animator item : list)
-                {
-                    final long durationItem = getAnimatorDuration(item);
-                    if (durationItem > duration)
-                        duration = durationItem;
-                }
-            }
-        }
-        return duration;
     }
 
     private static boolean isFullScreen(Window window)

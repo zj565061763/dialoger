@@ -75,10 +75,11 @@ public interface Dialoger
     void setThemeResId(int themeResId);
 
     /**
-     * 设置窗口背景颜色
+     * 0表示去除默认的模糊背景，内部是通过调用{@link #setThemeResId(int)}实现的
      *
      * @param color
      */
+    @Deprecated
     void setBackgroundColor(int color);
 
     /**
