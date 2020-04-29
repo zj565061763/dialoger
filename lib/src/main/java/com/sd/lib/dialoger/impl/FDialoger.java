@@ -68,7 +68,7 @@ public class FDialoger implements Dialoger
 
     public FDialoger(Activity activity)
     {
-        this(activity, R.style.lib_dialoger_background_dim);
+        this(activity, 0);
     }
 
     public FDialoger(Activity activity, int themeResId)
@@ -77,7 +77,7 @@ public class FDialoger implements Dialoger
             throw new NullPointerException("activity is null");
 
         mActivity = activity;
-        mThemeResId = themeResId;
+        mThemeResId = themeResId != 0 ? themeResId : R.style.lib_dialoger_background_dim;
 
         final InternalDialogerView dialogerView = new InternalDialogerView(activity);
         mDialogerView = dialogerView;
