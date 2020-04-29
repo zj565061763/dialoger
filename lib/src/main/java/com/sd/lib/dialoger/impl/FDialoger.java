@@ -1046,9 +1046,8 @@ public class FDialoger implements Dialoger
 
         private void setDefaultParams()
         {
-            final boolean fullScreen = mIsFullScreen != null ? mIsFullScreen : isFullScreen(mActivity.getWindow());
             final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-            final int targetHeight = fullScreen ? ViewGroup.LayoutParams.MATCH_PARENT : ViewGroup.LayoutParams.WRAP_CONTENT;
+            final int targetHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
 
             final WindowManager.LayoutParams params = getWindow().getAttributes();
             if (params.width != targetWidth || params.height != targetHeight
@@ -1068,6 +1067,7 @@ public class FDialoger implements Dialoger
                 view.setPadding(0, 0, 0, 0);
             }
 
+            final boolean fullScreen = mIsFullScreen != null ? mIsFullScreen : isFullScreen(mActivity.getWindow());
             if (fullScreen)
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
             else
