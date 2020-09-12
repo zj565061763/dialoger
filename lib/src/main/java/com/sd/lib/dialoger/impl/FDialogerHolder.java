@@ -12,6 +12,7 @@ import java.util.Set;
 class FDialogerHolder
 {
     private static final Map<Activity, Set<FDialoger>> MAP_ACTIVITY_DIALOG = new HashMap<>();
+    private static final Map<Activity, ActivityConfig> MAP_ACTIVITY_CONFIG = new HashMap<>();
 
     public synchronized static void addDialoger(FDialoger dialoger)
     {
@@ -22,6 +23,7 @@ class FDialogerHolder
         {
             holder = new HashSet<>();
             MAP_ACTIVITY_DIALOG.put(activity, holder);
+            addActivityConfig(activity);
         }
 
         holder.add(dialoger);
@@ -37,7 +39,10 @@ class FDialogerHolder
 
         holder.remove(dialoger);
         if (holder.isEmpty())
+        {
             MAP_ACTIVITY_DIALOG.remove(activity);
+            removeActivityConfig(activity);
+        }
     }
 
     public synchronized static List<FDialoger> get(Activity activity)
@@ -46,17 +51,34 @@ class FDialogerHolder
         if (holder == null)
             return null;
 
-        if (holder.isEmpty())
-        {
-            MAP_ACTIVITY_DIALOG.remove(activity);
-            return null;
-        }
-
         return new ArrayList<>(holder);
     }
 
     public synchronized static void remove(Activity activity)
     {
         MAP_ACTIVITY_DIALOG.remove(activity);
+        removeActivityConfig(activity);
+    }
+
+    private static void addActivityConfig(Activity activity)
+    {
+        final ActivityConfig config = new ActivityConfig();
+        config.mSystemUiVisibility = activity.getWindow().getDecorView().getSystemUiVisibility();
+        MAP_ACTIVITY_CONFIG.put(activity, config);
+    }
+
+    private static void removeActivityConfig(Activity activity)
+    {
+        final ActivityConfig config = MAP_ACTIVITY_CONFIG.remove(activity);
+        if (config != null)
+        {
+            if (activity.getWindow().getDecorView().getSystemUiVisibility() != config.mSystemUiVisibility)
+                activity.getWindow().getDecorView().setSystemUiVisibility(config.mSystemUiVisibility);
+        }
+    }
+
+    private static class ActivityConfig
+    {
+        public int mSystemUiVisibility;
     }
 }
