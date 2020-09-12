@@ -160,6 +160,12 @@ public class FDialoger implements Dialoger
                     p.height = params.height;
                 }
 
+                if (p.height == ViewGroup.LayoutParams.MATCH_PARENT)
+                {
+                    if (mThemeResId == R.style.lib_dialoger_background_dim)
+                        setThemeResId(R.style.lib_dialoger_default);
+                }
+
                 mContainerView.addView(view, p);
             }
 
