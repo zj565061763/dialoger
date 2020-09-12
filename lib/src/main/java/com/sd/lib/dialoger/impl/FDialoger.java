@@ -967,6 +967,8 @@ public class FDialoger implements Dialoger
         public InternalDialog(Context context, int themeResId)
         {
             super(context, themeResId);
+            final WindowManager.LayoutParams params = getWindow().getAttributes();
+            params.gravity = Gravity.TOP;
         }
 
         private void setDefaultParams()
