@@ -4,36 +4,34 @@ import android.app.Activity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.WeakHashMap;
 
-class FDialogerHolder
+public class FDialogerHolder
 {
-    private static final Map<Activity, Set<FDialoger>> MAP_ACTIVITY_DIALOG = new HashMap<>();
+    private static final Map<Activity, Map<FDialoger, String>> MAP_ACTIVITY_DIALOG = new HashMap<>();
     private static final Map<Activity, ActivityConfig> MAP_ACTIVITY_CONFIG = new HashMap<>();
 
-    public synchronized static void addDialoger(FDialoger dialoger)
+    static synchronized void addDialoger(FDialoger dialoger)
     {
         final Activity activity = dialoger.getOwnerActivity();
 
-        Set<FDialoger> holder = MAP_ACTIVITY_DIALOG.get(activity);
+        Map<FDialoger, String> holder = MAP_ACTIVITY_DIALOG.get(activity);
         if (holder == null)
         {
-            holder = new HashSet<>();
+            holder = new WeakHashMap<>();
             MAP_ACTIVITY_DIALOG.put(activity, holder);
-            addActivityConfig(activity);
         }
 
-        holder.add(dialoger);
+        holder.put(dialoger, "");
     }
 
-    public synchronized static void removeDialoger(FDialoger dialoger)
+    static synchronized void removeDialoger(FDialoger dialoger)
     {
         final Activity activity = dialoger.getOwnerActivity();
 
-        final Set<FDialoger> holder = MAP_ACTIVITY_DIALOG.get(activity);
+        final Map<FDialoger, String> holder = MAP_ACTIVITY_DIALOG.get(activity);
         if (holder == null)
             return;
 
@@ -41,44 +39,65 @@ class FDialogerHolder
         if (holder.isEmpty())
         {
             MAP_ACTIVITY_DIALOG.remove(activity);
-            removeActivityConfig(activity);
+            restoreActivityConfig(activity);
         }
     }
 
-    public synchronized static List<FDialoger> get(Activity activity)
+    static synchronized List<FDialoger> get(Activity activity)
     {
-        final Set<FDialoger> holder = MAP_ACTIVITY_DIALOG.get(activity);
+        final Map<FDialoger, String> holder = MAP_ACTIVITY_DIALOG.get(activity);
         if (holder == null)
             return null;
 
-        return new ArrayList<>(holder);
+        return new ArrayList<>(holder.keySet());
     }
 
-    public synchronized static void remove(Activity activity)
+    static synchronized void remove(Activity activity)
     {
         MAP_ACTIVITY_DIALOG.remove(activity);
-        removeActivityConfig(activity);
+        restoreActivityConfig(activity);
     }
 
-    private static void addActivityConfig(Activity activity)
-    {
-        final ActivityConfig config = new ActivityConfig();
-        config.mSystemUiVisibility = activity.getWindow().getDecorView().getSystemUiVisibility();
-        MAP_ACTIVITY_CONFIG.put(activity, config);
-    }
-
-    private static void removeActivityConfig(Activity activity)
+    private static void restoreActivityConfig(Activity activity)
     {
         final ActivityConfig config = MAP_ACTIVITY_CONFIG.remove(activity);
         if (config != null)
-        {
-            if (activity.getWindow().getDecorView().getSystemUiVisibility() != config.mSystemUiVisibility)
-                activity.getWindow().getDecorView().setSystemUiVisibility(config.mSystemUiVisibility);
-        }
+            config.restore(activity);
     }
 
-    private static class ActivityConfig
+    /**
+     * 返回activity对象对应的配置
+     *
+     * @param activity
+     * @return
+     */
+    public static synchronized ActivityConfig getActivityConfig(Activity activity)
     {
-        public int mSystemUiVisibility;
+        ActivityConfig config = MAP_ACTIVITY_CONFIG.get(activity);
+        if (config == null)
+        {
+            config = new ActivityConfig();
+            MAP_ACTIVITY_CONFIG.put(activity, config);
+        }
+        return config;
+    }
+
+    public static final class ActivityConfig
+    {
+        private Integer mSystemUiVisibility;
+
+        public void setSystemUiVisibility(Integer systemUiVisibility)
+        {
+            mSystemUiVisibility = systemUiVisibility;
+        }
+
+        private void restore(Activity activity)
+        {
+            if (activity == null)
+                return;
+
+            if (mSystemUiVisibility != null)
+                activity.getWindow().getDecorView().setSystemUiVisibility(mSystemUiVisibility);
+        }
     }
 }
