@@ -2,6 +2,7 @@ package com.sd.lib.dialoger.impl;
 
 import android.app.Activity;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,14 +56,14 @@ public class FDialogerHolder
     static synchronized void remove(Activity activity)
     {
         MAP_ACTIVITY_DIALOG.remove(activity);
-        restoreActivityConfig(activity);
+        MAP_ACTIVITY_CONFIG.remove(activity);
     }
 
     private static void restoreActivityConfig(Activity activity)
     {
-        final ActivityConfig config = MAP_ACTIVITY_CONFIG.remove(activity);
+        final ActivityConfig config = MAP_ACTIVITY_CONFIG.get(activity);
         if (config != null)
-            config.restore(activity);
+            config.restore();
     }
 
     /**
@@ -73,10 +74,13 @@ public class FDialogerHolder
      */
     public static synchronized ActivityConfig getActivityConfig(Activity activity)
     {
+        if (activity == null)
+            return null;
+
         ActivityConfig config = MAP_ACTIVITY_CONFIG.get(activity);
         if (config == null)
         {
-            config = new ActivityConfig();
+            config = new ActivityConfig(activity);
             MAP_ACTIVITY_CONFIG.put(activity, config);
         }
         return config;
@@ -84,15 +88,31 @@ public class FDialogerHolder
 
     public static final class ActivityConfig
     {
+        private final WeakReference<Activity> mActivity;
         private Integer mSystemUiVisibility;
+
+        private ActivityConfig(Activity activity)
+        {
+            mActivity = new WeakReference<>(activity);
+        }
 
         public void setSystemUiVisibility(Integer systemUiVisibility)
         {
             mSystemUiVisibility = systemUiVisibility;
         }
 
-        private void restore(Activity activity)
+        public void save()
         {
+            final Activity activity = mActivity.get();
+            if (activity == null)
+                return;
+
+            mSystemUiVisibility = activity.getWindow().getDecorView().getSystemUiVisibility();
+        }
+
+        private void restore()
+        {
+            final Activity activity = mActivity.get();
             if (activity == null)
                 return;
 
