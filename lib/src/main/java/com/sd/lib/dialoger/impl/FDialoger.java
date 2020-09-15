@@ -7,6 +7,7 @@ import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -980,7 +981,21 @@ public class FDialoger implements Dialoger
         private void setDefaultParams()
         {
             final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
-            final int targetHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int targetHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+
+            if (Build.VERSION.SDK_INT >= 21)
+            {
+                final ViewGroup.LayoutParams layoutParams = getContentView().getLayoutParams();
+                if (layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT)
+                {
+                    final int systemVisibility = getWindow().getDecorView().getSystemUiVisibility();
+                    final int value = systemVisibility & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                    if (value == View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                    {
+                        targetHeight = FDialoger.this.getContext().getResources().getDisplayMetrics().heightPixels;
+                    }
+                }
+            }
 
             final WindowManager.LayoutParams params = getWindow().getAttributes();
             if (params.width != targetWidth || params.height != targetHeight
