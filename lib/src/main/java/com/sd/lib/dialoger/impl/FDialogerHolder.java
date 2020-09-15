@@ -83,7 +83,8 @@ public class FDialogerHolder
         if (config == null)
         {
             config = new ActivityConfig(activity);
-            MAP_ACTIVITY_CONFIG.put(activity, config);
+            if (!activity.isFinishing())
+                MAP_ACTIVITY_CONFIG.put(activity, config);
         }
         return config;
     }
@@ -96,11 +97,6 @@ public class FDialogerHolder
         private ActivityConfig(Activity activity)
         {
             mActivity = new WeakReference<>(activity);
-        }
-
-        public void setSystemUiVisibility(Integer systemUiVisibility)
-        {
-            mSystemUiVisibility = systemUiVisibility;
         }
 
         public void save()
