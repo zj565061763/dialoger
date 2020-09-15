@@ -4,35 +4,37 @@ import android.app.Activity;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
 public class FDialogerHolder
 {
-    private static final Map<Activity, Map<FDialoger, String>> MAP_ACTIVITY_DIALOG = new HashMap<>();
-    private static final Map<Activity, ActivityConfig> MAP_ACTIVITY_CONFIG = new HashMap<>();
+    private static final Map<Activity, Collection<FDialoger>> MAP_ACTIVITY_DIALOG = new HashMap<>();
+    private static final Map<Activity, ActivityConfig> MAP_ACTIVITY_CONFIG = new WeakHashMap<>();
 
     static synchronized void addDialoger(FDialoger dialoger)
     {
         final Activity activity = dialoger.getOwnerActivity();
 
-        Map<FDialoger, String> holder = MAP_ACTIVITY_DIALOG.get(activity);
+        Collection<FDialoger> holder = MAP_ACTIVITY_DIALOG.get(activity);
         if (holder == null)
         {
-            holder = new WeakHashMap<>();
+            holder = new HashSet<>();
             MAP_ACTIVITY_DIALOG.put(activity, holder);
         }
 
-        holder.put(dialoger, "");
+        holder.add(dialoger);
     }
 
     static synchronized void removeDialoger(FDialoger dialoger)
     {
         final Activity activity = dialoger.getOwnerActivity();
 
-        final Map<FDialoger, String> holder = MAP_ACTIVITY_DIALOG.get(activity);
+        final Collection<FDialoger> holder = MAP_ACTIVITY_DIALOG.get(activity);
         if (holder == null)
             return;
 
@@ -46,11 +48,11 @@ public class FDialogerHolder
 
     static synchronized List<FDialoger> get(Activity activity)
     {
-        final Map<FDialoger, String> holder = MAP_ACTIVITY_DIALOG.get(activity);
+        final Collection<FDialoger> holder = MAP_ACTIVITY_DIALOG.get(activity);
         if (holder == null)
             return null;
 
-        return new ArrayList<>(holder.keySet());
+        return new ArrayList<>(holder);
     }
 
     static synchronized void remove(Activity activity)
