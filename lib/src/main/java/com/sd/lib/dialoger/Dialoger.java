@@ -140,6 +140,13 @@ public interface Dialoger
     AnimatorCreator getAnimatorCreator();
 
     /**
+     * 设置动画时长
+     *
+     * @param duration
+     */
+    void setAnimatorDuration(long duration);
+
+    /**
      * 设置重力属性{@link android.view.Gravity}
      *
      * @param gravity

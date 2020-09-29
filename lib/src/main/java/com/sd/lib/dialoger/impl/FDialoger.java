@@ -64,6 +64,7 @@ public class FDialoger implements Dialoger
     private FVisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreator mAnimatorCreator;
     private AnimatorCreator mBackgroundViewAnimatorCreator;
+    private long mAnimatorDuration;
 
     private boolean mTryStartShowAnimator;
     private boolean mIsAnimatorCreatorModifiedInternal;
@@ -268,6 +269,12 @@ public class FDialoger implements Dialoger
     public AnimatorCreator getAnimatorCreator()
     {
         return mAnimatorCreator;
+    }
+
+    @Override
+    public void setAnimatorDuration(long duration)
+    {
+        mAnimatorDuration = duration;
     }
 
     @Override
@@ -654,6 +661,12 @@ public class FDialoger implements Dialoger
         } else if (animatorContent != null)
         {
             animator = animatorContent;
+        }
+
+        if (mAnimatorDuration > 0)
+        {
+            if (animator != null)
+                animator.setDuration(mAnimatorDuration);
         }
 
         if (mIsDebug)

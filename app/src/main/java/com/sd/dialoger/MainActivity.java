@@ -1,10 +1,11 @@
 package com.sd.dialoger;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.sd.lib.dialoger.Dialoger;
 import com.sd.lib.dialoger.animator.AlphaCreator;
@@ -78,6 +79,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          *
          */
         dialoger.setAnimatorCreator(new AlphaCreator());
+
+        /**
+         * 设置动画时长
+         */
+        dialoger.setAnimatorDuration(2000);
 
         /**
          * 显示窗口
