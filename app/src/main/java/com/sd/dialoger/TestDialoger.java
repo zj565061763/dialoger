@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.Toast;
 
+import com.sd.lib.dialoger.animator.AlphaCreator;
 import com.sd.lib.dialoger.impl.FDialoger;
 
 public class TestDialoger extends FDialoger
@@ -14,6 +15,14 @@ public class TestDialoger extends FDialoger
         setDebug(true);
         setPadding(0, 0, 0, 0);
         setBackgroundDim(false);
+        setAnimatorCreator(new AlphaCreator()
+        {
+            @Override
+            protected long getDuration()
+            {
+                return 1000;
+            }
+        });
 
         setContentView(R.layout.dialoger_test);
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener()
