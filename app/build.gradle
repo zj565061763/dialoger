@@ -22,5 +22,5 @@ dependencies {
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation project(':lib')
 
-    implementation 'com.github.zj565061763:systemui:1.0.0-beta7'
+    implementation 'com.github.zj565061763:systemui:1.0.0-beta16'
 }
