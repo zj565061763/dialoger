@@ -14,7 +14,6 @@ public class TestDialoger extends FDialoger
         super(activity);
         setDebug(true);
         setPadding(0, 0, 0, 0);
-        setBackgroundDim(false);
         setAnimatorCreator(new AlphaCreator()
         {
             @Override
