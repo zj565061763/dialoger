@@ -1023,15 +1023,11 @@ public class FDialoger implements Dialoger
 
             if (Build.VERSION.SDK_INT >= 21)
             {
-                final ViewGroup.LayoutParams layoutParams = getContentView().getLayoutParams();
-                if (layoutParams.height == ViewGroup.LayoutParams.MATCH_PARENT)
+                final int systemVisibility = getWindow().getDecorView().getSystemUiVisibility();
+                final int value = systemVisibility & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+                if (value == View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
                 {
-                    final int systemVisibility = getWindow().getDecorView().getSystemUiVisibility();
-                    final int value = systemVisibility & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-                    if (value == View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-                    {
-                        targetHeight = FDialoger.this.getContext().getResources().getDisplayMetrics().heightPixels;
-                    }
+                    targetHeight = FDialoger.this.getContext().getResources().getDisplayMetrics().heightPixels;
                 }
             }
 
