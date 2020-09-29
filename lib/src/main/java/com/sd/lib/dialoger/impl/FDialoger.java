@@ -2,11 +2,13 @@ package com.sd.lib.dialoger.impl;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,7 +20,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -27,7 +28,8 @@ import android.widget.LinearLayout;
 import com.sd.lib.dialoger.Dialoger;
 import com.sd.lib.dialoger.R;
 import com.sd.lib.dialoger.TargetDialoger;
-import com.sd.lib.dialoger.animator.EmptyCreator;
+import com.sd.lib.dialoger.animator.AlphaCreator;
+import com.sd.lib.dialoger.animator.ObjectAnimatorCreator;
 import com.sd.lib.dialoger.animator.SlideBottomTopCreator;
 import com.sd.lib.dialoger.animator.SlideLeftRightCreator;
 import com.sd.lib.dialoger.animator.SlideRightLeftCreator;
@@ -42,6 +44,7 @@ public class FDialoger implements Dialoger
     private int mThemeResId;
 
     private final View mDialogerView;
+    private final View mBackgroundView;
     private final LinearLayout mContainerView;
     private View mContentView;
 
@@ -59,6 +62,7 @@ public class FDialoger implements Dialoger
 
     private FVisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreator mAnimatorCreator;
+    private AnimatorCreator mBackgroundViewAnimatorCreator;
 
     private boolean mTryStartShowAnimator;
     private boolean mIsAnimatorCreatorModifiedInternal;
@@ -76,15 +80,17 @@ public class FDialoger implements Dialoger
             throw new NullPointerException("activity is null");
 
         mActivity = activity;
-        mThemeResId = themeResId != 0 ? themeResId : R.style.lib_dialoger_background_dim;
+        mThemeResId = themeResId != 0 ? themeResId : R.style.lib_dialoger_default;
 
         final InternalDialogerView dialogerView = new InternalDialogerView(activity);
         mDialogerView = dialogerView;
         mContainerView = dialogerView.mContainerView;
+        mBackgroundView = dialogerView.mBackgroundView;
 
         final int defaultPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
         setPadding(defaultPadding, 0, defaultPadding, 0);
 
+        setBackgroundDim(true);
         setGravity(Gravity.CENTER);
     }
 
@@ -137,6 +143,19 @@ public class FDialoger implements Dialoger
         setDialogerView(view);
     }
 
+    @Override
+    public void setBackgroundDim(boolean backgroundDim)
+    {
+        if (backgroundDim)
+        {
+            final int color = mActivity.getResources().getColor(R.color.lib_dialoger_background_dim);
+            mBackgroundView.setBackgroundColor(color);
+        } else
+        {
+            mBackgroundView.setBackgroundColor(Color.TRANSPARENT);
+        }
+    }
+
     private void setDialogerView(View view)
     {
         final View old = mContentView;
@@ -159,12 +178,6 @@ public class FDialoger implements Dialoger
                     p.height = params.height;
                 }
 
-                if (p.height == ViewGroup.LayoutParams.MATCH_PARENT)
-                {
-                    if (mThemeResId == R.style.lib_dialoger_background_dim)
-                        setThemeResId(R.style.lib_dialoger_default);
-                }
-
                 mContainerView.addView(view, p);
             }
 
@@ -180,28 +193,9 @@ public class FDialoger implements Dialoger
     }
 
     @Override
-    public void setThemeResId(int themeResId)
-    {
-        if (mThemeResId != themeResId)
-        {
-            if (mState != State.Dismissed)
-                throw new RuntimeException("theme can only be changed when state=" + State.Dismissed);
-
-            mThemeResId = themeResId;
-
-            if (mDialog != null)
-            {
-                removeView(mDialogerView);
-                mDialog = null;
-            }
-        }
-    }
-
-    @Override
     public void setBackgroundColor(int color)
     {
-        if (color <= 0)
-            setThemeResId(R.style.lib_dialoger_default);
+        mBackgroundView.setBackgroundColor(color);
     }
 
     @Override
@@ -548,7 +542,7 @@ public class FDialoger implements Dialoger
             switch (mGravity)
             {
                 case Gravity.CENTER:
-                    setAnimatorCreator(new EmptyCreator());
+                    setAnimatorCreator(new AlphaCreator());
                     mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.LEFT:
@@ -642,10 +636,24 @@ public class FDialoger implements Dialoger
     {
         Animator animator = null;
 
+        final Animator animatorBackground = getBackgroundViewAnimatorCreator().createAnimator(show, mBackgroundView);
         final Animator animatorContent = (mAnimatorCreator == null || mContentView == null) ?
                 null : mAnimatorCreator.createAnimator(show, mContentView);
 
-        if (animatorContent != null)
+        if (animatorBackground != null && animatorContent != null)
+        {
+            final long duration = getAnimatorDuration(animatorContent);
+            if (duration < 0)
+                throw new RuntimeException("Illegal duration:" + duration);
+            animatorBackground.setDuration(duration);
+
+            final AnimatorSet animatorSet = new AnimatorSet();
+            animatorSet.play(animatorBackground).with(animatorContent);
+            animator = animatorSet;
+        } else if (animatorBackground != null)
+        {
+            animator = animatorBackground;
+        } else if (animatorContent != null)
         {
             animator = animatorContent;
         }
@@ -654,6 +662,55 @@ public class FDialoger implements Dialoger
             Log.i(Dialoger.class.getSimpleName(), "createAnimator " + (show ? "show" : "dismiss") + " animator " + (animator == null ? "null" : "not null"));
 
         return animator;
+    }
+
+    private AnimatorCreator getBackgroundViewAnimatorCreator()
+    {
+        if (mBackgroundViewAnimatorCreator == null)
+        {
+            mBackgroundViewAnimatorCreator = new ObjectAnimatorCreator()
+            {
+                @Override
+                protected String getPropertyName()
+                {
+                    return View.ALPHA.getName();
+                }
+
+                @Override
+                protected float getValueHidden(View view)
+                {
+                    return 0.0f;
+                }
+
+                @Override
+                protected float getValueShown(View view)
+                {
+                    return 1.0f;
+                }
+
+                @Override
+                protected float getValueCurrent(View view)
+                {
+                    return view.getAlpha();
+                }
+
+                @Override
+                protected void onAnimationStart(boolean show, View view)
+                {
+                    super.onAnimationStart(show, view);
+                    view.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                protected void onAnimationEnd(boolean show, View view)
+                {
+                    super.onAnimationEnd(show, view);
+                    if (!show)
+                        view.setVisibility(View.INVISIBLE);
+                }
+            };
+        }
+        return mBackgroundViewAnimatorCreator;
     }
 
     private void removeDialogerView(boolean removeByHideAnimator)
@@ -1193,21 +1250,22 @@ public class FDialoger implements Dialoger
         }
     }
 
-    private static void removeView(final View view)
+    private static long getAnimatorDuration(Animator animator)
     {
-        if (view == null)
-            return;
-
-        final ViewParent viewParent = view.getParent();
-        if (viewParent instanceof ViewGroup)
+        long duration = animator.getDuration();
+        if (duration < 0)
         {
-            try
+            if (animator instanceof AnimatorSet)
             {
-                final ViewGroup viewGroup = (ViewGroup) viewParent;
-                viewGroup.removeView(view);
-            } catch (Exception e)
-            {
+                final List<Animator> list = ((AnimatorSet) animator).getChildAnimations();
+                for (Animator item : list)
+                {
+                    final long durationItem = getAnimatorDuration(item);
+                    if (durationItem > duration)
+                        duration = durationItem;
+                }
             }
         }
+        return duration;
     }
 }

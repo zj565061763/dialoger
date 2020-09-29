@@ -9,8 +9,6 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="lib_dialoger_background_dim" parent="lib_dialoger_default">
-        <item name="android:backgroundDimEnabled">true</item>
-    </style>
+    <color name="lib_dialoger_background_dim">#66000000</color>
 
 </resources>

@@ -68,17 +68,12 @@ public interface Dialoger
     void setContentView(View view);
 
     /**
-     * 设置主题id
+     * 设置背景是否模糊
      *
-     * @param themeResId
+     * @param backgroundDim
      */
-    void setThemeResId(int themeResId);
+    void setBackgroundDim(boolean backgroundDim);
 
-    /**
-     * 0表示去除默认的模糊背景，内部是通过调用{@link #setThemeResId(int)}实现的
-     *
-     * @param color
-     */
     @Deprecated
     void setBackgroundColor(int color);
 
