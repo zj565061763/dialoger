@@ -83,13 +83,6 @@ public interface Dialoger
     void setBackgroundColor(int color);
 
     /**
-     * 是否全屏，默认null-跟随Activity
-     *
-     * @param fullScreen true-全屏，false-不全屏，null-跟随Activity
-     */
-    void setFullScreen(Boolean fullScreen);
-
-    /**
      * 根据id查找view
      *
      * @param id

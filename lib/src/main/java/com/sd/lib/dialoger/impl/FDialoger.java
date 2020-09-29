@@ -51,8 +51,6 @@ public class FDialoger implements Dialoger
 
     private State mState = State.Dismissed;
 
-    private Boolean mIsFullScreen = null;
-
     private OnDismissListener mOnDismissListener;
     private OnShowListener mOnShowListener;
     private List<LifecycleCallback> mLifecycleCallbacks;
@@ -204,12 +202,6 @@ public class FDialoger implements Dialoger
     {
         if (color <= 0)
             setThemeResId(R.style.lib_dialoger_default);
-    }
-
-    @Override
-    public void setFullScreen(Boolean fullScreen)
-    {
-        mIsFullScreen = fullScreen;
     }
 
     @Override
@@ -1014,12 +1006,6 @@ public class FDialoger implements Dialoger
             {
                 view.setPadding(0, 0, 0, 0);
             }
-
-            final boolean fullScreen = mIsFullScreen != null ? mIsFullScreen : isFullScreen(mActivity.getWindow());
-            if (fullScreen)
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-            else
-                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         }
 
         @Override
@@ -1205,18 +1191,6 @@ public class FDialoger implements Dialoger
         {
             return this == Dismissed || this == TryDismiss;
         }
-    }
-
-    private static boolean isFullScreen(Window window)
-    {
-        if (window == null)
-            return false;
-
-        final WindowManager.LayoutParams params = window.getAttributes();
-        if (params == null)
-            return false;
-
-        return (params.flags & WindowManager.LayoutParams.FLAG_FULLSCREEN) == WindowManager.LayoutParams.FLAG_FULLSCREEN;
     }
 
     private static void removeView(final View view)
