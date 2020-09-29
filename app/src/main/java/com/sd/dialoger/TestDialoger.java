@@ -13,7 +13,7 @@ public class TestDialoger extends FDialoger
         super(activity);
         setDebug(true);
         setPadding(0, 0, 0, 0);
-        setBackgroundColor(0);
+        setBackgroundDim(false);
 
         setContentView(R.layout.dialoger_test);
         findViewById(R.id.btn).setOnClickListener(new View.OnClickListener()
