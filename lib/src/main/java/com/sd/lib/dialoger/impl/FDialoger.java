@@ -212,7 +212,7 @@ public class FDialoger implements Dialoger
     @Override
     public void setCanceledOnTouchOutside(boolean cancel)
     {
-        if (cancel && !mCancelable)
+        if (cancel)
             mCancelable = true;
 
         mCanceledOnTouchOutside = cancel;
