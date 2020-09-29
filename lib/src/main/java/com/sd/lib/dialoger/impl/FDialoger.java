@@ -796,15 +796,6 @@ public class FDialoger implements Dialoger
             super.setVisibility(visibility);
         }
 
-        private boolean isViewUnder(View view, int x, int y)
-        {
-            if (view == null)
-                return false;
-
-            return x >= view.getLeft() && x < view.getRight()
-                    && y >= view.getTop() && y < view.getBottom();
-        }
-
         @Override
         public boolean onInterceptTouchEvent(MotionEvent ev)
         {
@@ -1265,5 +1256,14 @@ public class FDialoger implements Dialoger
             }
         }
         return duration;
+    }
+
+    private static boolean isViewUnder(View view, int x, int y)
+    {
+        if (view == null)
+            return false;
+
+        return x >= view.getLeft() && x < view.getRight()
+                && y >= view.getTop() && y < view.getBottom();
     }
 }
