@@ -59,6 +59,7 @@ public class FDialoger implements Dialoger
     private List<LifecycleCallback> mLifecycleCallbacks;
 
     private boolean mLockDialoger;
+    private boolean mIsBackgroundDim;
 
     private FVisibilityAnimatorHandler mAnimatorHandler;
     private AnimatorCreator mAnimatorCreator;
@@ -146,6 +147,7 @@ public class FDialoger implements Dialoger
     @Override
     public void setBackgroundDim(boolean backgroundDim)
     {
+        mIsBackgroundDim = backgroundDim;
         if (backgroundDim)
         {
             final int color = mActivity.getResources().getColor(R.color.lib_dialoger_background_dim);
@@ -190,12 +192,6 @@ public class FDialoger implements Dialoger
 
     protected void onContentViewChanged(View oldView, View contentView)
     {
-    }
-
-    @Override
-    public void setBackgroundColor(int color)
-    {
-        mBackgroundView.setBackgroundColor(color);
     }
 
     @Override
@@ -636,7 +632,9 @@ public class FDialoger implements Dialoger
     {
         Animator animator = null;
 
-        final Animator animatorBackground = getBackgroundViewAnimatorCreator().createAnimator(show, mBackgroundView);
+        final Animator animatorBackground = mIsBackgroundDim ?
+                getBackgroundViewAnimatorCreator().createAnimator(show, mBackgroundView) : null;
+
         final Animator animatorContent = (mAnimatorCreator == null || mContentView == null) ?
                 null : mAnimatorCreator.createAnimator(show, mContentView);
 

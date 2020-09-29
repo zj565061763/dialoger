@@ -74,9 +74,6 @@ public interface Dialoger
      */
     void setBackgroundDim(boolean backgroundDim);
 
-    @Deprecated
-    void setBackgroundColor(int color);
-
     /**
      * 根据id查找view
      *
