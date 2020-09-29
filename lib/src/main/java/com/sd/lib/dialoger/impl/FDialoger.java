@@ -41,7 +41,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
-    private int mThemeResId;
+    private final int mThemeResId;
 
     private final View mDialogerView;
     private final View mBackgroundView;
