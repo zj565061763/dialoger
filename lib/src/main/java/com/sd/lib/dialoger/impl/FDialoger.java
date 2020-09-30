@@ -986,6 +986,23 @@ public class FDialoger implements Dialoger
         }
     }
 
+    /**
+     * 内容View的高度是否为{@link ViewGroup.LayoutParams#MATCH_PARENT}
+     *
+     * @return
+     */
+    private boolean isContentHeightMatchParent()
+    {
+        if (mContainerView == null)
+            return false;
+
+        final ViewGroup.LayoutParams params = mContainerView.getLayoutParams();
+        if (params == null)
+            return false;
+
+        return params.height == ViewGroup.LayoutParams.MATCH_PARENT;
+    }
+
     private Dialog mDialog;
 
     private Dialog getDialog()
