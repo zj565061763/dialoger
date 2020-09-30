@@ -229,9 +229,33 @@ public interface Dialoger
      */
     void setDebug(boolean debug);
 
+    /**
+     * 返回Context对象
+     *
+     * @return
+     */
     Context getContext();
 
+    /**
+     * 返回构造方法传入的Activity
+     *
+     * @return
+     */
     Activity getOwnerActivity();
+
+    /**
+     * 返回Window对象
+     *
+     * @return
+     */
+    Window getWindow();
+
+    /**
+     * 返回内部的窗口对象
+     *
+     * @return
+     */
+    Dialog dialog();
 
     /**
      * 返回窗口的内容view
@@ -255,18 +279,11 @@ public interface Dialoger
     void setContentView(View view);
 
     /**
-     * 设置窗口背景颜色
+     * 设置背景是否模糊
      *
-     * @param color
+     * @param backgroundDim
      */
-    void setBackgroundColor(int color);
-
-    /**
-     * 是否显示任务栏
-     *
-     * @param show
-     */
-    void setShowStatusBar(boolean show);
+    void setBackgroundDim(boolean backgroundDim);
 
     /**
      * 根据id查找view
@@ -332,6 +349,13 @@ public interface Dialoger
      * @return
      */
     AnimatorCreator getAnimatorCreator();
+
+    /**
+     * 设置动画时长
+     *
+     * @param duration
+     */
+    void setAnimatorDuration(long duration);
 
     /**
      * 设置重力属性{@link android.view.Gravity}
