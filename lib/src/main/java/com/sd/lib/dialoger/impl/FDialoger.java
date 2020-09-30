@@ -957,7 +957,8 @@ public class FDialoger implements Dialoger
             if (getWidth() > 0 && getHeight() > 0)
                 startShowAnimator();
 
-            if ((mGravity & Gravity.TOP) == Gravity.TOP && shouldTransparentStatusBarForBackgroundDim())
+            final boolean isGravityTop = (mGravity & Gravity.TOP) == Gravity.TOP;
+            if (isGravityTop && shouldTransparentStatusBarForBackgroundDim())
             {
                 final int barHeight = FStatusBarUtils.getBarHeight(this.getContext());
                 if (barHeight != this.getPaddingTop())
