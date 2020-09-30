@@ -70,17 +70,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          * 默认规则:
          * Gravity.CENTER:                      AlphaCreator 透明度
          *
-         * Gravity.LEFT:                        SlideRightLeftCreator 向右滑入，向左滑出
-         * Gravity.LEFT | Gravity.CENTER:       SlideRightLeftCreator
+         * Gravity.LEFT:                        SlideRightLeftParentCreator 向右滑入，向左滑出
          *
-         * Gravity.TOP:                         SlideBottomTopCreator 向下滑入，向上滑出
-         * Gravity.TOP | Gravity.CENTER:        SlideBottomTopCreator
+         * Gravity.TOP:                         SlideBottomTopParentCreator 向下滑入，向上滑出
          *
-         * Gravity.RIGHT:                       SlideLeftRightCreator 向左滑入，向右滑出
-         * case Gravity.RIGHT | Gravity.CENTER: SlideLeftRightCreator
+         * Gravity.RIGHT:                       SlideLeftRightParentCreator 向左滑入，向右滑出
          *
-         * Gravity.BOTTOM:                      SlideTopBottomCreator 向上滑入，向下滑出
-         * Gravity.BOTTOM | Gravity.CENTER:     SlideTopBottomCreator
+         * Gravity.BOTTOM:                      SlideTopBottomParentCreator 向上滑入，向下滑出
          *
          */
         dialoger.setAnimatorCreator(new SlideTopBottomParentCreator());
