@@ -874,6 +874,8 @@ public class FDialoger implements Dialoger, FStatusBar.Config
 
     private final class InternalContainerView extends LinearLayout
     {
+        private int mSavePaddingTop;
+
         public InternalContainerView(Context context)
         {
             super(context);
@@ -904,6 +906,7 @@ public class FDialoger implements Dialoger, FStatusBar.Config
             if (left != getPaddingLeft() || top != getPaddingTop()
                     || right != getPaddingRight() || bottom != getPaddingBottom())
             {
+                mSavePaddingTop = top;
                 super.setPadding(left, top, right, bottom);
             }
         }
@@ -961,6 +964,16 @@ public class FDialoger implements Dialoger, FStatusBar.Config
 
             if (getWidth() > 0 && getHeight() > 0)
                 startShowAnimator();
+
+            if ((mGravity & Gravity.TOP) == Gravity.TOP && shouldTransparentStatusBarForBackgroundDim())
+            {
+                final int barHeight = FStatusBarUtils.getBarHeight(this.getContext());
+                if (barHeight != this.getPaddingTop())
+                    super.setPadding(this.getPaddingLeft(), barHeight, this.getPaddingRight(), this.getPaddingBottom());
+            } else
+            {
+                this.setPadding(this.getPaddingLeft(), mSavePaddingTop, this.getPaddingRight(), this.getPaddingBottom());
+            }
         }
     }
 
