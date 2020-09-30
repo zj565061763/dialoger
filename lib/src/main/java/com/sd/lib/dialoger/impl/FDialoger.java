@@ -1032,7 +1032,7 @@ public class FDialoger implements Dialoger
     {
         if (mIsBackgroundDim)
         {
-            if (!isContentHeightMatchParent() && mTargetDialoger == null)
+            if (!isContentHeightMatchParent())
             {
                 return true;
             }
