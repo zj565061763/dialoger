@@ -9,7 +9,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,12 +33,13 @@ import com.sd.lib.dialoger.animator.SlideBottomTopParentCreator;
 import com.sd.lib.dialoger.animator.SlideLeftRightParentCreator;
 import com.sd.lib.dialoger.animator.SlideRightLeftParentCreator;
 import com.sd.lib.dialoger.animator.SlideTopBottomParentCreator;
+import com.sd.lib.systemui.statusbar.FStatusBar;
 import com.sd.lib.systemui.statusbar.FStatusBarUtils;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class FDialoger implements Dialoger
+public class FDialoger implements Dialoger, FStatusBar.Config
 {
     private final Activity mActivity;
     private final int mThemeResId;
@@ -773,6 +773,12 @@ public class FDialoger implements Dialoger
         return mTargetDialoger;
     }
 
+    @Override
+    public FStatusBar.Brightness getStatusBarBrightness()
+    {
+        return FStatusBar.Brightness.dark;
+    }
+
     private final class InternalDialogerView extends FrameLayout
     {
         private final View mBackgroundView;
@@ -1008,12 +1014,7 @@ public class FDialoger implements Dialoger
         return params.height == ViewGroup.LayoutParams.MATCH_PARENT;
     }
 
-    /**
-     * 状态栏是否需要透明延展
-     *
-     * @return
-     */
-    protected boolean shouldTransparentStatusBar()
+    private boolean shouldTransparentStatusBarForBackgroundDim()
     {
         if (mIsBackgroundDim)
         {
@@ -1073,21 +1074,12 @@ public class FDialoger implements Dialoger
             final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
             int targetHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-            if (shouldTransparentStatusBar())
-            {
+            if (shouldTransparentStatusBarForBackgroundDim())
                 FStatusBarUtils.setTransparent(this);
-            }
 
             boolean setHeightPixels = false;
-            if (Build.VERSION.SDK_INT >= 21)
-            {
-                final int systemVisibility = getWindow().getDecorView().getSystemUiVisibility();
-                final int value = systemVisibility & View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-                if (value == View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-                {
-                    setHeightPixels = true;
-                }
-            }
+            if (FStatusBarUtils.isContentExtension(FDialoger.this.getWindow()))
+                setHeightPixels = true;
 
             if (setHeightPixels)
                 targetHeight = FDialoger.this.getContext().getResources().getDisplayMetrics().heightPixels;
