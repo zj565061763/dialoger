@@ -33,13 +33,12 @@ import com.sd.lib.dialoger.animator.SlideBottomTopParentCreator;
 import com.sd.lib.dialoger.animator.SlideLeftRightParentCreator;
 import com.sd.lib.dialoger.animator.SlideRightLeftParentCreator;
 import com.sd.lib.dialoger.animator.SlideTopBottomParentCreator;
-import com.sd.lib.systemui.statusbar.FStatusBar;
 import com.sd.lib.systemui.statusbar.FStatusBarUtils;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class FDialoger implements Dialoger, FStatusBar.Config
+public class FDialoger implements Dialoger
 {
     private final Activity mActivity;
     private final int mThemeResId;
@@ -771,12 +770,6 @@ public class FDialoger implements Dialoger, FStatusBar.Config
         if (mTargetDialoger == null)
             mTargetDialoger = new SimpleTargetDialoger(this);
         return mTargetDialoger;
-    }
-
-    @Override
-    public FStatusBar.Brightness getStatusBarBrightness()
-    {
-        return FStatusBar.Brightness.dark;
     }
 
     private final class InternalDialogerView extends FrameLayout
