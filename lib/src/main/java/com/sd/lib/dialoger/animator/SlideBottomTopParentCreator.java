@@ -3,7 +3,7 @@ package com.sd.lib.dialoger.animator;
 import android.view.View;
 
 /**
- * 向下滑入，向上滑出相对于内容View父容器）
+ * 向下滑入，向上滑出（相对于内容View父容器）
  */
 public class SlideBottomTopParentCreator extends SlideVerticalCreator
 {
