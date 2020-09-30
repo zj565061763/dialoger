@@ -10,7 +10,7 @@ public class SlideBottomTopParentCreator extends SlideVerticalCreator
     @Override
     protected float getValueHidden(View view)
     {
-        return -(view.getHeight() + view.getTop());
+        return -view.getBottom();
     }
 
     @Override
