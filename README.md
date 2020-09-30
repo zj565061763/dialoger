@@ -102,17 +102,21 @@ interface AnimatorCreator
 ```
 
 库中已经提供的实现类有：
-* AlphaCreator 透明度
-* ScaleXCreator 缩放宽度
-* ScaleYCreator 缩放高度
-* ScaleXYCreator 缩放宽高
-* SlideBottomTopCreator 向下滑入，向上滑出，默认距离为内容view的高度
-* SlideTopBottomCreator 向上滑入，向下滑出，默认距离为内容view的高度
-* SlideLeftRightCreator 向左滑入，向右滑出，默认距离为内容view的宽度
-* SlideRightLeftCreator 向右滑入，向左滑出，默认距离为内容view的宽度
-* PivotCreator 为包装类，可以在动画开始的时候改变view的锚点
-* PivotPercentCreator 为包装类，可以在动画开始的时候改变view的锚点，根据百分比改变
-* CombineCreator 为组合类，可以同时组合多个不同的creator
+* AlphaCreator                透明度
+* ScaleXCreator               缩放宽度
+* ScaleYCreator               缩放高度
+* ScaleXYCreator              缩放宽高
+* SlideBottomTopCreator       向下滑入，向上滑出
+* SlideBottomTopParentCreator 向下滑入，向上滑出（相对于内容View父容器）
+* SlideTopBottomCreator       向上滑入，向下滑出
+* SlideTopBottomParentCreator 向上滑入，向下滑出（相对于内容View父容器）
+* SlideLeftRightCreator       向左滑入，向右滑出
+* SlideLeftRightParentCreator 向左滑入，向右滑出（相对于内容View父容器）
+* SlideRightLeftCreator       向右滑入，向左滑出
+* SlideRightLeftParentCreator 向右滑入，向左滑出（相对于内容View父容器）
+* PivotCreator                包装类，可以在动画开始的时候改变view的锚点
+* PivotPercentCreator         包装类，可以在动画开始的时候改变view的锚点，根据百分比改变
+* CombineCreator              组合类，可以同时组合多个不同的creator
 
 # 显示在某个View周围
 
