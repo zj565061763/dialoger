@@ -21,4 +21,6 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation project(':lib')
+
+    implementation 'com.github.zj565061763:systemui:latest.release'
 }
