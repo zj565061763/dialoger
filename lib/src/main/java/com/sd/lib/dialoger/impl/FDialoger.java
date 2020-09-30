@@ -1017,14 +1017,23 @@ public class FDialoger implements Dialoger, FStatusBar.Config
      */
     private boolean isContentHeightMatchParent()
     {
-        if (mContainerView == null)
+        if (mContentView == null)
             return false;
 
         final ViewGroup.LayoutParams params = mContentView.getLayoutParams();
         if (params == null)
             return false;
 
-        return params.height == ViewGroup.LayoutParams.MATCH_PARENT;
+        if (params.height == ViewGroup.LayoutParams.WRAP_CONTENT)
+            return false;
+
+        if (params.height == ViewGroup.LayoutParams.MATCH_PARENT)
+            return true;
+
+        if (params.height == getDisplayHeight(getContext()))
+            return true;
+
+        return false;
     }
 
     private boolean shouldTransparentStatusBarForBackgroundDim()
@@ -1095,7 +1104,7 @@ public class FDialoger implements Dialoger, FStatusBar.Config
                 setHeightPixels = true;
 
             if (setHeightPixels)
-                targetHeight = FDialoger.this.getContext().getResources().getDisplayMetrics().heightPixels;
+                targetHeight = getDisplayHeight(getContext());
 
             final WindowManager.LayoutParams params = getWindow().getAttributes();
             if (params.width != targetWidth || params.height != targetHeight
@@ -1327,5 +1336,10 @@ public class FDialoger implements Dialoger, FStatusBar.Config
 
         return x >= view.getLeft() && x < view.getRight()
                 && y >= view.getTop() && y < view.getBottom();
+    }
+
+    private static int getDisplayHeight(Context context)
+    {
+        return context.getResources().getDisplayMetrics().heightPixels;
     }
 }
