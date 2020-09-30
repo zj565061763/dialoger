@@ -34,6 +34,7 @@ import com.sd.lib.dialoger.animator.SlideBottomTopParentCreator;
 import com.sd.lib.dialoger.animator.SlideLeftRightParentCreator;
 import com.sd.lib.dialoger.animator.SlideRightLeftParentCreator;
 import com.sd.lib.dialoger.animator.SlideTopBottomParentCreator;
+import com.sd.lib.systemui.statusbar.FStatusBarUtils;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -1000,11 +1001,28 @@ public class FDialoger implements Dialoger
         if (mContainerView == null)
             return false;
 
-        final ViewGroup.LayoutParams params = mContainerView.getLayoutParams();
+        final ViewGroup.LayoutParams params = mContentView.getLayoutParams();
         if (params == null)
             return false;
 
         return params.height == ViewGroup.LayoutParams.MATCH_PARENT;
+    }
+
+    /**
+     * 状态栏是否需要透明延展
+     *
+     * @return
+     */
+    protected boolean shouldTransparentStatusBar()
+    {
+        if (mIsBackgroundDim)
+        {
+            if (!isContentHeightMatchParent() && mTargetDialoger == null)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private Dialog mDialog;
@@ -1055,8 +1073,12 @@ public class FDialoger implements Dialoger
             final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
             int targetHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
 
-            boolean setHeightPixels = false;
+            if (shouldTransparentStatusBar())
+            {
+                FStatusBarUtils.setTransparent(this);
+            }
 
+            boolean setHeightPixels = false;
             if (Build.VERSION.SDK_INT >= 21)
             {
                 final int systemVisibility = getWindow().getDecorView().getSystemUiVisibility();
