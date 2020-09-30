@@ -30,10 +30,10 @@ import com.sd.lib.dialoger.R;
 import com.sd.lib.dialoger.TargetDialoger;
 import com.sd.lib.dialoger.animator.AlphaCreator;
 import com.sd.lib.dialoger.animator.ObjectAnimatorCreator;
-import com.sd.lib.dialoger.animator.SlideBottomTopCreator;
-import com.sd.lib.dialoger.animator.SlideLeftRightCreator;
-import com.sd.lib.dialoger.animator.SlideRightLeftCreator;
-import com.sd.lib.dialoger.animator.SlideTopBottomCreator;
+import com.sd.lib.dialoger.animator.SlideBottomTopParentCreator;
+import com.sd.lib.dialoger.animator.SlideLeftRightParentCreator;
+import com.sd.lib.dialoger.animator.SlideRightLeftParentCreator;
+import com.sd.lib.dialoger.animator.SlideTopBottomParentCreator;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -550,22 +550,22 @@ public class FDialoger implements Dialoger
                     break;
                 case Gravity.LEFT:
                 case Gravity.LEFT | Gravity.CENTER:
-                    setAnimatorCreator(new SlideRightLeftCreator());
+                    setAnimatorCreator(new SlideRightLeftParentCreator());
                     mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.TOP:
                 case Gravity.TOP | Gravity.CENTER:
-                    setAnimatorCreator(new SlideBottomTopCreator());
+                    setAnimatorCreator(new SlideBottomTopParentCreator());
                     mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.RIGHT:
                 case Gravity.RIGHT | Gravity.CENTER:
-                    setAnimatorCreator(new SlideLeftRightCreator());
+                    setAnimatorCreator(new SlideLeftRightParentCreator());
                     mIsAnimatorCreatorModifiedInternal = true;
                     break;
                 case Gravity.BOTTOM:
                 case Gravity.BOTTOM | Gravity.CENTER:
-                    setAnimatorCreator(new SlideTopBottomCreator());
+                    setAnimatorCreator(new SlideTopBottomParentCreator());
                     mIsAnimatorCreatorModifiedInternal = true;
                     break;
             }
