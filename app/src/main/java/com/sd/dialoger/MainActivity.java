@@ -8,7 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.sd.lib.dialoger.Dialoger;
-import com.sd.lib.dialoger.animator.AlphaCreator;
+import com.sd.lib.dialoger.animator.SlideTopBottomParentCreator;
 import com.sd.lib.dialoger.impl.FDialoger;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener
@@ -25,6 +25,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void showSimpleDemo()
     {
         final FDialoger dialoger = new FDialoger(this);
+
+        /**
+         * 设置填充
+         */
+        dialoger.setPadding(0, 0, 0, 0);
 
         /**
          * 设置调试模式，内部会输出日志，日志tag：Dialoger
@@ -78,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
          * Gravity.BOTTOM | Gravity.CENTER:     SlideTopBottomCreator
          *
          */
-        dialoger.setAnimatorCreator(new AlphaCreator());
+        dialoger.setAnimatorCreator(new SlideTopBottomParentCreator());
 
         /**
          * 设置动画时长
