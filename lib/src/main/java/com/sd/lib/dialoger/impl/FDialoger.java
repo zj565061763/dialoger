@@ -148,14 +148,17 @@ public class FDialoger implements Dialoger
     @Override
     public void setBackgroundDim(boolean backgroundDim)
     {
-        mIsBackgroundDim = backgroundDim;
-        if (backgroundDim)
+        if (mIsBackgroundDim != backgroundDim)
         {
-            final int color = mActivity.getResources().getColor(R.color.lib_dialoger_background_dim);
-            mBackgroundView.setBackgroundColor(color);
-        } else
-        {
-            mBackgroundView.setBackgroundColor(Color.TRANSPARENT);
+            mIsBackgroundDim = backgroundDim;
+            if (backgroundDim)
+            {
+                final int color = mActivity.getResources().getColor(R.color.lib_dialoger_background_dim);
+                mBackgroundView.setBackgroundColor(color);
+            } else
+            {
+                mBackgroundView.setBackgroundColor(Color.TRANSPARENT);
+            }
         }
     }
 
@@ -959,6 +962,7 @@ public class FDialoger implements Dialoger
         public InternalBackgroundView(Context context)
         {
             super(context);
+            setBackgroundColor(Color.TRANSPARENT);
         }
 
         @Override
