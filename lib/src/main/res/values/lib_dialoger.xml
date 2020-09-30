@@ -9,6 +9,16 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+    <style name="lib_dialoger_anim_left_left" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/lib_dialoger_anim_slide_in_from_left</item>
+        <item name="android:windowExitAnimation">@anim/lib_dialoger_anim_slide_out_to_left</item>
+    </style>
+
+    <style name="lib_dialoger_anim_right_right" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/lib_dialoger_anim_slide_in_from_right</item>
+        <item name="android:windowExitAnimation">@anim/lib_dialoger_anim_slide_out_to_right</item>
+    </style>
+
     <color name="lib_dialoger_background_dim">#66000000</color>
 
 </resources>
