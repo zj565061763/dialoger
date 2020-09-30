@@ -14,6 +14,11 @@ private void showSimpleDemo()
     final FDialoger dialoger = new FDialoger(this);
 
     /**
+     * 设置填充
+     */
+    dialoger.setPadding(0, 0, 0, 0);
+
+    /**
      * 设置调试模式，内部会输出日志，日志tag：Dialoger
      */
     dialoger.setDebug(true);
@@ -61,7 +66,12 @@ private void showSimpleDemo()
      * Gravity.BOTTOM:                      SlideTopBottomParentCreator 向上滑入，向下滑出
      *
      */
-    dialoger.setAnimatorCreator(new AlphaCreator());
+    dialoger.setAnimatorCreator(new SlideTopBottomParentCreator());
+
+    /**
+     * 设置动画时长
+     */
+    dialoger.setAnimatorDuration(1000);
 
     /**
      * 显示窗口
