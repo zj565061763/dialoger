@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         /**
          * 设置动画时长
          */
-        dialoger.setAnimatorDuration(2000);
+        dialoger.setAnimatorDuration(1000);
 
         /**
          * 显示窗口
