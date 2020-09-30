@@ -1,6 +1,5 @@
 package com.sd.lib.dialoger.impl;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
