@@ -1295,7 +1295,6 @@ public class FDialoger implements Dialoger
         }
     }
 
-
     private enum State
     {
         TryShow,
