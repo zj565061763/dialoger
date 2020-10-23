@@ -1265,6 +1265,17 @@ public class FDialoger implements Dialoger
     }
 
     /**
+     * 返回Activity的所有窗口
+     *
+     * @param activity
+     * @return
+     */
+    public static List<FDialoger> getAll(Activity activity)
+    {
+        return FDialogerHolder.get(activity);
+    }
+
+    /**
      * 关闭指定Activity的所有窗口
      *
      * @param activity
@@ -1274,7 +1285,7 @@ public class FDialoger implements Dialoger
         if (activity.isFinishing())
             return;
 
-        final List<FDialoger> list = FDialogerHolder.get(activity);
+        final List<FDialoger> list = getAll(activity);
         if (list == null || list.isEmpty())
             return;
 
@@ -1283,6 +1294,7 @@ public class FDialoger implements Dialoger
             item.dismiss();
         }
     }
+
 
     private enum State
     {
