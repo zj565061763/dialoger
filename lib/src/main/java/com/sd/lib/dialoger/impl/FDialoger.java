@@ -761,6 +761,10 @@ public class FDialoger implements Dialoger
     {
     }
 
+    protected void onTouchOutside(MotionEvent event)
+    {
+    }
+
     private SimpleTargetDialoger mTargetDialoger;
 
     @Override
@@ -829,10 +833,14 @@ public class FDialoger implements Dialoger
             {
                 if (!isViewUnder(mContentView, (int) event.getX(), (int) event.getY()))
                 {
+                    if (mIsDebug)
+                        Log.i(Dialoger.class.getSimpleName(), "touch outside");
+
+                    onTouchOutside(event);
                     if (mCanceledOnTouchOutside && mCancelable)
                     {
                         if (mIsDebug)
-                            Log.i(Dialoger.class.getSimpleName(), "touch outside try dismiss ");
+                            Log.i(Dialoger.class.getSimpleName(), "touch outside try dismiss");
 
                         dismiss();
                         return true;
