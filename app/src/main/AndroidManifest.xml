@@ -12,7 +12,13 @@
 
         <meta-data
             android:name="android.max_aspect"
-            android:value="4.2" />
+            android:value="2.4" />
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
 
         <activity android:name="com.sd.dialoger.MainActivity">
             <intent-filter>
