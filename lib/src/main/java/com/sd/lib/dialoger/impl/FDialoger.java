@@ -9,9 +9,11 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -1105,7 +1107,27 @@ public class FDialoger implements Dialoger
                 setHeightPixels = true;
 
             if (setHeightPixels)
-                targetHeight = getDisplayHeight(getContext());
+            {
+                final int barHeight = FStatusBarUtils.getBarHeight(getContext());
+                final int displayHeight = getDisplayHeight(getContext());
+                final int realHeight = getRealHeight(getWindow(), getContext());
+
+                final int topHeight = barHeight + displayHeight;
+                if (topHeight >= realHeight)
+                {
+                    targetHeight = displayHeight;
+                } else
+                {
+                    final int delta = realHeight - topHeight;
+                    if (delta <= 10)
+                    {
+                        targetHeight = displayHeight;
+                    } else
+                    {
+                        targetHeight = topHeight;
+                    }
+                }
+            }
 
             final WindowManager.LayoutParams params = getWindow().getAttributes();
             if (params.width != targetWidth || params.height != targetHeight
@@ -1353,5 +1375,18 @@ public class FDialoger implements Dialoger
     private static int getDisplayHeight(Context context)
     {
         return context.getResources().getDisplayMetrics().heightPixels;
+    }
+
+    private static int getRealHeight(Window window, Context context)
+    {
+        if (Build.VERSION.SDK_INT >= 17)
+        {
+            final DisplayMetrics metrics = new DisplayMetrics();
+            window.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            return metrics.heightPixels;
+        } else
+        {
+            return getDisplayHeight(context);
+        }
     }
 }
