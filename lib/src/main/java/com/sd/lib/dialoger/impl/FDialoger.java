@@ -9,7 +9,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -1039,7 +1038,12 @@ public class FDialoger implements Dialoger
         return false;
     }
 
-    private boolean shouldTransparentStatusBarForBackgroundDim()
+    /**
+     * 是否为模糊背景设置状态栏延伸
+     *
+     * @return
+     */
+    protected boolean shouldTransparentStatusBarForBackgroundDim()
     {
         if (mIsBackgroundDim)
         {
@@ -1049,6 +1053,16 @@ public class FDialoger implements Dialoger
             }
         }
         return false;
+    }
+
+    /**
+     * 是否为状态栏内容延伸检查Window高度
+     *
+     * @return
+     */
+    protected boolean shouldCheckHeightForStatusBarContentExtension()
+    {
+        return true;
     }
 
     private Dialog mDialog;
@@ -1102,34 +1116,27 @@ public class FDialoger implements Dialoger
             if (shouldTransparentStatusBarForBackgroundDim())
                 FStatusBarUtils.setTransparent(this);
 
-            boolean setHeightPixels = false;
-            if (FStatusBarUtils.isContentExtension(FDialoger.this.getWindow()))
-                setHeightPixels = true;
-
-            if (setHeightPixels)
+            if (shouldCheckHeightForStatusBarContentExtension() && FStatusBarUtils.isContentExtension(FDialoger.this.getWindow()))
             {
-                final int barHeight = FStatusBarUtils.getBarHeight(getContext());
-                final int displayHeight = getDisplayHeight(getContext());
-                final int realHeight = getRealHeight(getWindow(), getContext());
+                final int realHeight = getRealHeight(getWindow());
+                final int barHeight = FNavigationBarUtils.getBarHeight(getContext());
+                final int topHeight = realHeight - barHeight;
 
-                final int topHeight = barHeight + displayHeight;
-                if (topHeight >= realHeight)
+                final int displayHeight = getDisplayHeight(getContext());
+                if (topHeight <= displayHeight)
                 {
                     targetHeight = displayHeight;
                 } else
                 {
-                    final int delta = realHeight - topHeight;
-                    if (delta <= 10)
-                    {
-                        targetHeight = displayHeight;
-                    } else
-                    {
-                        targetHeight = topHeight;
-                    }
+                    // 暂不判断是否开启刘海屏适配
+                    targetHeight = topHeight;
                 }
             }
 
             final WindowManager.LayoutParams params = getWindow().getAttributes();
+            if (params.height == ViewGroup.LayoutParams.MATCH_PARENT)
+                targetHeight = ViewGroup.LayoutParams.MATCH_PARENT;
+
             if (params.width != targetWidth || params.height != targetHeight
                     || params.horizontalMargin != 0 || params.verticalMargin != 0)
             {
@@ -1377,16 +1384,10 @@ public class FDialoger implements Dialoger
         return context.getResources().getDisplayMetrics().heightPixels;
     }
 
-    private static int getRealHeight(Window window, Context context)
+    private static int getRealHeight(Window window)
     {
-        if (Build.VERSION.SDK_INT >= 17)
-        {
-            final DisplayMetrics metrics = new DisplayMetrics();
-            window.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
-            return metrics.heightPixels;
-        } else
-        {
-            return getDisplayHeight(context);
-        }
+        final DisplayMetrics metrics = new DisplayMetrics();
+        window.getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+        return metrics.heightPixels;
     }
 }

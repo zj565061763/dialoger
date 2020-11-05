@@ -1,16 +1,18 @@
 package com.sd.lib.dialoger.impl;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.Window;
 import android.view.WindowManager;
 
-class FStatusBarUtils extends FSystemUIUtils
+import java.lang.reflect.Method;
+
+class FNavigationBarUtils extends FSystemUIUtils
 {
     /**
      * 设置全透明
@@ -23,19 +25,6 @@ class FStatusBarUtils extends FSystemUIUtils
             return;
 
         setTransparent(activity.getWindow());
-    }
-
-    /**
-     * 设置全透明
-     *
-     * @param dialog
-     */
-    public static void setTransparent(Dialog dialog)
-    {
-        if (dialog == null)
-            return;
-
-        setTransparent(dialog.getWindow());
     }
 
     /**
@@ -63,16 +52,17 @@ class FStatusBarUtils extends FSystemUIUtils
         {
             int flag = window.getDecorView().getSystemUiVisibility();
             flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+            flag = addFlag(flag, View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
             window.getDecorView().setSystemUiVisibility(flag);
 
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
 
-            if (window.getStatusBarColor() != Color.TRANSPARENT)
-                window.setStatusBarColor(Color.TRANSPARENT);
+            if (window.getNavigationBarColor() != Color.TRANSPARENT)
+                window.setNavigationBarColor(Color.TRANSPARENT);
         } else if (Build.VERSION.SDK_INT >= 19)
         {
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
     }
 
@@ -84,22 +74,22 @@ class FStatusBarUtils extends FSystemUIUtils
      */
     static void setBrightness(Window window, boolean dark)
     {
-        if (Build.VERSION.SDK_INT >= 23)
+        if (Build.VERSION.SDK_INT >= 21)
         {
             int flag = window.getDecorView().getSystemUiVisibility();
             if (dark)
             {
-                flag = clearFlag(flag, View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                flag = clearFlag(flag, View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             } else
             {
-                flag = addFlag(flag, View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                flag = addFlag(flag, View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
             }
             window.getDecorView().setSystemUiVisibility(flag);
         }
     }
 
     /**
-     * 内容是否延展到状态栏底部
+     * 内容是否延展到底部导航栏底部
      *
      * @param window
      * @return
@@ -110,12 +100,13 @@ class FStatusBarUtils extends FSystemUIUtils
         {
             final int flags = window.getDecorView().getSystemUiVisibility();
             final boolean hasFullScreen = hasFlag(flags, View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            return hasFullScreen;
+            final boolean hasHideNavigation = hasFlag(flags, View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+            return hasFullScreen && hasHideNavigation;
         } else if (Build.VERSION.SDK_INT >= 19)
         {
             final int flags = window.getAttributes().flags;
-            final boolean hasTranslucentStatus = hasFlag(flags, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            return hasTranslucentStatus;
+            final boolean hasTranslucentNavigation = hasFlag(flags, WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
+            return hasTranslucentNavigation;
         } else
         {
             return false;
@@ -123,19 +114,50 @@ class FStatusBarUtils extends FSystemUIUtils
     }
 
     /**
-     * Window的状态栏是否可见
+     * 底部导航栏是否可见
      *
-     * @param window
+     * @param context
      * @return
      */
-    public static boolean isBarVisible(Window window)
+    public static boolean isBarVisible(Context context)
     {
-        final int flags = window.getAttributes().flags;
-        return !hasFlag(flags, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final Resources resources = context.getResources();
+        final int resourceId = resources.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (resourceId == 0)
+            return !ViewConfiguration.get(context).hasPermanentMenuKey();
+
+        boolean isVisible = resources.getBoolean(resourceId);
+
+        final String navigationBarOverride = getNavigationBarOverride();
+        if ("1".equals(navigationBarOverride))
+        {
+            isVisible = false;
+        }
+
+        return isVisible;
+    }
+
+    private static String getNavigationBarOverride()
+    {
+        String result = null;
+        if (Build.VERSION.SDK_INT >= 19)
+        {
+            try
+            {
+                final Class clazz = Class.forName("android.os.SystemProperties");
+                final Method method = clazz.getDeclaredMethod("get", String.class);
+                method.setAccessible(true);
+                result = (String) method.invoke(null, "qemu.hw.mainkeys");
+            } catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return result;
     }
 
     /**
-     * 状态栏高度
+     * 底部导航栏高度
      *
      * @param context
      * @return
@@ -143,13 +165,7 @@ class FStatusBarUtils extends FSystemUIUtils
     public static int getBarHeight(Context context)
     {
         final Resources resources = context.getResources();
-        final int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
+        final int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
         return resourceId == 0 ? 0 : resources.getDimensionPixelSize(resourceId);
-    }
-
-    @Deprecated
-    public static int getStatusBarHeight(Context context)
-    {
-        return getBarHeight(context);
     }
 }
