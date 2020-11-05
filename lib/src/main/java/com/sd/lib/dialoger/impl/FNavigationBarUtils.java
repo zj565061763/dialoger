@@ -12,7 +12,7 @@ import android.view.WindowManager;
 
 import java.lang.reflect.Method;
 
-class FNavigationBarUtils extends FSystemUIUtils
+class FNavigationBarUtils extends FFlagUtils
 {
     /**
      * 设置全透明
