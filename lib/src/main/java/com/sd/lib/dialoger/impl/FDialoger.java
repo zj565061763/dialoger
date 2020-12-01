@@ -370,6 +370,7 @@ public class FDialoger implements Dialoger
                 getAnimatorHandler().cancelHideAnimator();
             }
 
+            showDimDialog();
             getDialog().show();
             setState(State.Shown);
         }
@@ -723,6 +724,7 @@ public class FDialoger implements Dialoger
 
         try
         {
+            hideDimDialog();
             getDialog().dismiss();
         } catch (Exception e)
         {
@@ -998,6 +1000,7 @@ public class FDialoger implements Dialoger
     }
 
     private Dialog mDialog;
+    private BackgroundDimDialog mDimDialog;
 
     private Dialog getDialog()
     {
@@ -1029,6 +1032,32 @@ public class FDialoger implements Dialoger
                     ViewGroup.LayoutParams.MATCH_PARENT));
         }
         return mDialog;
+    }
+
+    private void showDimDialog()
+    {
+        if (mActivity.isFinishing())
+            return;
+
+        if (mIsBackgroundDim)
+        {
+            if (mDimDialog == null)
+                mDimDialog = new BackgroundDimDialog(mActivity);
+
+            mDimDialog.show();
+        }
+    }
+
+    private void hideDimDialog()
+    {
+        try
+        {
+            if (mDimDialog != null)
+                mDimDialog.dismiss();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private final class InternalDialog extends Dialog

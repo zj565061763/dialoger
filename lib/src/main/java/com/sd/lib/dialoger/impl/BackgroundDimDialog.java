@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.sd.lib.dialoger.R;
 
-public class BackgroundDimDialog extends Dialog
+class BackgroundDimDialog extends Dialog
 {
     public BackgroundDimDialog(Context context)
     {
@@ -26,5 +26,7 @@ public class BackgroundDimDialog extends Dialog
         getWindow().getAttributes().height = ViewGroup.LayoutParams.MATCH_PARENT;
         getWindow().getAttributes().horizontalMargin = 0;
         getWindow().getAttributes().verticalMargin = 0;
+
+        FStatusBarUtils.setTransparent(this);
     }
 }
