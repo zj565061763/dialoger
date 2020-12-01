@@ -635,7 +635,16 @@ public class FDialoger implements Dialoger
     {
         Animator animator = null;
 
-        final Animator animatorBackground = null;
+        Animator animatorBackground = null;
+        if (show)
+        {
+            if (mIsBackgroundDim && mDimDialog != null)
+                animatorBackground = getBackgroundViewAnimatorCreator().createAnimator(true, mDimDialog.mContentView);
+        } else
+        {
+            if (mDimDialog != null && mDimDialog.isShowing())
+                animatorBackground = getBackgroundViewAnimatorCreator().createAnimator(false, mDimDialog.mContentView);
+        }
 
         final Animator animatorContent = (mAnimatorCreator == null || mContentView == null) ?
                 null : mAnimatorCreator.createAnimator(show, mContentView);
