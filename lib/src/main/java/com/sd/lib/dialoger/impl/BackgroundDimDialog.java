@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sd.lib.dialoger.R;
+import com.sd.lib.systemui.statusbar.FStatusBarUtils;
 
 class BackgroundDimDialog extends Dialog
 {

@@ -34,6 +34,8 @@ import com.sd.lib.dialoger.animator.SlideBottomTopParentCreator;
 import com.sd.lib.dialoger.animator.SlideLeftRightParentCreator;
 import com.sd.lib.dialoger.animator.SlideRightLeftParentCreator;
 import com.sd.lib.dialoger.animator.SlideTopBottomParentCreator;
+import com.sd.lib.systemui.navigationbar.FNavigationBarUtils;
+import com.sd.lib.systemui.statusbar.FStatusBarUtils;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
