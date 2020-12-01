@@ -12,6 +12,7 @@ public class SystemUIDialog extends FDialoger implements FStatusBar.Config
     {
         super(activity);
         setPadding(0, 0, 0, 0);
+
         setContentView(R.layout.dialog_system_ui);
         FStatusBarUtils.setTransparent(dialog());
     }
