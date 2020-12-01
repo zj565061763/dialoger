@@ -19,7 +19,6 @@ class BackgroundDimDialog extends Dialog
         final View view = new View(context);
         view.setBackgroundColor(color);
         view.setLayoutParams(params);
-
         setContentView(view);
 
         setCancelable(false);
