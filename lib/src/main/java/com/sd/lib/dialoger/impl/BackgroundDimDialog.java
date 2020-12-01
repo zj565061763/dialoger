@@ -10,6 +10,8 @@ import com.sd.lib.systemui.statusbar.FStatusBarUtils;
 
 class BackgroundDimDialog extends Dialog
 {
+    final View mContentView;
+
     public BackgroundDimDialog(Context context)
     {
         super(context, R.style.lib_dialoger_default);
@@ -20,6 +22,7 @@ class BackgroundDimDialog extends Dialog
         view.setBackgroundColor(color);
         view.setLayoutParams(params);
         setContentView(view);
+        mContentView = view;
 
         setCancelable(false);
         getWindow().getAttributes().width = ViewGroup.LayoutParams.MATCH_PARENT;
