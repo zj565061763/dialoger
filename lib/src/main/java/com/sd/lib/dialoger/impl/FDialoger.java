@@ -8,7 +8,6 @@ import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -44,7 +43,6 @@ public class FDialoger implements Dialoger
     private final int mThemeResId;
 
     private final View mDialogerView;
-    private final View mBackgroundView;
     private final LinearLayout mContainerView;
     private View mContentView;
 
@@ -87,7 +85,6 @@ public class FDialoger implements Dialoger
         final InternalDialogerView dialogerView = new InternalDialogerView(activity);
         mDialogerView = dialogerView;
         mContainerView = dialogerView.mContainerView;
-        mBackgroundView = dialogerView.mBackgroundView;
 
         final int defaultPadding = (int) (activity.getResources().getDisplayMetrics().widthPixels * 0.1f);
         setPadding(defaultPadding, 0, defaultPadding, 0);
@@ -151,14 +148,6 @@ public class FDialoger implements Dialoger
         if (mIsBackgroundDim != backgroundDim)
         {
             mIsBackgroundDim = backgroundDim;
-            if (backgroundDim)
-            {
-                final int color = mActivity.getResources().getColor(R.color.lib_dialoger_background_dim);
-                mBackgroundView.setBackgroundColor(color);
-            } else
-            {
-                mBackgroundView.setBackgroundColor(Color.TRANSPARENT);
-            }
         }
     }
 
@@ -642,8 +631,7 @@ public class FDialoger implements Dialoger
     {
         Animator animator = null;
 
-        final Animator animatorBackground = mIsBackgroundDim ?
-                getBackgroundViewAnimatorCreator().createAnimator(show, mBackgroundView) : null;
+        final Animator animatorBackground = null;
 
         final Animator animatorContent = (mAnimatorCreator == null || mContentView == null) ?
                 null : mAnimatorCreator.createAnimator(show, mContentView);
@@ -778,16 +766,11 @@ public class FDialoger implements Dialoger
 
     private final class InternalDialogerView extends FrameLayout
     {
-        private final View mBackgroundView;
         private final LinearLayout mContainerView;
 
         public InternalDialogerView(Context context)
         {
             super(context);
-
-            mBackgroundView = new InternalBackgroundView(context);
-            addView(mBackgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
             mContainerView = new InternalContainerView(context);
             addView(mContainerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
@@ -796,7 +779,7 @@ public class FDialoger implements Dialoger
         public void onViewAdded(View child)
         {
             super.onViewAdded(child);
-            if (child != mBackgroundView && child != mContainerView)
+            if (child != mContainerView)
                 throw new RuntimeException("you can not add view to dialoger view");
         }
 
@@ -804,7 +787,7 @@ public class FDialoger implements Dialoger
         public void onViewRemoved(View child)
         {
             super.onViewRemoved(child);
-            if (child == mBackgroundView || child == mContainerView)
+            if (child == mContainerView)
                 throw new RuntimeException("you can not remove dialoger child");
         }
 
@@ -875,8 +858,6 @@ public class FDialoger implements Dialoger
 
     private final class InternalContainerView extends LinearLayout
     {
-        private int mSavePaddingTop;
-
         public InternalContainerView(Context context)
         {
             super(context);
@@ -907,7 +888,6 @@ public class FDialoger implements Dialoger
             if (left != getPaddingLeft() || top != getPaddingTop()
                     || right != getPaddingRight() || bottom != getPaddingBottom())
             {
-                mSavePaddingTop = top;
                 super.setPadding(left, top, right, bottom);
             }
         }
@@ -965,34 +945,6 @@ public class FDialoger implements Dialoger
 
             if (getWidth() > 0 && getHeight() > 0)
                 startShowAnimator();
-
-            final boolean isGravityTop = (mGravity & Gravity.TOP) == Gravity.TOP;
-            if (isGravityTop && shouldTransparentStatusBarForBackgroundDim())
-            {
-                final int barHeight = FStatusBarUtils.getBarHeight(this.getContext());
-                if (this.getPaddingTop() < barHeight)
-                    super.setPadding(this.getPaddingLeft(), barHeight, this.getPaddingRight(), this.getPaddingBottom());
-            } else
-            {
-                this.setPadding(this.getPaddingLeft(), mSavePaddingTop, this.getPaddingRight(), this.getPaddingBottom());
-            }
-        }
-    }
-
-    private final class InternalBackgroundView extends View
-    {
-        public InternalBackgroundView(Context context)
-        {
-            super(context);
-            setBackgroundColor(Color.TRANSPARENT);
-        }
-
-        @Override
-        protected void onLayout(boolean changed, int left, int top, int right, int bottom)
-        {
-            super.onLayout(changed, left, top, right, bottom);
-            if (changed)
-                FDialoger.this.checkMatchLayoutParams(this);
         }
     }
 
@@ -1010,49 +962,6 @@ public class FDialoger implements Dialoger
         {
             throw new RuntimeException("you can not set margin to view");
         }
-    }
-
-    /**
-     * 内容View的高度是否为{@link ViewGroup.LayoutParams#MATCH_PARENT}
-     *
-     * @return
-     */
-    private boolean isContentHeightMatchParent()
-    {
-        if (mContentView == null)
-            return false;
-
-        final ViewGroup.LayoutParams params = mContentView.getLayoutParams();
-        if (params == null)
-            return false;
-
-        if (params.height == ViewGroup.LayoutParams.WRAP_CONTENT)
-            return false;
-
-        if (params.height == ViewGroup.LayoutParams.MATCH_PARENT)
-            return true;
-
-        if (params.height == getDisplayHeight(getContext()))
-            return true;
-
-        return false;
-    }
-
-    /**
-     * 是否为模糊背景设置状态栏延伸
-     *
-     * @return
-     */
-    protected boolean shouldTransparentStatusBarForBackgroundDim()
-    {
-        if (mIsBackgroundDim)
-        {
-            if (!isContentHeightMatchParent())
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -1112,9 +1021,6 @@ public class FDialoger implements Dialoger
         {
             final int targetWidth = ViewGroup.LayoutParams.MATCH_PARENT;
             int targetHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
-
-            if (shouldTransparentStatusBarForBackgroundDim())
-                FStatusBarUtils.setTransparent(this);
 
             if (shouldCheckHeightForStatusBarContentExtension() && FStatusBarUtils.isContentExtension(FDialoger.this.getWindow()))
             {
