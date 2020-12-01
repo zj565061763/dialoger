@@ -8,6 +8,7 @@ import android.app.Application;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -766,11 +767,16 @@ public class FDialoger implements Dialoger
 
     private final class InternalDialogerView extends FrameLayout
     {
+        private final View mBackgroundView;
         private final LinearLayout mContainerView;
 
         public InternalDialogerView(Context context)
         {
             super(context);
+
+            mBackgroundView = new InternalBackgroundView(context);
+            addView(mBackgroundView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
             mContainerView = new InternalContainerView(context);
             addView(mContainerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         }
@@ -779,7 +785,7 @@ public class FDialoger implements Dialoger
         public void onViewAdded(View child)
         {
             super.onViewAdded(child);
-            if (child != mContainerView)
+            if (child != mBackgroundView && child != mContainerView)
                 throw new RuntimeException("you can not add view to dialoger view");
         }
 
@@ -787,7 +793,7 @@ public class FDialoger implements Dialoger
         public void onViewRemoved(View child)
         {
             super.onViewRemoved(child);
-            if (child == mContainerView)
+            if (child == mBackgroundView || child == mContainerView)
                 throw new RuntimeException("you can not remove dialoger child");
         }
 
@@ -945,6 +951,23 @@ public class FDialoger implements Dialoger
 
             if (getWidth() > 0 && getHeight() > 0)
                 startShowAnimator();
+        }
+    }
+
+    private final class InternalBackgroundView extends View
+    {
+        public InternalBackgroundView(Context context)
+        {
+            super(context);
+            setBackgroundColor(Color.TRANSPARENT);
+        }
+
+        @Override
+        protected void onLayout(boolean changed, int left, int top, int right, int bottom)
+        {
+            super.onLayout(changed, left, top, right, bottom);
+            if (changed)
+                FDialoger.this.checkMatchLayoutParams(this);
         }
     }
 
