@@ -650,10 +650,7 @@ public class FDialoger implements Dialoger
             final AnimatorSet animatorSet = new AnimatorSet();
             animatorSet.play(animatorBackground).with(animatorContent);
             animator = animatorSet;
-        } else if (animatorBackground != null)
-        {
-            animator = animatorBackground;
-        } else if (animatorContent != null)
+        } else
         {
             animator = animatorContent;
         }
