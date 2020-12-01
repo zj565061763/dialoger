@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sd.lib.dialoger.R;
+import com.sd.lib.systemui.common.FSystemUIUtils;
 import com.sd.lib.systemui.statusbar.FStatusBarUtils;
 
 class BackgroundDimDialog extends Dialog
@@ -25,8 +26,10 @@ class BackgroundDimDialog extends Dialog
         mContentView = view;
 
         setCancelable(false);
+
+        final int height = FSystemUIUtils.getRealMetrics(getWindow()).heightPixels;
+        getWindow().getAttributes().height = height > 0 ? height : ViewGroup.LayoutParams.MATCH_PARENT;
         getWindow().getAttributes().width = ViewGroup.LayoutParams.MATCH_PARENT;
-        getWindow().getAttributes().height = ViewGroup.LayoutParams.MATCH_PARENT;
         getWindow().getAttributes().horizontalMargin = 0;
         getWindow().getAttributes().verticalMargin = 0;
 
