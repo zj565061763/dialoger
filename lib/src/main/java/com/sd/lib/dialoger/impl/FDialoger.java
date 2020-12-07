@@ -372,9 +372,7 @@ public class FDialoger implements Dialoger
                 getAnimatorHandler().cancelHideAnimator();
             }
 
-            showDimDialog();
-            getDialog().show();
-            setState(State.Shown);
+            showDialog();
         }
     };
 
@@ -397,7 +395,7 @@ public class FDialoger implements Dialoger
                     getAnimatorHandler().cancelHideAnimator();
 
                 setLockDialoger(true);
-                removeDialogerView(false);
+                dismissDialog(false);
                 return;
             }
 
@@ -422,7 +420,7 @@ public class FDialoger implements Dialoger
                 // 等待动画结束后让窗口消失
             } else
             {
-                removeDialogerView(false);
+                dismissDialog(false);
             }
         }
     };
@@ -624,7 +622,7 @@ public class FDialoger implements Dialoger
                     if (mIsDebug)
                         Log.i(Dialoger.class.getSimpleName(), "dismiss onAnimationEnd ");
 
-                    removeDialogerView(true);
+                    dismissDialog(true);
                 }
             });
         }
@@ -723,26 +721,6 @@ public class FDialoger implements Dialoger
             };
         }
         return mBackgroundViewAnimatorCreator;
-    }
-
-    private void removeDialogerView(boolean removeByHideAnimator)
-    {
-        if (mIsDebug)
-            Log.e(Dialoger.class.getSimpleName(), "removeDialogerView by hideAnimator:" + removeByHideAnimator);
-
-        try
-        {
-            hideDimDialog();
-            getDialog().dismiss();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            if (mIsDebug)
-                Log.e(Dialoger.class.getSimpleName(), "removeDialogerView error:" + e);
-        } finally
-        {
-            setState(State.Dismissed);
-        }
     }
 
     protected void onCreate(Bundle savedInstanceState)
@@ -1040,6 +1018,43 @@ public class FDialoger implements Dialoger
                     ViewGroup.LayoutParams.MATCH_PARENT));
         }
         return mDialog;
+    }
+
+    private void showDialog()
+    {
+        try
+        {
+            showDimDialog();
+            getDialog().show();
+            setState(State.Shown);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            if (mIsDebug)
+                Log.e(Dialoger.class.getSimpleName(), "showDialog error:" + e);
+
+            dismissDialog(false);
+        }
+    }
+
+    private void dismissDialog(boolean isAnimator)
+    {
+        if (mIsDebug)
+            Log.e(Dialoger.class.getSimpleName(), "dismissDialog by animator:" + isAnimator);
+
+        hideDimDialog();
+        try
+        {
+            getDialog().dismiss();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            if (mIsDebug)
+                Log.e(Dialoger.class.getSimpleName(), "dismissDialog error:" + e);
+        } finally
+        {
+            setState(State.Dismissed);
+        }
     }
 
     private void showDimDialog()
