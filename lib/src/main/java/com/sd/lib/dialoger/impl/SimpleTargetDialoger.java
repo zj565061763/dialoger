@@ -155,20 +155,12 @@ class SimpleTargetDialoger implements TargetDialoger
     {
         if (mUpdater == null)
         {
-            mUpdater = new OnGlobalLayoutChangeUpdater();
-            mUpdater.setUpdatable(new ViewUpdater.Updatable()
+            mUpdater = new OnGlobalLayoutChangeUpdater()
             {
                 @Override
-                public void update()
+                protected void onStateChanged(boolean started)
                 {
-                    getTracker().update();
-                }
-            });
-            mUpdater.setOnStateChangeCallback(new ViewUpdater.OnStateChangeCallback()
-            {
-                @Override
-                public void onStateChanged(boolean started, ViewUpdater updater)
-                {
+                    super.onStateChanged(started);
                     if (started)
                     {
                         getDialogerBackup().backup(mDialoger);
@@ -176,6 +168,14 @@ class SimpleTargetDialoger implements TargetDialoger
                     {
                         getDialogerBackup().restore(mDialoger);
                     }
+                }
+            };
+            mUpdater.setUpdatable(new ViewUpdater.Updatable()
+            {
+                @Override
+                public void update()
+                {
+                    getTracker().update();
                 }
             });
         }
