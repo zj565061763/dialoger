@@ -8,8 +8,8 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 28
-        versionCode 20201207
-        versionName "1.2.0-beta7"
+        versionCode 20201210
+        versionName "1.2.0-beta8"
     }
 
     buildTypes {
@@ -27,7 +27,7 @@ android {
 
 dependencies {
     implementation 'com.github.zj565061763:viewtracker:1.1.2'
-    implementation 'com.github.zj565061763:viewupdater:1.1.2'
+    implementation 'com.github.zj565061763:viewupdater:1.1.3'
     implementation 'com.github.zj565061763:systemui:latest.release'
 }
 tasks.withType(Javadoc) {
